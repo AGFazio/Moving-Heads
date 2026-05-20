@@ -40,7 +40,7 @@
             }
         },
         {
-            "name": "Dominar",
+            "name": "Dominar IP",
             "channels": [
                 "Dimming",
                 "Strobe",
@@ -72,6 +72,78 @@
                 "reverse": 0,
                 "orient_home": 110,
                 "orient_zero": 20
+            }
+        },
+		{
+            "name": "YPS 230w",
+            "channels": [
+                "Color Wheel",
+                "Strobe",
+                "Dimming",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Zoom",
+                "Color Mirror",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Blank",
+                "Blank",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "YPS Starlight Mini",
+            "channels": [
+                "Pan",
+                "Tilt",
+                "Pan Fine",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Strobe",
+                "Dimming",
+                "Color Wheel",
+                "Blank",
+                "Gobo",
+                "Blank",
+                "Focus",
+                "Prism",
+                "Prism Rotate",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
             }
         },
         {
@@ -332,151 +404,7 @@
                 "orient_zero": 45
             }
         },
-        {
-            "name": "YPS 230w",
-            "channels": [
-                "Color Wheel",
-                "Strobe",
-                "Dimming",
-                "Gobo",
-                "Prism",
-                "Prism Rotate",
-                "Zoom",
-                "Color Mirror",
-                "Focus",
-                "Pan",
-                "Pan Fine",
-                "Tilt",
-                "Tilt Fine",
-                "Blank",
-                "Blank",
-                "Reset"
-            ],
-            "pan_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 540,
-                "reverse": 1,
-                "orient_home": 270
-            },
-            "tilt_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 270,
-                "reverse": 0,
-                "orient_home": 135,
-                "orient_zero": 45
-            }
-        },
-        {
-            "name": "YPS Starlight Mini",
-            "channels": [
-                "Pan",
-                "Tilt",
-                "Pan Fine",
-                "Tilt Fine",
-                "Pan & Tilt Speed",
-                "Color Mirror",
-                "Strobe",
-                "Dimming",
-                "Color Wheel",
-                "Blank",
-                "Gobo",
-                "Blank",
-                "Focus",
-                "Prism",
-                "Prism Rotate",
-                "Reset"
-            ],
-            "pan_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 540,
-                "reverse": 1,
-                "orient_home": 270
-            },
-            "tilt_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 270,
-                "reverse": 0,
-                "orient_home": 135,
-                "orient_zero": 45
-            }
-        },
-        {
-            "name": "Wallys Mini Beam",
-            "channels": [
-                "Pan",
-                "Tilt",
-                "Pan Fine",
-                "Tilt Fine",
-                "Pan & Tilt Speed",
-                "Color Mirror",
-                "Strobe",
-                "Dimming",
-                "Color Wheel",
-                "Blank",
-                "Gobo",
-                "Blank",
-                "Focus",
-                "Prism",
-                "Prism Rotate",
-                "Reset"
-            ],
-            "pan_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 540,
-                "reverse": 1,
-                "orient_home": 270
-            },
-            "tilt_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 270,
-                "reverse": 0,
-                "orient_home": 135,
-                "orient_zero": 45
-            }
-        },
-        {
-            "name": "YPS Outdoor 350w",
-            "channels": [
-                "Color Wheel",
-                "Dimming",
-                "Strobe",
-                "Gobo",
-                "Prism",
-                "Prism Rotate",
-                "Blank",
-                "Blank",
-                "Focus",
-                "Pan",
-                "Pan Fine",
-                "Tilt",
-                "Tilt Fine",
-                "Pan & Tilt Speed",
-                "Color Mirror",
-                "Reset"
-            ],
-            "pan_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 540,
-                "reverse": 1,
-                "orient_home": 270
-            },
-            "tilt_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 270,
-                "reverse": 0,
-                "orient_home": 135,
-                "orient_zero": 45
-            }
-        },
-		{
+        		{
             "name": "MLS Magicolor Aura",
             "channels": [
                 "Color Wheel",
