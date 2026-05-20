@@ -1,0 +1,608 @@
+{
+    "moving_heads": [
+        {
+            "name": "Phoenix Ray 300W",
+            "channels": [
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Dimming",
+                "Strobe",
+                "Color Wheel",
+                "Gobo",
+                "Color Mirror",
+                "Prism",
+                "Prism Rotate",
+                "Focus",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "Phoenix Ray MAX",
+            "channels": [
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Wheel",
+                "Gobo",
+                "Blank",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Color Mirror",
+                "Focus",
+                "Blank",
+                "Strobe",
+                "Dimming",
+                "Blank",
+                "Reset",
+                "Blank"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "Dominar Lempa",
+            "channels": [
+                "Color Wheel",
+                "Strobe",
+                "Dimming",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Color Mirror",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Blank",
+                "Blank",
+                "Blank",
+                "Blank",
+                "Blank"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "Dominar",
+            "channels": [
+                "Dimming",
+                "Strobe",
+                "Color Wheel",
+                "Gobo",
+                "Color Mirror",
+                "Prism",
+                "Prism Rotate",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan",
+                "Pan & Tilt Speed",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 0,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 220,
+                "reverse": 0,
+                "orient_home": 110,
+                "orient_zero": 20
+            }
+        },
+        {
+            "name": "YPS 350W",
+            "channels": [
+                "Color Wheel",
+                "Dimming",
+                "Strobe",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+		{
+            "name": "YPS Nova 20ch",
+            "channels": [
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Dimming",
+                "Strobe",
+                "Color Wheel",
+                "Gobo",
+                "Gobo Rotate",
+                "Gobo Rotate1",
+                "Gobo RF",
+                "Prism1",
+				"Prism2",
+				"Prism Rotate",
+                "Frost",
+				"Zoom",
+				"Focus",
+				"Focus F",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+		{
+            "name": "YPS Nova 18ch",
+            "channels": [
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Dimming",
+                "Strobe",
+                "Color Wheel",
+                "Gobo",
+                "Gobo Rotate",
+                "Gobo Rotate1",
+                "Gobo RF",
+                "Prism1",
+				"Prism2",
+				"Prism Rotate",
+                "Frost",
+				"Zoom",
+				"Focus",
+				"Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "Wallys Mega Beam",
+            "channels": [
+                "Color Wheel",
+                "Dimming",
+                "Strobe",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 210,
+                "reverse": 0,
+                "orient_home": 105,
+                "orient_zero": 15
+            }
+        },
+		{
+            "name": "Wally's Mini Beam",
+            "channels": [
+                "Pan",
+                "Tilt",
+                "Pan Fine",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Strobe",
+                "Dimming",
+                "Color Wheel",
+                "Blank",
+                "Gobo",
+                "Blank",
+                "Focus",
+                "Prism",
+                "Prism Rotate",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "Mattos Pheonix Ray",
+            "channels": [
+                "Color Wheel",
+                "Dimming",
+                "Strobe",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+		{
+            "name": "Mattos Pheonix Ray MAX",
+            "channels": [
+                "Color Wheel",
+                "Dimming",
+                "Strobe",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "YPS 230w",
+            "channels": [
+                "Color Wheel",
+                "Strobe",
+                "Dimming",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Zoom",
+                "Color Mirror",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Blank",
+                "Blank",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "YPS Starlight Mini",
+            "channels": [
+                "Pan",
+                "Tilt",
+                "Pan Fine",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Strobe",
+                "Dimming",
+                "Color Wheel",
+                "Blank",
+                "Gobo",
+                "Blank",
+                "Focus",
+                "Prism",
+                "Prism Rotate",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "Wallys Mini Beam",
+            "channels": [
+                "Pan",
+                "Tilt",
+                "Pan Fine",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Strobe",
+                "Dimming",
+                "Color Wheel",
+                "Blank",
+                "Gobo",
+                "Blank",
+                "Focus",
+                "Prism",
+                "Prism Rotate",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+        {
+            "name": "YPS Outdoor 350w",
+            "channels": [
+                "Color Wheel",
+                "Dimming",
+                "Strobe",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        },
+		{
+            "name": "MLS Magicolor Aura",
+            "channels": [
+                "Color Wheel",
+                "Dimming",
+                "Strobe",
+                "Gobo",
+                "Prism",
+                "Prism Rotate",
+                "Blank",
+                "Blank",
+                "Focus",
+                "Pan",
+                "Pan Fine",
+                "Tilt",
+                "Tilt Fine",
+                "Pan & Tilt Speed",
+                "Color Mirror",
+                "Reset"
+            ],
+            "pan_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 540,
+                "reverse": 1,
+                "orient_home": 270
+            },
+            "tilt_motor": {
+                "min_limit": -180,
+                "max_limit": 180,
+                "range_of_motion": 270,
+                "reverse": 0,
+                "orient_home": 135,
+                "orient_zero": 45
+            }
+        }
+    ],
+    "channel_types": [
+        "Pan",
+        "Pan Fine",
+        "Tilt",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Dimming",
+        "Strobe",
+        "Color Wheel",
+        "Gobo",
+        "Color Mirror",
+        "Prism",
+        "Prism Rotate",
+        "Focus",
+        "Reset",
+        "Blank",
+        "Zoom"
+    ]
+}
