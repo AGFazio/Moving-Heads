@@ -11,14 +11,17 @@ Generates xLights `.xmodel` files for DMX moving head fixtures using a JSON fixt
 
 Each fixture in the JSON defines its DMX channel list in order. The position of each channel in the list is its DMX channel number (1-indexed). The script uses this to automatically assign the correct channel numbers to pan, tilt, dimmer, shutter, and color wheel in the generated model.
 
-Each run produces files for **1, 2, 4, 6, and 8 heads**, named:
+Each run produces files for **1, 2, 4, 6, and 8 heads**. The generated `.xmodel` files are organized in the `Files/` directory with a subdirectory per head count:
 
 ```
-1 head Fixture Name.xmodel
-2 heads Fixture Name.xmodel
-4 heads Fixture Name.xmodel
-6 heads Fixture Name.xmodel
-8 heads Fixture Name.xmodel
+Files/
+├── 1 Head/
+│   ├── 1 head Fixture Name.xmodel
+│   └── ...
+├── 2 Heads/
+├── 4 Heads/
+├── 6 Heads/
+└── 8 Heads/
 ```
 
 Each `.xmodel` file contains:

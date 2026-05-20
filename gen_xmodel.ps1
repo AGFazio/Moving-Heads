@@ -97,7 +97,10 @@ foreach ($mh in $data.moving_heads) {
     $safeName  = $name -replace '[/\\:]','-'
 
     foreach ($n in $HeadCounts) {
-        $label = if ($n -eq 1) { "1 head" } else { "$n heads" }
+        $label   = if ($n -eq 1) { "1 head" } else { "$n heads" }
+        $subDir  = if ($n -eq 1) { "1 Head" } else { "$n Heads" }
+        $destDir = Join-Path $OutputDir "Files\$subDir"
+        New-Item -ItemType Directory -Path $destDir -Force | Out-Null
 
         $lines = [System.Collections.Generic.List[string]]::new()
         $lines.Add('<?xml version="1.0"?>')
@@ -114,9 +117,9 @@ foreach ($mh in $data.moving_heads) {
         $lines.Add('</models>')
 
         $content  = $lines -join "`n"
-        $filepath = Join-Path $OutputDir "$label $safeName.xmodel"
+        $filepath = Join-Path $destDir "$label $safeName.xmodel"
         [System.IO.File]::WriteAllText($filepath, $content, [System.Text.Encoding]::UTF8)
-        Write-Host "Written: $label $safeName.xmodel"
+        Write-Host "Written: Files\$subDir\$label $safeName.xmodel"
     }
 }
 Write-Host "Done."
