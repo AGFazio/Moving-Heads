@@ -1,101 +1,113 @@
-# Moving Heads xLights Model Generator
+# Moving Heads — xLights .xmodel Builder
 
-Generates xLights `.xmodel` files for DMX moving head fixtures using a JSON fixture definition file.
+A web-based tool for generating [xLights](https://xlights.org) `.xmodel` files for DMX moving heads — no coding or XML editing required.
 
-## Files
+## Try it now
 
-- **`moving_heads_channel_types.json`** — Fixture definitions: channel order, motor limits, pan/tilt orientation, and reverse rotation settings.
-- **`gen_xmodel.ps1`** — PowerShell script that reads the JSON and outputs `.xmodel` files ready to import into xLights.
+Open the tool in any browser:
 
-## How It Works
+**[xmodel-builder.html](https://agfazio.github.io/Moving-Heads/xmodel-builder.html)**
 
-Each fixture in the JSON defines its DMX channel list in order. The position of each channel in the list is its DMX channel number (1-indexed). The script uses this to automatically assign the correct channel numbers to pan, tilt, dimmer, shutter, and color wheel in the generated model.
+It runs entirely in your browser. Nothing is uploaded or saved anywhere unless you explicitly choose to share it.
 
-Each run produces files for **1, 2, 4, 6, and 8 heads**. The generated `.xmodel` files are organized in the `Files/` directory with a subdirectory per head count:
+---
 
-```
-Files/
-├── 1 Head/
-│   ├── 1 head Fixture Name.xmodel
-│   └── ...
-├── 2 Heads/
-├── 4 Heads/
-├── 6 Heads/
-└── 8 Heads/
-```
+## What it does
 
-Each `.xmodel` file contains:
-- **4 Single Line string models** (MH Pan, MH Tilt, MH Dimmer, MH Shutter) — span all heads using `@MHN:channel` relative references, useful for sequencing all heads together on one row.
-- **Individual DmxMovingHeadAdv head models** (MH1, MH2, …) — one per head, with full motor configuration.
+Pick a moving-head fixture (or build a new one), set the number of heads and the DMX start channel, and the tool generates a ready-to-import xLights `.xmodel` file with:
 
-## JSON Structure
+- One `DmxMovingHeadAdv` model per physical head
+- "String Group" sub-models you can drive together from the layout view (Dimmer, Shutter, Pan, Tilt, etc.)
+- A Model Group containing all heads (when you have more than one)
+- Properly mapped channel positions, pan/tilt motor parameters, color wheel slots, and head orientation
 
-```json
-{
-    "moving_heads": [
-        {
-            "name": "Fixture Name",
-            "channels": [
-                "Pan",
-                "Pan Fine",
-                "Tilt",
-                "Tilt Fine",
-                "Pan & Tilt Speed",
-                "Dimming",
-                "Strobe",
-                "Color Wheel",
-                "Gobo",
-                "Reset"
-            ],
-            "pan_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 540,
-                "reverse": 1,
-                "orient_home": 270
-            },
-            "tilt_motor": {
-                "min_limit": -180,
-                "max_limit": 180,
-                "range_of_motion": 270,
-                "reverse": 0,
-                "orient_home": 135,
-                "orient_zero": 45
-            }
-        }
-    ],
-    "channel_types": [ ... ]
-}
-```
+The output matches xLights' native `.xmodel` format — import it, place your heads in the layout, and you're done.
 
-### Motor Fields
+---
 
-| Field | Description |
-|---|---|
-| `min_limit` / `max_limit` | Physical rotation limits in degrees |
-| `range_of_motion` | Total degrees of travel (e.g. 540 for pan, 270 for tilt) |
-| `reverse` | `1` = reverse rotation (counter-clockwise), `0` = normal (clockwise) |
-| `orient_home` | Angle the fixture points at DMX value 0 (pan) |
-| `orient_zero` | Angle considered "zero/up" for tilt |
+## How to use it
 
-### Supported Channel Names
+### If your fixture is already in the preset list
 
-`Pan`, `Pan Fine`, `Tilt`, `Tilt Fine`, `Pan & Tilt Speed`, `Dimming`, `Strobe`, `Color Wheel`, `Gobo`, `Gobo Rotate`, `Color Mirror`, `Prism`, `Prism Rotate`, `Focus`, `Zoom`, `Frost`, `Reset`, `Blank`
+1. **Choose preset** mode is selected by default.
+2. Pick your fixture from the **Load a preset** dropdown and click **Load**.
+3. Set **Quantity of heads** and **DMX Start Channel** for your install.
+4. In **Pan motor parameters**, choose the **Head orientation at rest** (Right / Left / Front / Back) — this is which way the head points when powered off, viewed from in front of the stage.
+5. Tick **Mount → Upside Down** if the fixtures are hung upside down.
+6. Click **Generate and Download xmodel**.
+7. In xLights: **File → Import → Import Model From File** and pick the downloaded `.xmodel`.
 
-Use `Blank` for any channel that has no function or is reserved.
+### If your fixture isn't in the list yet
 
-## Usage
+1. Switch the radio to **Add new fixture**.
+2. Set **Channels per fixture** to the total channel count of your unit (from the manual).
+3. In **Channel layout**, set each row's type via the dropdown. Channel types can only be used once per fixture (except Blank).
+4. Fill in **Pan Direction**, **Tilt range**, **Mount**, and choose orientation.
+5. (Optional) Customize the **Color Wheel** slot count and colors/DMX values.
+6. Scroll to the bottom **Save as Preset** section, enter a **Model name**, and click **Add New Model as Preset**.
+7. In the popup, click **Open a GitHub issue (new tab)** — your fixture's full spec is pre-filled. Just click **CREATE** on the GitHub page.
+8. The maintainer will merge it into the catalog. The next time anyone opens the tool, your fixture appears in the preset list for everyone.
 
-1. Edit `moving_heads_channel_types.json` to add or update fixtures.
-2. Run the generator script (output goes to the same folder as the script):
+---
 
-```powershell
-& ".\gen_xmodel.ps1"
-```
+## Pan Direction explained
 
-3. Import the generated `.xmodel` files into xLights via **File → Import → Import Model**.
+Hold the powered-off head and rotate it **clockwise** (viewed from above) until it stops. Power it on:
 
-## Notes
+- If it turns back **counter-clockwise** to reach rest → set Pan Direction to **CCW**.
+- If it stays put, or slightly returns clockwise → set Pan Direction to **CW**.
 
-- Color wheel colors and DMX trigger values in the generated models are set to generic defaults. Update these per fixture in xLights after importing if your fixture has specific color positions.
-- When adding new fixtures to the JSON, make sure each entry (except the last) is followed by a comma — missing commas are the most common JSON syntax error.
+Click the **?** next to the Pan Direction field in the tool for the same instructions.
+
+---
+
+## Head orientation explained
+
+"At rest" is where the head points when it's powered on with no commands. Looking at the stage from the audience side:
+
+- **Right / Left** — head points to one side of the stage
+- **Front** — head points toward the viewer
+- **Back** — head points away from the viewer (toward the upstage wall)
+
+Only valid combinations are selectable: CCW direction grays out Left, CW grays out Right.
+
+---
+
+## Files in this repo
+
+| File | Purpose |
+|------|---------|
+| `xmodel-builder.html` | The web tool itself. Open in any browser. |
+| `moving_heads_channel_types.json` | Catalog of all known fixtures + channel types. The tool fetches this live on each load. |
+| `gen_xmodel.ps1` | Legacy PowerShell script (predecessor of the web tool, kept for reference). |
+
+---
+
+## For maintainers — adding a submitted fixture
+
+When a user opens a GitHub issue titled **"New fixture: ..."**:
+
+1. Open the issue. The fixture's JSON object is in the body, in a markdown code block.
+2. Edit `moving_heads_channel_types.json`.
+3. Append the JSON object to the `moving_heads` array.
+4. Commit + push.
+5. Close the issue.
+
+The tool fetches this JSON on every page load, so the new fixture is available to everyone immediately.
+
+---
+
+## Local development
+
+The tool is a single `xmodel-builder.html` file — no build step, no dependencies. To work on it:
+
+1. Clone the repo.
+2. Edit `xmodel-builder.html`.
+3. Open it in a browser to test. Note that when loaded from `file://`, the remote preset fetch may be CORS-blocked depending on the browser — the tool falls back to its baked-in preset list silently.
+4. Commit and push when ready.
+
+---
+
+## License
+
+See the repository's LICENSE file (if present).
