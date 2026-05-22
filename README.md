@@ -39,7 +39,7 @@ The output matches xLights' native `.xmodel` format — import it, place your he
 
 ### If your fixture isn't in the list yet
 
-1. Switch the radio to **Add new fixture**.
+1. Switch the radio to **Add new Moving Head**.
 2. Set **Channels per fixture** to the total channel count of your unit (from the manual).
 3. In **Channel layout**, set each row's type via the dropdown. Channel types can only be used once per fixture (except Blank).
 4. Fill in **Pan Direction**, **Tilt range**, **Mount**, and choose orientation.
