@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>xLights Moving Head .xmodel Builder</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #1e1e2e; color: #cdd6f4; line-height: 1.5; }
+  header { background: #181825; padding: 18px 28px; border-bottom: 1px solid #313244; }
+  header h1 { margin: 0 0 4px 0; font-size: 22px; color: #cba6f7; }
+  header p { margin: 0; color: #a6adc8; font-size: 13px; }
+  main { display: block; min-height: calc(100vh - 70px); }
+  .form-pane { padding: 24px 28px; max-width: 900px; margin: 0 auto; }
+  fieldset { border: 1px solid #313244; border-radius: 8px; padding: 14px 16px 16px; margin: 0 0 16px 0; background: #181825; }
+  legend { padding: 0 8px; color: #f9e2af; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+  label { display: block; margin-bottom: 4px; font-size: 12px; color: #bac2de; font-weight: 500; }
+  input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 7px 10px; background: #1e1e2e; border: 1px solid #45475a; border-radius: 5px; color: #cdd6f4; font-family: inherit; font-size: 13px; }
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { outline: none; border-color: #cba6f7; }
+  input[type="color"] { width: 100%; height: 32px; padding: 2px; background: #1e1e2e; border: 1px solid #45475a; border-radius: 5px; cursor: pointer; }
+  textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; min-height: 60px; resize: vertical; }
+  .row { display: grid; gap: 10px; margin-bottom: 10px; }
+  .row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .chlist-header, .chlist-row { display: grid; grid-template-columns: 40px 1fr 32px; gap: 8px; align-items: center; margin-bottom: 4px; }
+  .chlist-header { font-size: 10.5px; color: #a6adc8; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .chlist-header .center { text-align: center; }
+  .chlist-row .ch-num { text-align: center; color: #a6adc8; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .chlist-row .ch-remove { background: transparent; border: 1px solid #45475a; color: #f38ba8; padding: 4px 0; font-size: 14px; line-height: 1; cursor: pointer; border-radius: 4px; }
+  .chlist-row .ch-remove:hover { background: #45475a; }
+  .chlist-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .chlist-actions button { padding: 6px 12px; font-size: 12px; }
+  .sub-row { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: center; margin-bottom: 6px; }
+  .sub-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #cba6f7; }
+  .wheel-grid { display: grid; grid-template-columns: 30px 1fr 90px; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .wheel-grid .slot-num { color: #a6adc8; font-size: 12px; text-align: center; }
+  button { background: #cba6f7; color: #1e1e2e; border: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  button:hover { background: #b4befe; }
+  button.secondary { background: #313244; color: #cdd6f4; }
+  button.secondary:hover { background: #45475a; }
+  .actions { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  pre.preview { flex: 1; background: #1e1e2e; border: 1px solid #313244; border-radius: 6px; padding: 14px; overflow: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; margin: 0; white-space: pre; color: #cdd6f4; }
+  .help { color: #a6adc8; font-size: 12px; margin: -4px 0 8px 0; }
+  .pane-title { color: #f9e2af; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px 0; }
+  details { margin-bottom: 10px; }
+  summary { cursor: pointer; color: #f9e2af; font-size: 13px; font-weight: 600; padding: 4px 0; }
+  .status { font-size: 12px; color: #a6e3a1; margin-bottom: 8px; min-height: 16px; }
+  .status.warn { color: #f9e2af; }
+  .status.err { color: #f38ba8; }
+  .preset-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: end; }
+  .preset-row button { padding: 8px 14px; font-size: 12px; }
+  body.preset-mode .add-new-only { display: none; }
+  .preset-lock-hint { display: none; font-size: 11px; color: #fab387; font-style: italic; font-weight: 400; margin-left: 6px; }
+  body.preset-mode .preset-lock-hint { display: inline; }
+  .orient-grid { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: center; }
+  .orient-radios { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .orient-radios label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; color: #cdd6f4; margin: 0; }
+  .orient-radios input[type="radio"] { width: 16px; height: 16px; accent-color: #cba6f7; }
+  .orient-radios label.disabled { opacity: 0.35; cursor: not-allowed; }
+  #orientIcon { width: 126px; height: 90px; }
+  #orientIcon .ring { fill: #313244; stroke: #45475a; stroke-width: 2; }
+  #orientIcon text { fill: #6c7086; font-size: 9px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  #orientIcon .head-body { fill: #cba6f7; }
+  #orientIcon .beam { stroke: #f9e2af; stroke-width: 3; fill: none; stroke-linecap: round; }
+  #orientArrowGroup { transform-origin: 50px 50px; transition: transform 0.25s ease; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+  .modal-backdrop.show { display: flex; }
+  .modal-box { background: #181825; border: 1px solid #45475a; border-radius: 10px; padding: 24px; max-width: 460px; width: 90%; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+  .modal-box h3 { margin: 0 0 8px 0; color: #cba6f7; font-size: 18px; }
+  .modal-box p { margin: 0 0 16px 0; color: #bac2de; font-size: 13px; line-height: 1.5; }
+  .modal-box .modal-actions { display: flex; flex-direction: column; gap: 8px; }
+  .modal-box .modal-actions button { width: 100%; text-align: left; padding: 12px 14px; }
+  .field-tip { display: block; margin-top: 2px; font-size: 11px; color: #a6adc8; font-weight: 400; font-style: italic; }
+  .field-warn { display: none; margin-top: 6px; padding: 8px 10px; font-size: 12px; line-height: 1.45; color: #1e1e2e; background: #f9e2af; border-radius: 6px; font-weight: 500; }
+  .field-warn.show { display: block; }
+  input[type="radio"], input[type="checkbox"] { accent-color: #cba6f7; }
+  .help-btn { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #45475a; color: #f9e2af; border: none; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px; padding: 0; vertical-align: middle; }
+  .help-btn:hover { background: #585b70; }
+  .info-modal .modal-box { max-width: 520px; }
+  .info-modal .modal-box .modal-body { color: #cdd6f4; font-size: 13px; line-height: 1.6; max-height: 60vh; overflow-y: auto; margin-bottom: 16px; }
+  .info-modal .modal-box .modal-body p { margin: 0 0 10px 0; color: #cdd6f4; }
+  .info-modal .modal-box .modal-body ol, .info-modal .modal-box .modal-body ul { margin: 0 0 10px 18px; padding: 0; }
+  .info-modal .modal-box .modal-body li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>xLights Moving Head .xmodel Builder</h1>
+  <p>Generate a DMX moving-head .xmodel for any quantity of fixtures.</p>
+</header>
+
+<main>
+  <section class="form-pane">
+
+    <fieldset>
+      <legend>Fixture</legend>
+      <div style="display:flex; gap:24px; margin-bottom:12px; align-items:flex-start;">
+        <div>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#cdd6f4; margin:0;">
+            <input type="radio" name="fixtureMode" id="fixtureModePreset" value="preset" checked>
+            Choose preset
+          </label>
+          <span class="field-tip" style="margin-left:24px;">Look here first to see if your head is listed.</span>
+        </div>
+        <div>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#cdd6f4; margin:0;">
+            <input type="radio" name="fixtureMode" id="fixtureModeNew" value="new">
+            Add new fixture
+          </label>
+        </div>
+      </div>
+
+      <div id="presetModeContainer" class="preset-row">
+        <div>
+          <label for="presetSelect">Load a preset</label>
+          <select id="presetSelect"></select>
+        </div>
+        <button type="button" id="loadPresetBtn">Load</button>
+        <div></div>
+      </div>
+
+      <p class="help">Built-in presets come from your moving_heads_channel_types.json. Custom models you add are saved in this browser; an updated full catalog JSON is downloaded so you can commit it to the repository.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Model</legend>
+      <div class="row cols-2">
+        <div><label for="headCount">Quantity of heads <button type="button" class="help-btn" id="headCountHelpBtn" title="About the 8-head limit" aria-label="About the 8-head limit">?</button><span class="field-tip">Number of heads to be added in layout.</span></label><input type="number" id="headCount" value="1" min="1" max="500"><div id="headCountWarn" class="field-warn" role="status">Heads up: the xLights Advanced Moving Head effect supports up to 8 fixtures. Quantities above 8 will require manual adjustments to the models for them to perform as expected.</div></div>
+        <div><label for="startChannel">DMX Start Channel <span style="color:#a6adc8; font-weight:400;">(1-512)</span><span class="field-tip">Start channel for first head in chain.</span></label><input type="number" id="startChannel" value="1" min="1" max="512"></div>
+      </div>
+      <div class="row cols-2 add-new-only" id="channelCountRow">
+        <div><label for="channelCount">Channels per fixture</label><input type="number" id="channelCount" value="16" min="1" max="64"></div>
+        <div></div>
+      </div>
+      <input type="hidden" id="modelName" value="MH">
+    </fieldset>
+
+    <fieldset class="add-new-only">
+      <legend>Channel layout</legend>
+      <p class="help">One entry per DMX channel for this fixture, in order. The role channels below (Dimmer, Pan, Tilt, etc.) are looked up by name in this list.</p>
+      <div class="chlist-header"><div class="center">Ch #</div><div>Channel type</div><div></div></div>
+      <div id="channelList"></div>
+      <div class="chlist-actions">
+        <button type="button" class="secondary" id="clearChBtn">Clear all</button>
+      </div>
+      <div id="derivedRoles" style="display:none;"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>String Groups</legend>
+      <p class="help">Generate String Groups so you can drive all heads' values for one function from one place.</p>
+      <div id="submodelList"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Pan motor parameters</legend>
+      <div class="row cols-2">
+        <div>
+          <label for="panReverse">Pan Direction (CW/CCW) <button type="button" class="help-btn" id="panDirHelpBtn" title="How to test" aria-label="How to test pan direction">?</button><span class="preset-lock-hint">(from preset)</span>
+            <span class="field-tip">Direction head spins when powered on.</span>
+          </label>
+          <select id="panReverse">
+            <option value="1" selected>CCW - Counter Clockwise</option>
+            <option value="0">CW - Clockwise</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+      <label>Head orientation at rest (viewer's POV)<span class="field-tip">Grayed options are not recommended for the set Pan Direction.</span></label>
+      <div class="orient-grid" style="margin-top:6px;">
+        <svg id="orientIcon" viewBox="-20 0 140 100" xmlns="http://www.w3.org/2000/svg">
+          <circle class="ring" cx="50" cy="50" r="40"/>
+          <text x="50" y="14" text-anchor="middle">BACK</text>
+          <text x="50" y="92" text-anchor="middle">FRONT</text>
+          <text x="-2" y="53" text-anchor="middle">LEFT</text>
+          <text x="102" y="53" text-anchor="middle">RIGHT</text>
+          <g id="orientArrowGroup">
+            <circle class="head-body" cx="50" cy="50" r="11"/>
+            <path class="beam" d="M 50 50 L 80 50 M 73 44 L 80 50 L 73 56"/>
+          </g>
+        </svg>
+        <div class="orient-radios">
+          <label data-orient="right"><input type="radio" name="panOrient" value="right" checked> Right</label>
+          <label data-orient="left"><input type="radio" name="panOrient" value="left"> Left</label>
+          <label data-orient="front"><input type="radio" name="panOrient" value="front"> Front (toward viewer)</label>
+          <label data-orient="back"><input type="radio" name="panOrient" value="back"> Back (away from viewer)</label>
+        </div>
+      </div>
+      <input type="hidden" id="panOrientHome" value="270">
+      <input type="hidden" id="panOrientZero" value="0">
+    </fieldset>
+
+    <fieldset>
+      <legend>Tilt motor parameters</legend>
+      <div class="row cols-2">
+        <div><label for="tiltRange">Tilt range<span class="preset-lock-hint">(from preset)</span><span class="field-tip">Found in your manual or from the vendor.</span></label><input type="number" id="tiltRange" value="270" step="1"></div>
+        <div>
+          <label for="tiltUpsideDown">Mount</label>
+          <div style="display:flex; align-items:center; gap:8px; padding-top:6px;">
+            <input type="checkbox" id="tiltUpsideDown" style="width:18px; height:18px;">
+            <label for="tiltUpsideDown" style="margin:0; cursor:pointer;">Upside Down</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="add-new-only">
+      <legend>Color Wheel</legend>
+      <p class="help">Used when "Color Wheel" appears in the channel list. DMX value is where the wheel lands on that color.</p>
+      <div class="row cols-2" style="margin-bottom:12px;">
+        <div>
+          <label for="wheelSlots">Number of slots</label>
+          <input type="number" id="wheelSlots" value="13" min="1" max="64">
+        </div>
+        <div></div>
+      </div>
+      <div class="wheel-grid" style="margin-bottom:8px; font-size:10.5px; color:#a6adc8; text-transform:uppercase; letter-spacing:0.04em;"><div class="slot-num">Slot#</div><div style="text-align:center;">Color</div><div style="text-align:center;">DMX Range</div></div>
+      <div id="wheelEditor"></div>
+    </fieldset>
+    <fieldset class="add-new-only">
+      <legend>Save as Preset</legend>
+      <p class="help">Click "Add New Model as Preset" button to update preset repository.</p>
+      <div class="row cols-2" style="align-items:end;">
+        <div>
+          <label for="newModelName">Model name</label>
+          <input type="text" id="newModelName" placeholder="e.g. YPS 400W">
+        </div>
+        <div>
+          <button type="button" id="saveAsPresetBtn" style="width:100%;">Add New Model as Preset</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Output</legend>
+      <div class="actions">
+        <button type="button" id="generateBtn">Generate and Download xmodel</button>
+      </div>
+      <div class="status" id="status">Pick a preset or build a channel list, then Generate.</div>
+      <pre class="preview" id="preview" style="display:none; max-height:400px;"></pre>
+    </fieldset>
+
+  </section>
+</main>
+
+<script>
+
+'use strict';
+
+/* ===================== Reference data ===================== */
+
+// Legacy preset channel names -> new dropdown options. Keeps old presets working.
+const LEGACY_MAP = {
+  'Dimming':                 'Dimmer / Intensity',
+  'Dimmer/Intensity':        'Dimmer / Intensity',
+  'Strobe':                  'Shutter / Strobe',
+  'Shutter/Strobe':          'Shutter / Strobe',
+  'Pan':                     'Pan / X-axis / Horizontal',
+  'Pan/X-axis':              'Pan / X-axis / Horizontal',
+  'Pan/X-axis/Horizontal':   'Pan / X-axis / Horizontal',
+  'Tilt':                    'Tilt / Y-axis / Vertical',
+  'Tilt/Y-axis':             'Tilt / Y-axis / Vertical',
+  'Tilt/Y-axis/Vertical':    'Tilt / Y-axis / Vertical',
+  'Color Wheel':             'Color',
+  'Color Mirror':            'Frost',
+  'Prism':                   'Prism 1',
+  'Prism Rotate':            'Prism Rotate 1',
+  'Prism1':                  'Prism 1',
+  'Prism2':                  'Prism 2',
+  'Gobo Rotate':             'Gobo Jitter',
+  'Gobo Rotate1':            'Gobo Jitter',
+  'Reset':                   'Lamp / Reset',
+  'Lamp/Reset':              'Lamp / Reset',
+  'Focus F':                 'Focus',
+  'Gobo RF':                 'Blank',
+  'Zoom':                    'Blank',
+};
+function normalizeChannel(name) {
+  return (LEGACY_MAP.hasOwnProperty(name)) ? LEGACY_MAP[name] : name;
+}
+
+// Channel type options for the per-channel dropdown
+const CHANNEL_TYPES = [
+  'Blank',
+  'Dimmer / Intensity',
+  'Shutter / Strobe',
+  'Pan / X-axis / Horizontal',
+  'Pan Fine',
+  'Tilt / Y-axis / Vertical',
+  'Tilt Fine',
+  'Prism 2',
+  'Prism 1',
+  'Prism Rotate 2',
+  'Prism Rotate 1',
+  'Focus',
+  'Frost',
+  'Color',
+  'Pan & Tilt Speed',
+  'Lamp / Reset',
+  'Gobo',
+  'Gobo Jitter',
+];
+
+// Role -> derived xLights attribute mapping.
+// `lookup` is a list of channel-type names. First name found in the channel list wins.
+// This lets old preset names ("Dimming", "Strobe", "Pan", etc.) still resolve to the right role.
+const ROLES = [
+  { role: 'dimmer',      lookup: ['Dimmer / Intensity','Dimmer/Intensity','Dimming'],   label: 'Dimmer',      submodelName: 'Dimmer',       submodelDefault: true,
+    aliases: ['mh dimmers','intensity','mh intensity'], worldPosY: 478.566010 },
+  { role: 'shutter',     lookup: ['Shutter / Strobe','Shutter/Strobe','Strobe'],      label: 'Shutter',     submodelName: 'Shutter',      submodelDefault: true,
+    aliases: ['mh shutters','mh strobe','mh strobes'], worldPosY: 458.200409 },
+  { role: 'pan',         lookup: ['Pan / X-axis / Horizontal','Pan/X-axis/Horizontal','Pan/X-axis','Pan'],             label: 'Pan',         submodelName: 'Pan',          submodelDefault: true,
+    aliases: [], worldPosY: 517.977295 },
+  { role: 'panFine',     lookup: ['Pan Fine'],                     label: 'Pan Fine',    submodelName: null,           submodelDefault: false, aliases: [] },
+  { role: 'tilt',        lookup: ['Tilt / Y-axis / Vertical','Tilt/Y-axis/Vertical','Tilt/Y-axis','Tilt'],           label: 'Tilt',        submodelName: 'Tilt',         submodelDefault: true,
+    aliases: [], worldPosY: 497.631714 },
+  { role: 'tiltFine',    lookup: ['Tilt Fine'],                    label: 'Tilt Fine',   submodelName: null,           submodelDefault: false, aliases: [] },
+  { role: 'color',       lookup: ['Color','Color Wheel'],          label: 'Color Wheel', submodelName: 'Color',        submodelDefault: false,
+    aliases: [], worldPosY: 538.000000 },
+  { role: 'gobo',        lookup: ['Gobo'],                         label: 'Gobo',        submodelName: 'Gobo',         submodelDefault: false,
+    aliases: [], worldPosY: 572.000000 },
+  { role: 'prism',       lookup: ['Prism 1','Prism','Prism1'],     label: 'Prism',       submodelName: 'Prism',        submodelDefault: false,
+    aliases: [], worldPosY: 589.000000 },
+  { role: 'prismRotate', lookup: ['Prism Rotate 1','Prism Rotate'], label: 'Prism Rotate', submodelName: 'Prism Rotate', submodelDefault: false,
+    aliases: [], worldPosY: 600.000000 },
+  { role: 'focus',       lookup: ['Focus'],                        label: 'Focus',       submodelName: 'Focus',        submodelDefault: false,
+    aliases: [], worldPosY: 606.000000 },
+  { role: 'frost',       lookup: ['Frost'],                        label: 'Frost',       submodelName: 'Frost',        submodelDefault: false,
+    aliases: [], worldPosY: 623.000000 },
+];
+
+// Default color wheel (matches your sample YPS 350W)
+const DEFAULT_WHEEL = [
+  { color: '#ffffff', dmx: 2  },
+  { color: '#ff0000', dmx: 9  },
+  { color: '#ffff00', dmx: 17 },
+  { color: '#0000ff', dmx: 25 },
+  { color: '#00ff00', dmx: 33 },
+  { color: '#e1fdff', dmx: 41 },
+  { color: '#cc3232', dmx: 49 },
+  { color: '#00ffff', dmx: 57 },
+  { color: '#ff00ff', dmx: 65 },
+  { color: '#ffff80', dmx: 73 },
+  { color: '#ff80c0', dmx: 81 },
+  { color: '#0000d0', dmx: 90 },
+  { color: '#c0c0c0', dmx: 105 },
+];
+
+// The 12 built-in fixture presets from moving_heads_channel_types.json
+let BUILTIN_PRESETS = [
+  {
+    name: 'Dominar Lempa',
+    channels: ['Color Wheel','Strobe','Dimming','Gobo','Prism','Prism Rotate','Blank','Color Mirror','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Blank','Blank','Blank','Blank','Blank'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'Dominar IP',
+    channels: ['Dimming','Strobe','Color Wheel','Gobo','Color Mirror','Prism','Prism Rotate','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan','Pan & Tilt Speed','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:0, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:220, reverse:0, orient_home:110, orient_zero:20 },
+  },
+  {
+    name: 'YPS 230w',
+    channels: ['Color Wheel','Strobe','Dimming','Gobo','Prism','Prism Rotate','Zoom','Color Mirror','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Blank','Blank','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'YPS Starlight Mini',
+    channels: ['Pan','Tilt','Pan Fine','Tilt Fine','Pan & Tilt Speed','Color Mirror','Strobe','Dimming','Color Wheel','Blank','Gobo','Blank','Focus','Prism','Prism Rotate','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'YPS 350W',
+    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'YPS Nova 20ch',
+    channels: ['Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Dimming','Strobe','Color Wheel','Gobo','Gobo Rotate','Gobo Rotate1','Gobo RF','Prism1','Prism2','Prism Rotate','Frost','Zoom','Focus','Focus F','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'YPS Nova 18ch',
+    channels: ['Pan','Pan Fine','Tilt','Tilt Fine','Dimming','Strobe','Color Wheel','Gobo','Gobo Rotate','Gobo Rotate1','Gobo RF','Prism1','Prism2','Prism Rotate','Frost','Zoom','Focus','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'Wallys Mega Beam',
+    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:210, reverse:0, orient_home:105, orient_zero:15 },
+  },
+  {
+    name: "Wally's Mini Beam",
+    channels: ['Pan','Tilt','Pan Fine','Tilt Fine','Pan & Tilt Speed','Color Mirror','Strobe','Dimming','Color Wheel','Blank','Gobo','Blank','Focus','Prism','Prism Rotate','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'Mattos Pheonix Ray',
+    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'Mattos Pheonix Ray MAX',
+    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+  {
+    name: 'MLS Magicolor Aura',
+    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+  },
+];
+
+
+/* ===================== State ===================== */
+
+// The ordered channel list — array of strings, e.g. ['Color Wheel','Dimming',...]
+let channelList = [];
+
+/* ===================== Utilities ===================== */
+
+function $(id) { return document.getElementById(id); }
+
+
+
+
+// 1-based position of `name` in channelList, or 0 if absent.
+// `name` can be a string OR an array of candidate names (first found wins).
+function chPos(name) {
+  const candidates = Array.isArray(name) ? name : [name];
+  for (const n of candidates) {
+    const idx = channelList.indexOf(n);
+    if (idx >= 0) return idx + 1;
+  }
+  return 0;
+}
+
+/* ===================== UI builders ===================== */
+
+function buildPresetDropdown() {
+  const sel = $('presetSelect');
+  sel.innerHTML = '';
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '-- Select a preset --';
+  sel.appendChild(placeholder);
+
+  if (BUILTIN_PRESETS.length) {
+    const og = document.createElement('optgroup');
+    og.label = 'Built-in';
+    BUILTIN_PRESETS.forEach((p, i) => {
+      const o = document.createElement('option');
+      o.value = 'b:' + i;
+      o.textContent = p.name + ' (' + p.channels.length + ' ch)';
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  }
+  // Note: user-saved presets are intentionally NOT listed here.
+  // New models are submitted via the GitHub issue flow; once the catalog JSON
+  // on the repo is updated, they appear under the Built-in group above.
+}
+
+function buildDatalist() {
+  const dl = $('channelTypesDL');
+  dl.innerHTML = '';
+  CHANNEL_TYPES.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t;
+    dl.appendChild(o);
+  });
+}
+
+function buildChannelListUI() {
+  const wrap = $('channelList');
+  wrap.innerHTML = '';
+  channelList.forEach((val, idx) => {
+    const row = document.createElement('div');
+    row.className = 'chlist-row';
+    const inList = CHANNEL_TYPES.indexOf(val) >= 0;
+    let optsHtml = '';
+    if (!inList && val) {
+      optsHtml += '<option value="' + escapeAttr(val) + '" selected>' + escapeAttr(val) + '</option>';
+    }
+    // Channel types already used elsewhere in the list (Blank may repeat freely)
+    const usedElsewhere = new Set();
+    channelList.forEach((other, otherIdx) => {
+      if (otherIdx === idx) return;
+      if (other && other !== 'Blank') usedElsewhere.add(other);
+    });
+    CHANNEL_TYPES.forEach(t => {
+      const selAttr = (t === val) ? ' selected' : '';
+      // Disable if already used somewhere else; current row's selection + Blank always stay enabled
+      const disabledAttr = (t !== 'Blank' && t !== val && usedElsewhere.has(t)) ? ' disabled' : '';
+      optsHtml += '<option value="' + escapeAttr(t) + '"' + selAttr + disabledAttr + '>' + escapeAttr(t) + '</option>';
+    });
+    row.innerHTML =
+      '<div class="ch-num">' + (idx + 1) + '</div>' +
+      '<select data-idx="' + idx + '">' + optsHtml + '</select>' +
+      '<div></div>';
+    wrap.appendChild(row);
+  });
+  wrap.querySelectorAll('select').forEach(sel => {
+    sel.addEventListener('change', (e) => {
+      const i = parseInt(e.target.getAttribute('data-idx'), 10);
+      channelList[i] = e.target.value;
+      // Rebuild list so other rows' disabled options update to reflect the new state
+      buildChannelListUI();
+      updateDerived();
+      buildSubmodelUI();
+      regenerate();
+    });
+  });
+}
+
+// HTML attribute escape (just the chars that matter in attribute context)
+function escapeAttr(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Sync the visible channelCount input to channelList.length
+function syncChannelCountFromList() {
+  const cc = $('channelCount');
+  if (cc) cc.value = String(channelList.length);
+}
+
+// Resize channelList to match a target count, padding with 'Blank' or truncating
+function resizeChannelList(target) {
+  target = Math.max(1, target | 0);
+  if (channelList.length < target) {
+    while (channelList.length < target) channelList.push('Blank');
+  } else if (channelList.length > target) {
+    channelList.length = target;
+  }
+}
+
+function buildSubmodelUI() {
+  const wrap = $('submodelList');
+  // preserve existing checked state per role
+  const prev = {};
+  wrap.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    prev[cb.getAttribute('data-role')] = cb.checked;
+  });
+  wrap.innerHTML = '';
+  let any = false;
+  ROLES.forEach(r => {
+    if (!r.submodelName) return; // role can't be a submodel
+    const pos = chPos(r.lookup);
+    if (pos === 0) return; // role not present in channel list
+    any = true;
+    const checkedAttr = (r.role in prev) ? (prev[r.role] ? 'checked' : '')
+                                         : (r.submodelDefault ? 'checked' : '');
+    const row = document.createElement('div');
+    row.className = 'sub-row';
+    row.innerHTML =
+      '<input type="checkbox" id="sub_' + r.role + '" data-role="' + r.role + '" ' + checkedAttr + '>' +
+      '<label for="sub_' + r.role + '">MH ' + r.submodelName + ' &mdash; ch ' + pos + '</label>';
+    wrap.appendChild(row);
+  });
+  if (!any) {
+    wrap.innerHTML = '<p class="help">No roles present in the channel list yet.</p>';
+  }
+}
+
+function buildWheelUI() {
+  const wrap = $('wheelEditor');
+  // Snapshot current edits so we keep them across slot-count changes
+  const existing = [];
+  wrap.querySelectorAll('.wheel-grid').forEach((row, i) => {
+    const c = row.querySelector('input[type="color"]');
+    const d = row.querySelector('input[type="number"]');
+    if (c && d) existing.push({ color: c.value, dmx: parseInt(d.value, 10) || 0 });
+  });
+  const n = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
+  wrap.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const slot = existing[i] || DEFAULT_WHEEL[i] || { color: '#ffffff', dmx: 0 };
+    const row = document.createElement('div');
+    row.className = 'wheel-grid';
+    row.innerHTML =
+      '<div class="slot-num">' + (i + 1) + '</div>' +
+      '<input type="color" id="wc_' + i + '" value="' + slot.color + '">' +
+      '<input type="number" id="wd_' + i + '" value="' + slot.dmx + '" min="0" max="255">';
+    wrap.appendChild(row);
+  }
+}
+
+function updateDerived() {
+  const wrap = $('derivedRoles');
+  const pills = [];
+  ROLES.forEach(r => {
+    const pos = chPos(r.lookup);
+    if (pos > 0) {
+      pills.push('<span class="derived-pill"><b>' + r.label + '</b> ch ' + pos + '</span>');
+    }
+  });
+  wrap.innerHTML = pills.length ? pills.join('') : '<p class="help">No recognized roles in the list yet.</p>';
+  syncChannelCountFromList();
+}
+
+/* ===================== Preset load / save ===================== */
+
+/* ===== Pan orientation logic ===== */
+const ORIENT_MAP = {
+  1: { right: { zero: 0,   home: 270 }, front: { zero: 270, home: 0 }, back: { zero: 90,  home: 180 } },
+  0: { left:  { zero: 180, home: 270 }, front: { zero: 90,  home: 0 }, back: { zero: 270, home: 90  } },
+};
+const ORIENT_ROT = { right: 0, front: 90, left: 180, back: 270 };
+
+function getSelectedOrient() {
+  const c = document.querySelector('input[name="panOrient"]:checked');
+  return c ? c.value : 'right';
+}
+function getDirection() {
+  return parseInt(($('panReverse') && $('panReverse').value) || '1', 10);
+}
+function updateOrientUI() {
+  const dir = getDirection();
+  const disallowed = (dir === 1) ? 'left' : 'right';
+  let cur = getSelectedOrient();
+  document.querySelectorAll('input[name="panOrient"]').forEach(r => {
+    const allowed = (r.value !== disallowed);
+    r.disabled = !allowed;
+    const lbl = r.closest('label');
+    if (lbl) lbl.classList.toggle('disabled', !allowed);
+  });
+  if (cur === disallowed) {
+    const fb = (dir === 1) ? 'right' : 'left';
+    const fbr = document.querySelector('input[name="panOrient"][value="' + fb + '"]');
+    if (fbr) fbr.checked = true;
+  }
+  applyOrientation();
+}
+function applyOrientation() {
+  const dir = getDirection();
+  const orient = getSelectedOrient();
+  const map = ORIENT_MAP[dir] && ORIENT_MAP[dir][orient];
+  if (map) {
+    $('panOrientZero').value = map.zero;
+    $('panOrientHome').value = map.home;
+  }
+  const arrow = document.getElementById('orientArrowGroup');
+  if (arrow) {
+    const rot = ORIENT_ROT[orient] || 0;
+    arrow.style.transform = 'rotate(' + rot + 'deg)';
+  }
+}
+function syncOrientationFromPreset() {
+  const dir = getDirection();
+  const zero = parseInt($('panOrientZero').value, 10);
+  const home = parseInt($('panOrientHome').value, 10);
+  const table = ORIENT_MAP[dir] || {};
+  let found = null;
+  for (const k in table) {
+    if (table[k].zero === zero && table[k].home === home) { found = k; break; }
+  }
+  if (!found) found = (dir === 1) ? 'right' : 'left';
+  const radio = document.querySelector('input[name="panOrient"][value="' + found + '"]');
+  if (radio) radio.checked = true;
+  updateOrientUI();
+}
+
+/* ===== Fixture mode ===== */
+function setFixtureMode(mode) {
+  document.body.classList.toggle('preset-mode', mode === 'preset');
+  const presetWrap = document.getElementById('presetModeContainer');
+  if (presetWrap) presetWrap.style.display = (mode === 'preset') ? '' : 'none';
+  const addWrap = document.getElementById('addNewContainer');
+  if (addWrap) addWrap.style.display = (mode === 'new') ? '' : 'none';
+  const lock = (mode === 'preset');
+  const dir = $('panReverse'); if (dir) dir.disabled = lock;
+  const ups = $('tiltUpsideDown'); if (ups) ups.disabled = false;
+  const tr = $('tiltRange'); if (tr) tr.disabled = lock;
+  regenerate();
+}
+
+/* ===== Admin / export ===== */
+const REPO_ISSUES_URL = 'https://github.com/AGFazio/Moving-Heads/issues/new';
+
+function showInfoModal(title, html) {
+  const modal = document.getElementById('infoModal');
+  if (!modal) return;
+  document.getElementById('infoModalTitle').textContent = title;
+  document.getElementById('infoModalBody').innerHTML = html;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  const closeBtn = document.getElementById('infoModalCloseBtn');
+  const fresh = closeBtn.cloneNode(true);
+  closeBtn.parentNode.replaceChild(fresh, closeBtn);
+  const trigger = document.activeElement;
+  const close = () => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    if (trigger && typeof trigger.focus === 'function') trigger.focus();
+  };
+  fresh.addEventListener('click', close);
+  modal.addEventListener('click', (ev) => { if (ev.target === modal) close(); });
+  setTimeout(() => fresh.focus(), 0);
+}
+
+function showSubmitModal(preset) {
+  const modal = document.getElementById('submitModal');
+  if (!modal) return;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  const fresh = (id) => {
+    const btn = document.getElementById(id);
+    const c = btn.cloneNode(true);
+    btn.parentNode.replaceChild(c, btn);
+    return c;
+  };
+  const eGh = fresh('submitGithubBtn');
+  const trigger = document.activeElement;
+  const close = () => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    if (trigger && typeof trigger.focus === 'function') trigger.focus();
+  };
+  setTimeout(() => eGh.focus(), 0);
+
+  eGh.addEventListener('click', () => {
+    const title = 'New fixture: ' + preset.name;
+    const json = JSON.stringify(preset, null, 2);
+    const body = 'A new moving-head fixture was created via the .xmodel builder.\n\n' +
+      '**Name:** ' + preset.name + '\n' +
+      '**Channels:** ' + preset.channels.length + '\n\n' +
+      'Please append this object to `moving_heads_channel_types.json` -> `moving_heads`:\n\n' +
+      '```json\n' + json + '\n```\n';
+    const url = REPO_ISSUES_URL +
+      '?title=' + encodeURIComponent(title) +
+      '&body=' + encodeURIComponent(body);
+    window.open(url, '_blank', 'noopener');
+    close();
+  });
+  modal.addEventListener('click', (ev) => { if (ev.target === modal) close(); });
+}
+
+function applyPreset(p) {
+  channelList = p.channels.map(normalizeChannel);
+  syncChannelCountFromList();
+  if (p.pan_motor) {
+    if ($('panReverse')) $('panReverse').value = p.pan_motor.reverse;
+    if ($('panOrientHome')) $('panOrientHome').value = p.pan_motor.orient_home;
+    if ($('panOrientZero')) $('panOrientZero').value = (p.pan_motor.orient_zero != null) ? p.pan_motor.orient_zero : 0;
+    if (typeof syncOrientationFromPreset === 'function') syncOrientationFromPreset();
+  }
+  if (p.tilt_motor) {
+    if ($('tiltRange')) $('tiltRange').value = p.tilt_motor.range_of_motion;
+    if ($('tiltUpsideDown')) $('tiltUpsideDown').checked = !!p.tilt_motor.reverse;
+    // Tilt orient values are derived from tilt range; nothing to set here.
+  }
+  // Restore color wheel slots if the preset carries them
+  if (Array.isArray(p.color_wheel) && p.color_wheel.length) {
+    if ($('wheelSlots')) $('wheelSlots').value = String(p.color_wheel.length);
+    buildWheelUI();
+    p.color_wheel.forEach((slot, i) => {
+      const c = $('wc_' + i), d = $('wd_' + i);
+      if (c && slot.color) c.value = slot.color;
+      if (d && slot.dmx != null) d.value = slot.dmx;
+    });
+  }
+  buildChannelListUI();
+  updateDerived();
+  buildSubmodelUI();
+  // Sync the preset dropdown to reflect what's currently loaded
+  const presetSel = $('presetSelect');
+  if (presetSel) {
+    const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === p.name);
+    if (idx >= 0) presetSel.value = 'b:' + idx;
+  }
+  regenerate();
+}
+
+function currentAsPreset(name) {
+  // Snapshot current wheel slots so custom colors/DMX values travel with the preset
+  const slotCount = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
+  const wheel = [];
+  for (let i = 0; i < slotCount; i++) {
+    const c = $('wc_' + i), d = $('wd_' + i);
+    if (!c || !d) break;
+    wheel.push({ color: c.value, dmx: parseInt(d.value, 10) || 0 });
+  }
+  return {
+    name: name,
+    channels: channelList.slice(),
+    pan_motor: {
+      min_limit: -180,
+      max_limit: 180,
+      range_of_motion: 540,
+      reverse: parseInt($('panReverse').value, 10),
+      orient_home: parseInt($('panOrientHome').value, 10),
+      orient_zero: parseInt($('panOrientZero').value, 10),
+    },
+    tilt_motor: {
+      min_limit: -180,
+      max_limit: 180,
+      range_of_motion: parseFloat($('tiltRange').value),
+      reverse: $('tiltUpsideDown').checked ? 1 : 0,
+      orient_home: (parseFloat($('tiltRange').value) || 270) / 2,
+      orient_zero: ((parseFloat($('tiltRange').value) || 270) - 180) / 2,
+    },
+    color_wheel: wheel,
+  };
+}
+
+/* ===================== Read inputs ===================== */
+
+function readConfig() {
+  // Submodel checks (only for roles present in list)
+  const submodels = {};
+  ROLES.forEach(r => {
+    if (!r.submodelName) return;
+    const cb = document.querySelector('input[data-role="' + r.role + '"]');
+    submodels[r.role] = cb ? cb.checked : r.submodelDefault;
+  });
+
+  const slotCount = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
+  const wheel = [];
+  for (let i = 0; i < slotCount; i++) {
+    const c = $('wc_' + i);
+    const d = $('wd_' + i);
+    if (!c || !d) break;
+    wheel.push({ color: c.value, dmx: parseInt(d.value, 10) || 0 });
+  }
+
+  // Derived role channel numbers
+  const roleCh = {};
+  ROLES.forEach(r => { roleCh[r.role] = chPos(r.lookup); });
+
+  return {
+    modelName: ($('modelName').value || 'MH').trim(),
+    headCount: Math.max(1, parseInt($('headCount').value, 10) || 1),
+    channelCount: channelList.length,
+    startChannel: Math.max(1, parseInt($('startChannel').value, 10) || 1),
+    channels: channelList.slice(),
+    roleCh: roleCh,
+    submodels: submodels,
+    wheel: wheel,
+
+    panMin: -180,
+    panMax: 180,
+    panRange: 540,
+    panReverse: parseInt($('panReverse').value, 10) || 0,
+    panOrientHome: parseInt($('panOrientHome').value, 10),
+    panOrientZero: parseInt($('panOrientZero').value, 10) || 0,
+
+    tiltMin: -180,
+    tiltMax: 180,
+    tiltRange: parseFloat($('tiltRange').value) || 270,
+    tiltUpsideDown: $('tiltUpsideDown').checked ? 1 : 0,
+    // Tilt orient values are derived from tilt range:
+    //   OrientUp   = range / 2
+    //   OrientZero = (range - 180) / 2
+    tiltOrientHome: (parseFloat($('tiltRange').value) || 270) / 2,
+    tiltOrientZero: ((parseFloat($('tiltRange').value) || 270) - 180) / 2,
+
+    beamLength: 20,
+    beamWidth: 4,
+  };
+}
+
+/* ===================== XML generation ===================== */
+
+function xmlEscape(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Empty-string values ARE rendered (e.g. Controller="" matches xLights format).
+function attrs(obj) {
+  return Object.entries(obj)
+    .filter(([k, v]) => v !== undefined && v !== null)
+    .map(([k, v]) => k + '="' + xmlEscape(v) + '"')
+    .join(' ');
+}
+
+function buildSubmodel(role, cfg) {
+  const ch = cfg.roleCh[role.role];
+  if (!ch) return '';
+  const submodelName = cfg.modelName + ' ' + role.submodelName;
+  const firstRef = '@' + cfg.modelName + '1:' + ch;
+
+  const a = {
+    name: submodelName,
+    DisplayAs: 'Single Line',
+    Advanced: '1',
+    Antialias: '1',
+    Controller: '',
+    Dir: 'L',
+    LayoutGroup: 'Default',
+    LightsPerNode: '1',
+    NodesPerString: '1',
+    NumStrings: String(cfg.headCount),
+    PixelSize: '10',
+    SourceVersion: '2026.09.1',
+    StartChannel: firstRef,
+    StartSide: 'B',
+    String1: firstRef,
+  };
+  for (let i = 2; i <= cfg.headCount; i++) {
+    a['String' + i] = '@' + cfg.modelName + i + ':' + ch;
+  }
+  a.StringType = 'Single Color Intensity';
+  a.Transparency = '0';
+  a.versionNumber = '8';
+  a.WorldPosX = '155.322006';
+  a.WorldPosY = (role.worldPosY || 478.566010).toFixed(6);
+  a.WorldPosZ = '0.000000';
+  a.X2 = '63.696701';
+  a.Y2 = '-0.866577';
+  a.Z2 = '0.000000';
+
+  if (role.aliases && role.aliases.length) {
+    const aliasXml = '\n\t\t<Aliases>\n' +
+      role.aliases.map(al => '\t\t\t<alias name="' + xmlEscape(al) + '" />').join('\n') +
+      '\n\t\t</Aliases>\n\t';
+    return '\t<model ' + attrs(a) + '>' + aliasXml + '</model>';
+  }
+  return '\t<model ' + attrs(a) + ' />';
+}
+
+function buildHead(i, cfg) {
+  const name = cfg.modelName + i;
+  const startCh = cfg.startChannel + (i - 1) * cfg.channelCount;
+  const worldPosX = (265.093201 + (i - 1) * 40).toFixed(6);
+  const nodeNames = cfg.channels.join(',');
+
+  const a = {
+    name: name,
+    DisplayAs: 'DmxMovingHeadAdv',
+    Antialias: '1',
+    Controller: 'No Controller',
+    Dir: 'L',
+    DmxBeamLength: cfg.beamLength.toFixed(6),
+    DmxBeamOrient: '0',
+    DmxBeamWidth: cfg.beamWidth.toFixed(6),
+    DmxBeamYOffset: '0.000000',
+    DmxChannelCount: String(cfg.channelCount),
+  };
+
+  if (cfg.roleCh.color) {
+    a.DmxColorType = '1';
+    a.DmxColorWheelChannel = String(cfg.roleCh.color);
+    cfg.wheel.forEach((slot, idx) => { a['DmxColorWheelColor' + idx] = slot.color; });
+    a.DmxColorWheelDelay = '0';
+    cfg.wheel.forEach((slot, idx) => { a['DmxColorWheelDMX' + idx] = String(slot.dmx); });
+  }
+
+  if (cfg.roleCh.dimmer)  a.DmxDimmerChannel  = String(cfg.roleCh.dimmer);
+  a.DmxFixture = cfg.modelName + '1';
+  if (cfg.roleCh.shutter) {
+    a.DmxShutterChannel = String(cfg.roleCh.shutter);
+    a.DmxShutterOnValue = '255';
+    a.DmxShutterOpen = '1';
+  }
+  a.LayoutGroup = 'Default';
+  if (cfg.roleCh.dimmer)  a.MhDimmerChannel  = String(cfg.roleCh.dimmer);
+  a.NodeNames = nodeNames;
+  a.PixelSize = '2';
+  a.RotateX = '0.000000';
+  a.RotateY = '0.000000';
+  a.RotateZ = '0.000000';
+  a.ScaleX = '1.000000';
+  a.ScaleY = '1.000000';
+  a.ScaleZ = '1.000000';
+  a.SourceVersion = '2026.09.1';
+  a.StartChannel = String(startCh);
+  a.StartSide = 'B';
+  a.StringType = 'Single Color White';
+  a.Transparency = '0';
+  a.versionNumber = '8';
+  a.WorldPosX = worldPosX;
+  a.WorldPosY = '506.157715';
+  a.WorldPosZ = '0.000000';
+
+  const panCh = cfg.roleCh.pan || 0;
+  const panFineCh = cfg.roleCh.panFine || 0;
+  const tiltCh = cfg.roleCh.tilt || 0;
+  const tiltFineCh = cfg.roleCh.tiltFine || 0;
+
+  const inner =
+    '\t\t<PanMotor ChannelCoarse="' + panCh + '" ChannelFine="' + panFineCh + '" MinLimit="' + cfg.panMin + '" MaxLimit="' + cfg.panMax + '" RangeOfMotion="' + cfg.panRange.toFixed(6) + '" OrientZero="' + cfg.panOrientZero + '" OrientHome="' + cfg.panOrientHome + '" SlewLimit="180.000000" Reverse="' + cfg.panReverse + '" UpsideDown="0" />\n' +
+    '\t\t<TiltMotor ChannelCoarse="' + tiltCh + '" ChannelFine="' + tiltFineCh + '" MinLimit="' + cfg.tiltMin + '" MaxLimit="' + cfg.tiltMax + '" RangeOfMotion="' + cfg.tiltRange.toFixed(6) + '" OrientZero="' + cfg.tiltOrientZero + '" OrientHome="' + cfg.tiltOrientHome + '" SlewLimit="180.000000" Reverse="0" UpsideDown="' + cfg.tiltUpsideDown + '" />\n' +
+    '\t\t<BaseMesh ObjFile="C:\\Program Files\\xLights\\meshobjects\\SimpleMovingHead\\MovingHeadBase.obj" MeshOnly="0" Brightness="40.000000" Width="32.090599" Height="9.159451" Depth="25.529499" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="0.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
+    '\t\t<YokeMesh ObjFile="C:\\Program Files\\xLights\\meshobjects\\SimpleMovingHead\\MovingHeadYoke.obj" MeshOnly="0" Brightness="50.000000" Width="26.763802" Height="19.488209" Depth="15.915359" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
+    '\t\t<HeadMesh ObjFile="C:\\Program Files\\xLights\\meshobjects\\SimpleMovingHead\\MovingHead.obj" MeshOnly="0" Brightness="80.000000" Width="22.069799" Height="24.279701" Depth="11.368110" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="90.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="0.000000" OffsetZ="0.000000" />';
+
+  return '\t<model ' + attrs(a) + '>\n' + inner + '\n\t</model>';
+}
+
+// Order of submodels in output matches PS1: Dimmer, Pan, Shutter, Tilt, then any others
+const SUBMODEL_ORDER = ['dimmer','pan','shutter','tilt','color','gobo','prism','prismRotate','focus','frost'];
+
+function buildXmodel(cfg) {
+  const subOut = [];
+  SUBMODEL_ORDER.forEach(roleKey => {
+    const role = ROLES.find(r => r.role === roleKey);
+    if (!role || !role.submodelName) return;
+    if (!cfg.submodels[roleKey]) return;
+    if (!cfg.roleCh[roleKey]) return;
+    subOut.push(buildSubmodel(role, cfg));
+  });
+
+  const heads = [];
+  for (let i = 1; i <= cfg.headCount; i++) heads.push(buildHead(i, cfg));
+
+  // When >1 head, also emit a <modelGroup> containing just the head models.
+  let groupXml = '';
+  if (cfg.headCount > 1) {
+    const headNames = [];
+    for (let i = 1; i <= cfg.headCount; i++) headNames.push(cfg.modelName + i);
+    const groupAttrs = {
+      name: 'Group - MH ALL',
+      models: headNames.join(','),
+      LayoutGroup: 'Default',
+      GridSize: '400',
+      Transparency: '0',
+      SourceVersion: '2026.09.1',
+      selected: '0',
+      layout: 'minimalGrid',
+      showWhenSearched: '0',
+    };
+    groupXml = '\n\t<modelGroup ' + attrs(groupAttrs) + ' />';
+  }
+  const body = [...subOut, ...heads].join('\n');
+  return '<?xml version="1.0"?>\n<models type="exported">\n' + body + groupXml + '\n</models>';
+}
+
+/* ===================== Wire up ===================== */
+
+let lastXml = '';
+function setStatus(msg, kind) {
+  const el = $('status');
+  el.textContent = msg;
+  el.className = 'status' + (kind ? ' ' + kind : '');
+}
+
+function regenerate() {
+  try {
+    const cfg = readConfig();
+    if (cfg.channelCount === 0) {
+      setStatus('Channel list is empty. Load a preset or add channels.', 'warn');
+      $('preview').textContent = '';
+      lastXml = '';
+      return;
+    }
+    if (!cfg.roleCh.pan && !cfg.roleCh.tilt && !cfg.roleCh.dimmer && !cfg.roleCh.shutter) {
+      setStatus('Warning: no Pan / Tilt / Dimming / Strobe found in channel list.', 'warn');
+    } else {
+      setStatus('Generated - ' + cfg.headCount + ' head' + (cfg.headCount === 1 ? '' : 's') + ', ' + cfg.channelCount + ' channels each, total ' + (cfg.headCount * cfg.channelCount) + ' channels.');
+    }
+    lastXml = buildXmodel(cfg);
+    $('preview').textContent = lastXml;
+  } catch (err) {
+    setStatus('Error: ' + err.message, 'err');
+    console.error(err);
+  }
+}
+
+const REMOTE_PRESETS_URL = 'https://raw.githubusercontent.com/AGFazio/Moving-Heads/main/moving_heads_channel_types.json';
+
+// Try to fetch the latest preset catalog from the GitHub repo and refresh the
+// preset dropdown. Falls back to baked-in BUILTIN_PRESETS silently on failure
+// (offline, CORS, repo unreachable, etc.).
+async function loadRemotePresets() {
+  try {
+    const resp = await fetch(REMOTE_PRESETS_URL, { cache: 'no-cache' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (!data || !Array.isArray(data.moving_heads) || data.moving_heads.length === 0) {
+      throw new Error('Catalog is empty or malformed');
+    }
+    // Replace baked-in presets and rebuild the dropdown. Don't disturb the
+    // currently-selected preset / form state.
+    BUILTIN_PRESETS = data.moving_heads;
+    buildPresetDropdown();
+    setStatus('Loaded ' + BUILTIN_PRESETS.length + ' fixtures from the repository.');
+  } catch (err) {
+    console.warn('Using baked-in preset fallback (remote fetch failed):', err.message);
+    setStatus('Using built-in preset list (remote catalog unreachable).', 'warn');
+  }
+}
+
+function init() {
+  buildPresetDropdown();
+  buildWheelUI();
+  // Start with YPS 350W preset loaded so the preview isn't empty
+  const yps = BUILTIN_PRESETS.find(p => p.name === 'YPS 350W');
+  if (yps) applyPreset(yps);
+  buildSubmodelUI();
+  updateDerived();
+
+  $('loadPresetBtn').addEventListener('click', () => {
+    const v = $('presetSelect').value;
+    if (!v) { setStatus('Pick a preset from the list first.', 'warn'); return; }
+    const idxStr = v.split(':')[1];
+    const idx = parseInt(idxStr, 10);
+    const p = BUILTIN_PRESETS[idx];
+    if (p) {
+      applyPreset(p);
+      setStatus('Loaded preset: ' + p.name);
+    }
+  });
+
+  $('saveAsPresetBtn').addEventListener('click', (ev) => {
+    ev.preventDefault();
+    if (channelList.length === 0) { setStatus('Nothing to save - channel list is empty.', 'warn'); return; }
+    const nameInput = $('newModelName');
+    const name = nameInput ? nameInput.value.trim() : '';
+    if (!name) { alert('Please enter a Model name first.'); if (nameInput) nameInput.focus(); return; }
+    const newPreset = currentAsPreset(name);
+    setStatus('Preparing to submit: ' + name);
+    showSubmitModal(newPreset);
+  });
+
+  // Channel count input drives channelList length
+  $('channelCount').addEventListener('change', () => {
+    const target = parseInt($('channelCount').value, 10) || 1;
+    resizeChannelList(target);
+    buildChannelListUI();
+    updateDerived();
+    buildSubmodelUI();
+    regenerate();
+  });
+
+  $('clearChBtn').addEventListener('click', () => {
+    if (channelList.length === 0) return;
+    if (!confirm('Clear all channels from the list?')) return;
+    channelList = [];
+    buildChannelListUI();
+    updateDerived();
+    buildSubmodelUI();
+    $('preview').textContent = '';
+    lastXml = '';
+  });
+
+  $('generateBtn').addEventListener('click', (ev) => {
+    ev.preventDefault();
+    regenerate();
+    if (!lastXml) return;
+    // Well-formedness check before downloading
+    try {
+      const doc = new DOMParser().parseFromString(lastXml, 'application/xml');
+      const errEl = doc.querySelector('parsererror');
+      if (errEl) {
+        setStatus('Cannot download - generated XML is malformed. See browser console (F12).', 'err');
+        console.error('Generated .xmodel XML parse error:', errEl.textContent);
+        return;
+      }
+    } catch (e) {
+      setStatus('Cannot download - XML parser error: ' + e.message, 'err');
+      console.error(e);
+      return;
+    }
+    const cfg = readConfig();
+    const filename = cfg.headCount + ' head' + (cfg.headCount === 1 ? '' : 's') + ' ' + cfg.modelName + '.xmodel';
+    const BOM = '\uFEFF';
+    const dataUrl = 'data:application/xml;charset=utf-8,' + encodeURIComponent(BOM + lastXml);
+    const a = document.createElement('a');
+    a.href = dataUrl; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setStatus('Generated + downloaded "' + filename + '" - check your browser downloads (Ctrl+J).');
+  });
+
+
+
+  const liveIds = ['modelName','headCount','startChannel',
+    'panReverse','panOrientHome','panOrientZero',
+    'tiltRange','tiltUpsideDown',
+    'channelCount'];
+  liveIds.forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('change', regenerate);
+  });
+
+  const ws = $('wheelSlots');
+  if (ws) {
+    ws.addEventListener('change', () => {
+      buildWheelUI();
+      regenerate();
+    });
+  }
+
+  // Fixture mode toggle
+  document.getElementById('fixtureModePreset').addEventListener('change', () => setFixtureMode('preset'));
+  document.getElementById('fixtureModeNew').addEventListener('change', () => {
+    // Switching to add-new mode resets all channel slots to Blank so user starts fresh
+    channelList = channelList.map(() => 'Blank');
+    buildChannelListUI();
+    updateDerived();
+    buildSubmodelUI();
+    setFixtureMode('new');
+  });
+
+  // Pan orientation radios + direction change
+  document.querySelectorAll('input[name="panOrient"]').forEach(r => {
+    r.addEventListener('change', () => { applyOrientation(); regenerate(); });
+  });
+  if ($('panReverse')) {
+    $('panReverse').addEventListener('change', () => { updateOrientUI(); regenerate(); });
+  }
+  updateOrientUI();
+
+
+  // Clamp Quantity of heads to a minimum of 1, and toggle the >8 heads warning
+  function updateHeadCountWarn() {
+    const el = $('headCount');
+    const warn = $('headCountWarn');
+    if (!el || !warn) return;
+    const v = parseInt(el.value, 10) || 0;
+    warn.classList.toggle('show', v > 8);
+  }
+  if ($('headCount')) {
+    $('headCount').addEventListener('input', () => {
+      const el = $('headCount');
+      const v = parseInt(el.value, 10);
+      if (isNaN(v) || v < 1) el.value = '1';
+      updateHeadCountWarn();
+    });
+    updateHeadCountWarn();
+  }
+  // Clamp DMX Start Channel to 1..512 (DMX universe limit)
+  if ($('startChannel')) {
+    $('startChannel').addEventListener('input', () => {
+      const el = $('startChannel');
+      const v = parseInt(el.value, 10);
+      if (isNaN(v) || v < 1) el.value = '1';
+      else if (v > 512) el.value = '512';
+    });
+  }
+
+  // Esc key closes any open modal
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Escape') return;
+    document.querySelectorAll('.modal-backdrop.show').forEach(m => { m.classList.remove('show'); m.setAttribute('aria-hidden', 'true'); });
+  });
+
+  // Quantity of heads info button -> explains the >8 limit
+  if ($('headCountHelpBtn')) {
+    $('headCountHelpBtn').addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const html =
+        '<p>The xLights <b>Advanced Moving Head effect</b> supports a maximum of <b>8 fixtures</b> at a time.</p>' +
+        '<p>If you set <b>Quantity of heads</b> higher than 8, the generated <code>.xmodel</code> will still include every head and the Model Group, but the Advanced Moving Head effect will only address the first 8. You will need to:</p>' +
+        '<ul>' +
+        '<li>Manually adjust the models in xLights so they perform as expected.</li>' +
+        '</ul>';
+      showInfoModal('Quantity of heads - 8 fixture limit', html);
+    });
+  }
+
+  // Pan Direction help button -> info modal
+  if ($('panDirHelpBtn')) {
+    $('panDirHelpBtn').addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const html =
+        '<p><b>How to test the pan direction:</b></p>' +
+        '<ol>' +
+        '<li>With the moving head <b>powered off</b>, manually turn the head clockwise (as viewed from above) until it stops.</li>' +
+        '<li>Power on the moving head and observe the direction the head turns to reach its rest position.</li>' +
+        '<li><b>If the head turns counter-clockwise</b> back to rest &rarr; Pan Direction is <b>CCW - Counter Clockwise</b>.</li>' +
+        '<li><b>If the head stays put, or moves slightly and returns clockwise</b> to rest &rarr; Pan Direction is <b>CW - Clockwise</b>.</li>' +
+        '</ol>';
+      showInfoModal('Test Pan Direction', html);
+    });
+  }
+
+  // Start in preset mode (the auto-loaded YPS 350W preset)
+  setFixtureMode('preset');
+
+  regenerate();
+
+  // Kick off remote catalog fetch (non-blocking). Updates the dropdown when it lands.
+  loadRemotePresets();
+}
+
+init();
+</script>
+
+<div id="infoModal" class="modal-backdrop info-modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <h3 id="infoModalTitle"></h3>
+    <div class="modal-body" id="infoModalBody"></div>
+    <div class="modal-actions">
+      <button type="button" id="infoModalCloseBtn">Got it</button>
+    </div>
+  </div>
+</div>
+
+<div id="submitModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="submitModalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <h3 id="submitModalTitle">Share your new fixture?</h3>
+    <p>The fixture is saved in this browser. To get it added to the shared preset catalog for everyone, click below. A GitHub issue will open in a new tab with all the details pre-filled &mdash; just click the green <b>CREATE</b> button at the bottom of that page.</p>
+    <div class="modal-actions">
+      <button type="button" id="submitGithubBtn">Open a GitHub issue (new tab)</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+                                                                                      
