@@ -1097,6 +1097,23 @@ async function loadRemotePresets() {
 }
 
 function init() {
+  // Welcome modal: dismiss on Start click or backdrop click; Esc handler covers keyboard
+  const wm = document.getElementById('welcomeModal');
+  if (wm) {
+    const startBtn = document.getElementById('welcomeStartBtn');
+    const closeWelcome = () => {
+      wm.classList.remove('show');
+      wm.setAttribute('aria-hidden', 'true');
+    };
+    if (startBtn) {
+      startBtn.addEventListener('click', closeWelcome);
+      // Move focus into the welcome dialog so Enter dismisses it
+      setTimeout(() => startBtn.focus(), 0);
+    }
+    wm.addEventListener('click', (ev) => { if (ev.target === wm) closeWelcome(); });
+  }
+
+
   buildPresetDropdown();
   buildWheelUI();
   // Start with YPS 350W preset loaded so the preview isn't empty
@@ -1291,6 +1308,27 @@ function init() {
 
 init();
 </script>
+
+<div id="welcomeModal" class="modal-backdrop info-modal show" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-hidden="false">
+  <div class="modal-box">
+    <h3 id="welcomeModalTitle">Welcome to the xLights Moving Head .xmodel Builder</h3>
+    <div class="modal-body">
+      <p>This tool generates ready-to-import <b>.xmodel</b> files for xLights, for any DMX moving-head fixture.</p>
+      <p><b>Quick start:</b></p>
+      <ol>
+        <li>Pick your fixture from the <b>Choose preset</b> dropdown (or switch to <b>Add new Moving Head</b> if it isn't listed).</li>
+        <li>Set the <b>Quantity of heads</b> and the <b>DMX Start Channel</b> for your show.</li>
+        <li>Pick the <b>Head orientation at rest</b>.</li>
+        <li>Click <b>Generate and Download xmodel</b>.</li>
+        <li>In xLights: <i>File &rarr; Import &rarr; Import Model From File</i> and pick the downloaded file.</li>
+      </ol>
+      <p>For full details, the channel-type reference, and how to submit a new fixture to the catalog, see the <a href="https://github.com/AGFazio/Moving-Heads#readme" target="_blank" rel="noopener" style="color:#cba6f7;">README on GitHub</a>.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" id="welcomeStartBtn">Start</button>
+    </div>
+  </div>
+</div>
 
 <div id="infoModal" class="modal-backdrop info-modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle" aria-hidden="true">
   <div class="modal-box">
