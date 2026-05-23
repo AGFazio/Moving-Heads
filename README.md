@@ -14,12 +14,14 @@ It runs entirely in your browser. Nothing is uploaded or saved anywhere unless y
 
 ## What it does
 
-Pick a moving-head fixture (or build a new one), set the number of heads and the DMX start channel, and the tool generates a ready-to-import xLights `.xmodel` file with:
+Pick a moving-head fixture (or build a new one), set the number of heads (up to 8), and the tool generates a ready-to-import xLights `.xmodel` file with:
 
 - One `DmxMovingHeadAdv` model per physical head
 - "String Group" sub-models you can drive together from the layout view (Dimmer, Shutter, Pan, Tilt, etc.)
 - A Model Group containing all heads (when you have more than one)
 - Properly mapped channel positions, pan/tilt motor parameters, color wheel slots, and head orientation
+
+> **Note on quantity:** The xLights *Advanced Moving Head* effect supports a maximum of 8 fixtures at a time, so this tool caps **Quantity of heads** at 8. If you have more than 8 of the same fixture, generate additional `.xmodel` files and merge the new heads into the existing Group manually in xLights after import.
 
 The output matches xLights' native `.xmodel` format — import it, place your heads in the layout, and you're done.
 
@@ -30,12 +32,12 @@ The output matches xLights' native `.xmodel` format — import it, place your he
 ### If your fixture is already in the preset list
 
 1. **Choose preset** mode is selected by default.
-2. Pick your fixture from the **Load a preset** dropdown and click **Load**.
-3. Set **Quantity of heads** and **DMX Start Channel** for your install.
+2. Pick your fixture from the **Load a preset Moving Head** dropdown and click **Load**.
+3. Set **Quantity of heads** for your install (max 8).
 4. In **Pan motor parameters**, choose the **Head orientation at rest** (Right / Left / Front / Back) — this is which way the head points when powered off, viewed from in front of the stage.
 5. Tick **Mount → Upside Down** if the fixtures are hung upside down.
 6. Click **Generate and Download xmodel**.
-7. In xLights: **File → Import → Import Model From File** and pick the downloaded `.xmodel`.
+7. In xLights Layout, click the **Import** icon, drag a box on the layout, and choose your `.xmodel` file from your Downloads folder.
 
 ### If your fixture isn't in the list yet
 

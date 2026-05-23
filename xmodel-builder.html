@@ -5,17 +5,22 @@
 <title>xLights Moving Head .xmodel Builder</title>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #1e1e2e; color: #cdd6f4; line-height: 1.5; }
-  header { background: #181825; padding: 18px 28px; border-bottom: 1px solid #313244; }
-  header h1 { margin: 0 0 4px 0; font-size: 22px; color: #cba6f7; }
-  header p { margin: 0; color: #a6adc8; font-size: 13px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #181825; color: #cdd6f4; line-height: 1.5; }
+  header { background: radial-gradient(ellipse at 50% 0%, #2a1a3a 0%, #181825 60%, #11111b 100%); padding: 30px 28px 26px; border-bottom: 1px solid #313244; box-shadow: 0 4px 14px rgba(0,0,0,0.35); text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 240px; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(203,166,247,0.6) 50%, transparent 100%); }
+  .about-link { position: absolute; top: 16px; right: 20px; font-size: 12px; color: #a6adc8; text-decoration: none; padding: 6px 12px; border: 1px solid #45475a; border-radius: 6px; transition: color 0.15s, border-color 0.15s, background 0.15s; background: rgba(0,0,0,0.15); letter-spacing: 0.04em; }
+  .about-link:hover { color: #cba6f7; border-color: #cba6f7; background: rgba(203,166,247,0.08); }
+
+  header::after { content: ""; display: block; width: 60px; height: 3px; margin: 12px auto 0; border-radius: 2px; background: linear-gradient(90deg, #cba6f7 0%, #f9e2af 100%); box-shadow: 0 0 8px rgba(203,166,247,0.4); }
+  header h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.015em; background: linear-gradient(180deg, #f5e7ff 0%, #cba6f7 60%, #b08fe8 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; text-shadow: 0 2px 24px rgba(203,166,247,0.25); }
+  header p { margin: 8px 0 0; color: #a6adc8; font-size: 13.5px; font-style: italic; letter-spacing: 0.02em; }
   main { display: block; min-height: calc(100vh - 70px); }
-  .form-pane { padding: 24px 28px; max-width: 900px; margin: 0 auto; }
-  fieldset { border: 1px solid #313244; border-radius: 8px; padding: 14px 16px 16px; margin: 0 0 16px 0; background: #181825; }
-  legend { padding: 0 8px; color: #f9e2af; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .form-pane { padding: 28px 32px 40px; max-width: 900px; margin: 0 auto; }
+  fieldset { border: 1px solid #45475a; border-radius: 10px; padding: 18px 20px 20px; margin: 0 0 18px 0; background: linear-gradient(180deg, #2b2b40 0%, #25253a 100%); box-shadow: 0 2px 6px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15); position: relative; }
+  legend { padding: 2px 10px; color: #f9e2af; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: linear-gradient(180deg, #181825 0%, #1e1e2e 100%); border: 1px solid #45475a; border-radius: 6px; }
   label { display: block; margin-bottom: 4px; font-size: 12px; color: #bac2de; font-weight: 500; }
-  input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 7px 10px; background: #1e1e2e; border: 1px solid #45475a; border-radius: 5px; color: #cdd6f4; font-family: inherit; font-size: 13px; }
-  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { outline: none; border-color: #cba6f7; }
+  input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 8px 11px; background: #1c1c2c; border: 1px solid #45475a; border-radius: 6px; color: #cdd6f4; font-family: inherit; font-size: 13px; transition: border-color 0.15s, box-shadow 0.15s; }
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { outline: none; border-color: #cba6f7; box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.18); }
   input[type="color"] { width: 100%; height: 32px; padding: 2px; background: #1e1e2e; border: 1px solid #45475a; border-radius: 5px; cursor: pointer; }
   textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; min-height: 60px; resize: vertical; }
   .row { display: grid; gap: 10px; margin-bottom: 10px; }
@@ -34,10 +39,10 @@
   .sub-row input[type="checkbox"] { width: 18px; height: 18px; }
   .wheel-grid { display: grid; grid-template-columns: 30px 1fr 90px; gap: 8px; align-items: center; margin-bottom: 6px; }
   .wheel-grid .slot-num { color: #a6adc8; font-size: 12px; text-align: center; }
-  button { background: #cba6f7; color: #1e1e2e; border: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
-  button:hover { background: #b4befe; }
-  button.secondary { background: #313244; color: #cdd6f4; }
-  button.secondary:hover { background: #45475a; }
+  button { background: linear-gradient(180deg, #cba6f7 0%, #b694f5 100%); color: #1e1e2e; border: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: filter 0.15s, transform 0.05s, box-shadow 0.15s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  button:hover { filter: brightness(1.08); box-shadow: 0 3px 6px rgba(0,0,0,0.25); }
+  button.secondary { background: #313244; color: #cdd6f4; box-shadow: 0 1px 3px rgba(0,0,0,0.18); }
+  button.secondary:hover { background: #45475a; box-shadow: 0 2px 5px rgba(0,0,0,0.22); }
   .actions { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
   pre.preview { flex: 1; background: #1e1e2e; border: 1px solid #313244; border-radius: 6px; padding: 14px; overflow: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; margin: 0; white-space: pre; color: #cdd6f4; }
   .help { color: #a6adc8; font-size: 12px; margin: -4px 0 8px 0; }
@@ -66,7 +71,7 @@
   #orientArrowGroup { transform-origin: 50px 50px; transition: transform 0.25s ease; }
   .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
   .modal-backdrop.show { display: flex; }
-  .modal-box { background: #181825; border: 1px solid #45475a; border-radius: 10px; padding: 24px; max-width: 460px; width: 90%; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+  .modal-box { background: linear-gradient(180deg, #2b2b40 0%, #25253a 100%); border: 1px solid #45475a; border-radius: 12px; padding: 28px; max-width: 460px; width: 90%; box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.35); }
   .modal-box h3 { margin: 0 0 8px 0; color: #cba6f7; font-size: 18px; }
   .modal-box p { margin: 0 0 16px 0; color: #bac2de; font-size: 13px; line-height: 1.5; }
   .modal-box .modal-actions { display: flex; flex-direction: column; gap: 8px; }
@@ -92,6 +97,7 @@
 <body>
 
 <header>
+  <a class="about-link" href="https://github.com/AGFazio/Moving-Heads#readme" target="_blank" rel="noopener" aria-label="About this tool">About</a>
   <h1>xLights Moving Head .xmodel Builder</h1>
   <p>Generate a DMX moving-head .xmodel for any quantity of heads (up to 8).</p>
 </header>
@@ -122,7 +128,7 @@
         <select id="presetSelect" class="preset-select"></select>
       </div>
 
-      <p class="help">Built-in presets come from your moving_heads_channel_types.json. Custom models you add are saved in this browser; an updated full catalog JSON is downloaded so you can commit it to the repository.</p>
+      <p class="help">Built-in presets are pre-configured Moving Heads kept in a shared catalog. The list grows as new Moving Heads are added.</p>
     </fieldset>
 
     <fieldset>
@@ -198,7 +204,7 @@
     <fieldset>
       <legend>Tilt motor parameters</legend>
       <div class="row cols-2">
-        <div><label for="tiltRange">Tilt range<span class="preset-lock-hint">(from preset)</span><span class="field-tip">Found in your manual or from the vendor.</span></label><input type="number" id="tiltRange" value="270" step="1"></div>
+        <div class="add-new-only"><label for="tiltRange">Tilt range<span class="field-tip">Found in your manual or from the vendor.</span></label><input type="number" id="tiltRange" value="270" step="1"></div>
         <div>
           <label for="tiltUpsideDown">Mount</label>
           <div style="display:flex; align-items:center; gap:8px; padding-top:6px;">
