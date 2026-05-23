@@ -31,7 +31,7 @@
   .chlist-actions { display: flex; gap: 8px; margin-top: 10px; }
   .chlist-actions button { padding: 6px 12px; font-size: 12px; }
   .sub-row { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: center; margin-bottom: 6px; }
-  .sub-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #cba6f7; }
+  .sub-row input[type="checkbox"] { width: 18px; height: 18px; }
   .wheel-grid { display: grid; grid-template-columns: 30px 1fr 90px; gap: 8px; align-items: center; margin-bottom: 6px; }
   .wheel-grid .slot-num { color: #a6adc8; font-size: 12px; text-align: center; }
   button { background: #cba6f7; color: #1e1e2e; border: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
@@ -49,13 +49,14 @@
   .status.err { color: #f38ba8; }
   .preset-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: end; }
   .preset-row button { padding: 8px 14px; font-size: 12px; }
+  .preset-select { font-size: 15px; padding: 9px 12px; width: auto; }
   body.preset-mode .add-new-only { display: none; }
   .preset-lock-hint { display: none; font-size: 11px; color: #fab387; font-style: italic; font-weight: 400; margin-left: 6px; }
   body.preset-mode .preset-lock-hint { display: inline; }
   .orient-grid { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: center; }
   .orient-radios { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
   .orient-radios label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; color: #cdd6f4; margin: 0; }
-  .orient-radios input[type="radio"] { width: 16px; height: 16px; accent-color: #cba6f7; }
+  .orient-radios input[type="radio"] { width: 16px; height: 16px; }
   .orient-radios label.disabled { opacity: 0.35; cursor: not-allowed; }
   #orientIcon { width: 126px; height: 90px; }
   #orientIcon .ring { fill: #313244; stroke: #45475a; stroke-width: 2; }
@@ -72,8 +73,13 @@
   .modal-box .modal-actions button { width: 100%; text-align: left; padding: 12px 14px; }
   .field-tip { display: block; margin-top: 2px; font-size: 11px; color: #a6adc8; font-weight: 400; font-style: italic; }
   .field-warn { display: none; margin-top: 6px; padding: 8px 10px; font-size: 12px; line-height: 1.45; color: #1e1e2e; background: #f9e2af; border-radius: 6px; font-weight: 500; }
+  .head-radios { display: flex; gap: 6px; flex-wrap: nowrap; margin-top: 4px; }
+  .head-radio { flex: 1 1 0; display: flex; align-items: center; justify-content: center; min-width: 0; padding: 8px 6px; border: 1px solid #45475a; border-radius: 6px; font-size: 14px; color: #cdd6f4; cursor: pointer; background: #1e1e2e; margin: 0; }
+  .head-radio:hover { background: #313244; }
+  .head-radio input { margin-right: 6px; }
+  .head-radio:has(input:checked) { border-color: #22c55e; background: #313244; }
   .field-warn.show { display: block; }
-  input[type="radio"], input[type="checkbox"] { accent-color: #cba6f7; }
+  input[type="radio"], input[type="checkbox"] { accent-color: #22c55e; }
   .help-btn { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #45475a; color: #f9e2af; border: none; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px; padding: 0; vertical-align: middle; }
   .help-btn:hover { background: #585b70; }
   .info-modal .modal-box { max-width: 520px; }
@@ -87,7 +93,7 @@
 
 <header>
   <h1>xLights Moving Head .xmodel Builder</h1>
-  <p>Generate a DMX moving-head .xmodel for any quantity of fixtures.</p>
+  <p>Generate a DMX moving-head .xmodel for any quantity of heads (up to 8).</p>
 </header>
 
 <main>
@@ -111,13 +117,9 @@
         </div>
       </div>
 
-      <div id="presetModeContainer" class="preset-row">
-        <div>
-          <label for="presetSelect">Load a preset Moving Head</label>
-          <select id="presetSelect"></select>
-        </div>
-        <button type="button" id="loadPresetBtn">Load</button>
-        <div></div>
+      <div id="presetModeContainer">
+        <label for="presetSelect" style="color:#f9e2af; font-size:13px;">Load a preset Moving Head &darr;</label>
+        <select id="presetSelect" class="preset-select"></select>
       </div>
 
       <p class="help">Built-in presets come from your moving_heads_channel_types.json. Custom models you add are saved in this browser; an updated full catalog JSON is downloaded so you can commit it to the repository.</p>
@@ -126,9 +128,11 @@
     <fieldset>
       <legend>Model</legend>
       <div class="row cols-2">
-        <div><label for="headCount">Quantity of heads <button type="button" class="help-btn" id="headCountHelpBtn" title="About the 8-head limit" aria-label="About the 8-head limit">?</button><span class="field-tip">Number of heads to be added in layout.</span></label><input type="number" id="headCount" value="1" min="1" max="500"><div id="headCountWarn" class="field-warn" role="status">Heads up: the xLights Advanced Moving Head effect supports up to 8 fixtures. Quantities above 8 will require manual adjustments to the models for them to perform as expected.</div></div>
-        <div><label for="startChannel">DMX Start Channel <span style="color:#a6adc8; font-weight:400;">(1-512)</span><span class="field-tip">Start channel for first head in chain.</span></label><input type="number" id="startChannel" value="1" min="1" max="512"></div>
+        <div><label>Quantity of heads (max 8) <button type="button" class="help-btn" id="headCountHelpBtn" title="Why 8?" aria-label="Why 8?">?</button><span class="field-tip">Number of heads to be added in layout.</span></label><div class="head-radios" id="headCountRadios"><label class="head-radio"><input type="radio" name="headCountRadio" value="1" checked>1</label><label class="head-radio"><input type="radio" name="headCountRadio" value="2">2</label><label class="head-radio"><input type="radio" name="headCountRadio" value="3">3</label><label class="head-radio"><input type="radio" name="headCountRadio" value="4">4</label><label class="head-radio"><input type="radio" name="headCountRadio" value="5">5</label><label class="head-radio"><input type="radio" name="headCountRadio" value="6">6</label><label class="head-radio"><input type="radio" name="headCountRadio" value="7">7</label><label class="head-radio"><input type="radio" name="headCountRadio" value="8">8</label></div><input type="hidden" id="headCount" value="1"></div>
+        <div></div>
       </div>
+      <!-- DMX Start Channel removed; defaults to 1. Hidden input kept for backward compat. -->
+      <input type="hidden" id="startChannel" value="1">
       <div class="row cols-2 add-new-only" id="channelCountRow">
         <div><label for="channelCount">Channels per fixture</label><input type="number" id="channelCount" value="16" min="1" max="64"></div>
         <div></div>
@@ -149,7 +153,7 @@
 
     <fieldset>
       <legend>String Groups</legend>
-      <p class="help">Generate String Groups so you can drive all heads' values for one function from one place.</p>
+      <p class="help">Generate String Groups so you can drive all heads' values for one function from one place.</p><p class="help" style="color:#f9e2af;"><b>Note:</b> The four pre-checked items (Dimmer, Pan, Shutter, Tilt) are the most commonly used and should be left checked. The others are optional.</p>
       <div id="submodelList"></div>
     </fieldset>
 
@@ -181,8 +185,8 @@
           </g>
         </svg>
         <div class="orient-radios">
-          <label data-orient="right"><input type="radio" name="panOrient" value="right" checked> Right</label>
-          <label data-orient="left"><input type="radio" name="panOrient" value="left"> Left</label>
+          <label data-orient="right"><input type="radio" name="panOrient" value="right" checked> Right <span class="orient-rec" data-for="right" style="color:#a6e3a1; font-size:11px;">(Recommended Position)</span></label>
+          <label data-orient="left"><input type="radio" name="panOrient" value="left"> Left <span class="orient-rec" data-for="left" style="color:#a6e3a1; font-size:11px;">(Recommended Position)</span></label>
           <label data-orient="front"><input type="radio" name="panOrient" value="front"> Front (toward viewer)</label>
           <label data-orient="back"><input type="radio" name="panOrient" value="back"> Back (away from viewer)</label>
         </div>
@@ -220,7 +224,7 @@
     </fieldset>
     <fieldset class="add-new-only">
       <legend>Save as Preset</legend>
-      <p class="help">Click "Add New Model as Preset" button to update preset repository.</p>
+      <p class="help">Use the vendor and model as the name (e.g. "ADJ Vizi Hex Wash 7", "Chauvet Intimidator Spot 360"). Click <b>Add New Model as Preset</b> to send it to the preset repository.</p>
       <div class="row cols-2" style="align-items:end;">
         <div>
           <label for="newModelName">Model name</label>
@@ -428,6 +432,8 @@ let BUILTIN_PRESETS = [
 
 // The ordered channel list — array of strings, e.g. ['Color Wheel','Dimming',...]
 let channelList = [];
+// Name of the currently-loaded preset (for restoring selection after remote refresh)
+let currentPresetName = null;
 
 /* ===================== Utilities ===================== */
 
@@ -452,11 +458,6 @@ function chPos(name) {
 function buildPresetDropdown() {
   const sel = $('presetSelect');
   sel.innerHTML = '';
-  const placeholder = document.createElement('option');
-  placeholder.value = '';
-  placeholder.textContent = '-- Select a preset --';
-  sel.appendChild(placeholder);
-
   if (BUILTIN_PRESETS.length) {
     const og = document.createElement('optgroup');
     og.label = 'Built-in';
@@ -468,19 +469,13 @@ function buildPresetDropdown() {
     });
     sel.appendChild(og);
   }
+  // Auto-size the select to ~5ch wider than the longest option text
+  let longest = 0;
+  Array.from(sel.options).forEach(o => { if (o.text.length > longest) longest = o.text.length; });
+  sel.style.width = (longest + 5) + 'ch';
   // Note: user-saved presets are intentionally NOT listed here.
   // New models are submitted via the GitHub issue flow; once the catalog JSON
   // on the repo is updated, they appear under the Built-in group above.
-}
-
-function buildDatalist() {
-  const dl = $('channelTypesDL');
-  dl.innerHTML = '';
-  CHANNEL_TYPES.forEach(t => {
-    const o = document.createElement('option');
-    o.value = t;
-    dl.appendChild(o);
-  });
 }
 
 function buildChannelListUI() {
@@ -580,8 +575,8 @@ function buildWheelUI() {
   const existing = [];
   wrap.querySelectorAll('.wheel-grid').forEach((row, i) => {
     const c = row.querySelector('input[type="color"]');
-    const d = row.querySelector('input[type="number"]');
-    if (c && d) existing.push({ color: c.value, dmx: parseInt(d.value, 10) || 0 });
+    const d = row.querySelector('input[type="text"], input[type="number"]');
+    if (c && d) existing.push({ color: c.value, dmx: d.value });
   });
   const n = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
   wrap.innerHTML = '';
@@ -592,21 +587,14 @@ function buildWheelUI() {
     row.innerHTML =
       '<div class="slot-num">' + (i + 1) + '</div>' +
       '<input type="color" id="wc_' + i + '" value="' + slot.color + '">' +
-      '<input type="number" id="wd_' + i + '" value="' + slot.dmx + '" min="0" max="255">';
+      '<input type="text" id="wd_' + i + '" value="' + slot.dmx + '" placeholder="e.g. 4 or 2-5">';
     wrap.appendChild(row);
   }
 }
 
 function updateDerived() {
-  const wrap = $('derivedRoles');
-  const pills = [];
-  ROLES.forEach(r => {
-    const pos = chPos(r.lookup);
-    if (pos > 0) {
-      pills.push('<span class="derived-pill"><b>' + r.label + '</b> ch ' + pos + '</span>');
-    }
-  });
-  wrap.innerHTML = pills.length ? pills.join('') : '<p class="help">No recognized roles in the list yet.</p>';
+  // Used to render role/channel pills, but the container is now hidden.
+  // Kept as a stable entry point; just syncs the channel-count display.
   syncChannelCountFromList();
 }
 
@@ -629,6 +617,7 @@ function getDirection() {
 function updateOrientUI() {
   const dir = getDirection();
   const disallowed = (dir === 1) ? 'left' : 'right';
+  const recommended = (dir === 1) ? 'right' : 'left';
   let cur = getSelectedOrient();
   document.querySelectorAll('input[name="panOrient"]').forEach(r => {
     const allowed = (r.value !== disallowed);
@@ -636,9 +625,11 @@ function updateOrientUI() {
     const lbl = r.closest('label');
     if (lbl) lbl.classList.toggle('disabled', !allowed);
   });
+  document.querySelectorAll('.orient-rec').forEach(span => {
+    span.style.display = (span.getAttribute('data-for') === recommended) ? '' : 'none';
+  });
   if (cur === disallowed) {
-    const fb = (dir === 1) ? 'right' : 'left';
-    const fbr = document.querySelector('input[name="panOrient"][value="' + fb + '"]');
+    const fbr = document.querySelector('input[name="panOrient"][value="' + recommended + '"]');
     if (fbr) fbr.checked = true;
   }
   applyOrientation();
@@ -677,8 +668,6 @@ function setFixtureMode(mode) {
   document.body.classList.toggle('preset-mode', mode === 'preset');
   const presetWrap = document.getElementById('presetModeContainer');
   if (presetWrap) presetWrap.style.display = (mode === 'preset') ? '' : 'none';
-  const addWrap = document.getElementById('addNewContainer');
-  if (addWrap) addWrap.style.display = (mode === 'new') ? '' : 'none';
   const lock = (mode === 'preset');
   const dir = $('panReverse'); if (dir) dir.disabled = lock;
   const ups = $('tiltUpsideDown'); if (ups) ups.disabled = false;
@@ -731,9 +720,9 @@ function showSubmitModal(preset) {
   setTimeout(() => eGh.focus(), 0);
 
   eGh.addEventListener('click', () => {
-    const title = 'New fixture: ' + preset.name;
+    const title = 'New Moving Head: ' + preset.name;
     const json = JSON.stringify(preset, null, 2);
-    const body = 'A new moving-head fixture was created via the .xmodel builder.\n\n' +
+    const body = 'A new Moving Head was created via the .xmodel builder.\n\n' +
       '**Name:** ' + preset.name + '\n' +
       '**Channels:** ' + preset.channels.length + '\n\n' +
       'Please append this object to `moving_heads_channel_types.json` -> `moving_heads`:\n\n' +
@@ -748,6 +737,7 @@ function showSubmitModal(preset) {
 }
 
 function applyPreset(p) {
+  currentPresetName = p && p.name ? p.name : null;
   channelList = p.channels.map(normalizeChannel);
   syncChannelCountFromList();
   if (p.pan_motor) {
@@ -768,7 +758,7 @@ function applyPreset(p) {
     p.color_wheel.forEach((slot, i) => {
       const c = $('wc_' + i), d = $('wd_' + i);
       if (c && slot.color) c.value = slot.color;
-      if (d && slot.dmx != null) d.value = slot.dmx;
+      if (d && slot.dmx != null) d.value = String(slot.dmx);
     });
   }
   buildChannelListUI();
@@ -784,13 +774,13 @@ function applyPreset(p) {
 }
 
 function currentAsPreset(name) {
-  // Snapshot current wheel slots so custom colors/DMX values travel with the preset
+  // Snapshot current wheel slots so custom colors/DMX values (including ranges like "2-5") travel with the preset
   const slotCount = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
   const wheel = [];
   for (let i = 0; i < slotCount; i++) {
     const c = $('wc_' + i), d = $('wd_' + i);
     if (!c || !d) break;
-    wheel.push({ color: c.value, dmx: parseInt(d.value, 10) || 0 });
+    wheel.push({ color: c.value, dmx: d.value });
   }
   return {
     name: name,
@@ -832,7 +822,7 @@ function readConfig() {
     const c = $('wc_' + i);
     const d = $('wd_' + i);
     if (!c || !d) break;
-    wheel.push({ color: c.value, dmx: parseInt(d.value, 10) || 0 });
+    wheel.push({ color: c.value, dmx: parseDmxValue(d.value) });
   }
 
   // Derived role channel numbers
@@ -872,6 +862,22 @@ function readConfig() {
 }
 
 /* ===================== XML generation ===================== */
+
+// Color wheel DMX Range parser. Accepts a single number ("4") or hyphenated range
+// ("2-5"); returns ceil((lo+hi)/2). Returns 0 for invalid input.
+function parseDmxValue(s) {
+  if (s == null) return 0;
+  s = String(s).trim();
+  if (!s) return 0;
+  const m = s.match(/^(\d+)\s*-\s*(\d+)$/);
+  if (m) {
+    const lo = parseInt(m[1], 10), hi = parseInt(m[2], 10);
+    if (isNaN(lo) || isNaN(hi)) return 0;
+    return Math.ceil((lo + hi) / 2);
+  }
+  const n = parseInt(s, 10);
+  return isNaN(n) ? 0 : n;
+}
 
 function xmlEscape(s) {
   return String(s)
@@ -1088,8 +1094,15 @@ async function loadRemotePresets() {
     // Replace baked-in presets and rebuild the dropdown. Don't disturb the
     // currently-selected preset / form state.
     BUILTIN_PRESETS = data.moving_heads;
+    // Remember the currently-loaded preset name so we can re-select it after rebuilding the dropdown
+    const currentName = (typeof currentPresetName === 'string') ? currentPresetName : null;
     buildPresetDropdown();
-    setStatus('Loaded ' + BUILTIN_PRESETS.length + ' fixtures from the repository.');
+    if (currentName) {
+      const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === currentName);
+      const sel = $('presetSelect');
+      if (idx >= 0 && sel) sel.value = 'b:' + idx;
+    }
+    setStatus('Loaded ' + BUILTIN_PRESETS.length + ' moving heads from the repository.');
   } catch (err) {
     console.warn('Using baked-in preset fallback (remote fetch failed):', err.message);
     setStatus('Using built-in preset list (remote catalog unreachable).', 'warn');
@@ -1116,15 +1129,15 @@ function init() {
 
   buildPresetDropdown();
   buildWheelUI();
-  // Start with YPS 350W preset loaded so the preview isn't empty
-  const yps = BUILTIN_PRESETS.find(p => p.name === 'YPS 350W');
-  if (yps) applyPreset(yps);
+  // Auto-load the first preset on startup so the preview isn't empty
+  if (BUILTIN_PRESETS.length > 0) applyPreset(BUILTIN_PRESETS[0]);
   buildSubmodelUI();
   updateDerived();
 
-  $('loadPresetBtn').addEventListener('click', () => {
+  // Auto-load preset on dropdown change
+  $('presetSelect').addEventListener('change', () => {
     const v = $('presetSelect').value;
-    if (!v) { setStatus('Pick a preset from the list first.', 'warn'); return; }
+    if (!v) return;
     const idxStr = v.split(':')[1];
     const idx = parseInt(idxStr, 10);
     const p = BUILTIN_PRESETS[idx];
@@ -1196,7 +1209,7 @@ function init() {
 
 
 
-  const liveIds = ['modelName','headCount','startChannel',
+  const liveIds = ['modelName',
     'panReverse','panOrientHome','panOrientZero',
     'tiltRange','tiltUpsideDown',
     'channelCount'];
@@ -1216,7 +1229,13 @@ function init() {
   // Fixture mode toggle
   document.getElementById('fixtureModePreset').addEventListener('change', () => setFixtureMode('preset'));
   document.getElementById('fixtureModeNew').addEventListener('change', () => {
-    // Switching to add-new mode resets all channel slots to Blank so user starts fresh
+    // Reset channel slots to Blank for a fresh start. Confirm only if there's work to lose.
+    const hasNonBlank = channelList.some(c => c && c !== 'Blank');
+    if (hasNonBlank && !confirm('Switching to Add New Moving Head will clear the channel layout. Continue?')) {
+      // Restore the preset radio so the UI matches state
+      document.getElementById('fixtureModePreset').checked = true;
+      return;
+    }
     channelList = channelList.map(() => 'Blank');
     buildChannelListUI();
     updateDerived();
@@ -1234,32 +1253,15 @@ function init() {
   updateOrientUI();
 
 
-  // Clamp Quantity of heads to a minimum of 1, and toggle the >8 heads warning
-  function updateHeadCountWarn() {
-    const el = $('headCount');
-    const warn = $('headCountWarn');
-    if (!el || !warn) return;
-    const v = parseInt(el.value, 10) || 0;
-    warn.classList.toggle('show', v > 8);
-  }
-  if ($('headCount')) {
-    $('headCount').addEventListener('input', () => {
-      const el = $('headCount');
-      const v = parseInt(el.value, 10);
-      if (isNaN(v) || v < 1) el.value = '1';
-      updateHeadCountWarn();
+  // Quantity of heads radio buttons -> mirror to hidden #headCount input
+  document.querySelectorAll('input[name="headCountRadio"]').forEach(r => {
+    r.addEventListener('change', () => {
+      if (!r.checked) return;
+      const hc = $('headCount');
+      if (hc) hc.value = r.value;
+      regenerate();
     });
-    updateHeadCountWarn();
-  }
-  // Clamp DMX Start Channel to 1..512 (DMX universe limit)
-  if ($('startChannel')) {
-    $('startChannel').addEventListener('input', () => {
-      const el = $('startChannel');
-      const v = parseInt(el.value, 10);
-      if (isNaN(v) || v < 1) el.value = '1';
-      else if (v > 512) el.value = '512';
-    });
-  }
+  });
 
   // Esc key closes any open modal
   document.addEventListener('keydown', (ev) => {
@@ -1272,11 +1274,7 @@ function init() {
     $('headCountHelpBtn').addEventListener('click', (ev) => {
       ev.preventDefault();
       const html =
-        '<p>The xLights <b>Advanced Moving Head effect</b> supports a maximum of <b>8 fixtures</b> at a time.</p>' +
-        '<p>If you set <b>Quantity of heads</b> higher than 8, the generated <code>.xmodel</code> will still include every head and the Model Group, but the Advanced Moving Head effect will only address the first 8. You will need to:</p>' +
-        '<ul>' +
-        '<li>Manually adjust the models in xLights so they perform as expected.</li>' +
-        '</ul>';
+        '<p>The xLights <b>Advanced Moving Head effect</b> supports a maximum of <b>8 fixtures</b> at a time.</p>';
       showInfoModal('Quantity of heads - 8 fixture limit', html);
     });
   }
@@ -1297,7 +1295,7 @@ function init() {
     });
   }
 
-  // Start in preset mode (the auto-loaded YPS 350W preset)
+  // Start in preset mode (the auto-loaded first preset)
   setFixtureMode('preset');
 
   regenerate();
@@ -1306,7 +1304,12 @@ function init() {
   loadRemotePresets();
 }
 
-init();
+// Defer init until the full DOM is parsed (the modals live after this <script>).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 
 <div id="welcomeModal" class="modal-backdrop info-modal show" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-hidden="false">
@@ -1317,10 +1320,10 @@ init();
       <p><b>Quick start:</b></p>
       <ol>
         <li>Pick your fixture from the <b>Choose preset</b> dropdown (or switch to <b>Add new Moving Head</b> if it isn't listed).</li>
-        <li>Set the <b>Quantity of heads</b> and the <b>DMX Start Channel</b> for your show.</li>
+        <li>Set the <b>Quantity of heads</b> for your show.</li>
         <li>Pick the <b>Head orientation at rest</b>.</li>
         <li>Click <b>Generate and Download xmodel</b>.</li>
-        <li>In xLights: <i>File &rarr; Import &rarr; Import Model From File</i> and pick the downloaded file.</li>
+        <li>In xLights Layout, click the <b>Import</b> icon, drag a box on the layout, and choose your <code>.xmodel</code> file from your Downloads folder.</li>
       </ol>
       <p>For full details, the channel-type reference, and how to submit a new fixture to the catalog, see the <a href="https://github.com/AGFazio/Moving-Heads#readme" target="_blank" rel="noopener" style="color:#cba6f7;">README on GitHub</a>.</p>
     </div>
@@ -1352,4 +1355,3 @@ init();
 
 </body>
 </html>
-                                                                                      
