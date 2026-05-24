@@ -39,6 +39,9 @@
   .sub-row input[type="checkbox"] { width: 18px; height: 18px; }
   .wheel-grid { display: grid; grid-template-columns: 30px 1fr 90px; gap: 8px; align-items: center; margin-bottom: 6px; }
   .wheel-grid .slot-num { color: #a6adc8; font-size: 12px; text-align: center; }
+  .rgbw-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .rgbw-cell label { display: block; margin: 0 0 4px 0; font-size: 12px; color: #a6adc8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .rgbw-cell select { width: 100%; padding: 6px 8px; font-size: 13px; }
   button { background: linear-gradient(180deg, #cba6f7 0%, #b694f5 100%); color: #1e1e2e; border: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: filter 0.15s, transform 0.05s, box-shadow 0.15s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
   button:hover { filter: brightness(1.08); box-shadow: 0 3px 6px rgba(0,0,0,0.25); }
   button.secondary { background: #313244; color: #cdd6f4; box-shadow: 0 1px 3px rgba(0,0,0,0.18); }
@@ -76,6 +79,10 @@
   .modal-box p { margin: 0 0 16px 0; color: #bac2de; font-size: 13px; line-height: 1.5; }
   .modal-box .modal-actions { display: flex; flex-direction: column; gap: 8px; }
   .modal-box .modal-actions button { width: 100%; text-align: left; padding: 12px 14px; }
+  .modal-box .modal-actions.confirm-actions { flex-direction: row; justify-content: flex-end; }
+  .modal-box .modal-actions.confirm-actions button { width: auto; text-align: center; padding: 10px 18px; }
+  .modal-box .modal-actions.confirm-actions button.secondary { background: #313244; color: #cdd6f4; border: 1px solid #45475a; }
+  .modal-box .modal-actions.confirm-actions button.secondary:hover { background: #45475a; }
   .field-tip { display: block; margin-top: 2px; font-size: 11px; color: #a6adc8; font-weight: 400; font-style: italic; }
   .field-warn { display: none; margin-top: 6px; padding: 8px 10px; font-size: 12px; line-height: 1.45; color: #1e1e2e; background: #f9e2af; border-radius: 6px; font-weight: 500; }
   .head-radios { display: flex; gap: 6px; flex-wrap: nowrap; margin-top: 4px; }
@@ -148,7 +155,7 @@
 
     <fieldset class="add-new-only">
       <legend>Channel layout</legend>
-      <p class="help">One entry per DMX channel for this fixture, in order. The role channels below (Dimmer, Pan, Tilt, etc.) are looked up by name in this list.</p>
+      <p class="help">One entry per DMX channel for this fixture, in order. The role channels below (Dimmer, Pan, Tilt, etc.) are looked up by name in this list. <b>RGBW heads:</b> leave the Red/Green/Blue/White channels as <code>Blank</code> here — assign them in the <b>Color Properties</b> section below.</p>
       <div class="chlist-header"><div class="center">Ch #</div><div>Channel type</div><div></div></div>
       <div id="channelList"></div>
       <div class="chlist-actions">
@@ -216,17 +223,52 @@
     </fieldset>
 
     <fieldset class="add-new-only">
-      <legend>Color Wheel</legend>
-      <p class="help">Used when "Color Wheel" appears in the channel list. DMX value is where the wheel lands on that color.</p>
-      <div class="row cols-2" style="margin-bottom:12px;">
+      <legend>Color Properties</legend>
+      <p class="help">Pick how this Moving Head produces color. <b>Color Wheel</b> = a rotating wheel with fixed color slots (one DMX channel). <b>RGBW</b> = separate Red, Green, Blue (and optional White) LED channels.</p>
+      <div class="row" style="margin-bottom:12px;">
         <div>
-          <label for="wheelSlots">Number of slots</label>
-          <input type="number" id="wheelSlots" value="13" min="1" max="64">
+          <label>Color Type</label>
+          <div class="orient-radios" style="display:flex; gap:18px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0;"><input type="radio" name="colorType" value="wheel" checked> Color Wheel</label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0;"><input type="radio" name="colorType" value="rgbw"> RGBW</label>
+          </div>
         </div>
-        <div></div>
       </div>
-      <div class="wheel-grid" style="margin-bottom:8px; font-size:10.5px; color:#a6adc8; text-transform:uppercase; letter-spacing:0.04em;"><div class="slot-num">Slot#</div><div style="text-align:center;">Color</div><div style="text-align:center;">DMX Range</div></div>
-      <div id="wheelEditor"></div>
+
+      <div id="colorWheelBlock">
+        <p class="help">DMX value is where the wheel lands on that color. Single number (<code>4</code>) or range (<code>2-5</code>).</p>
+        <div class="row cols-2" style="margin-bottom:12px;">
+          <div>
+            <label for="wheelSlots">Number of slots</label>
+            <input type="number" id="wheelSlots" value="13" min="1" max="64">
+          </div>
+          <div></div>
+        </div>
+        <div class="wheel-grid" style="margin-bottom:8px; font-size:10.5px; color:#a6adc8; text-transform:uppercase; letter-spacing:0.04em;"><div class="slot-num">Slot#</div><div style="text-align:center;">Color</div><div style="text-align:center;">DMX Range</div></div>
+        <div id="wheelEditor"></div>
+      </div>
+
+      <div id="colorRgbwBlock" style="display:none;">
+        <p class="help">Pick the DMX channel number for each color LED. Set White to <b>0</b> if your fixture has no dedicated white LED (it becomes a pure RGB head).</p>
+        <div class="rgbw-row">
+          <div class="rgbw-cell">
+            <label for="redChannel">Red</label>
+            <select id="redChannel"></select>
+          </div>
+          <div class="rgbw-cell">
+            <label for="greenChannel">Green</label>
+            <select id="greenChannel"></select>
+          </div>
+          <div class="rgbw-cell">
+            <label for="blueChannel">Blue</label>
+            <select id="blueChannel"></select>
+          </div>
+          <div class="rgbw-cell">
+            <label for="whiteChannel">White</label>
+            <select id="whiteChannel"></select>
+          </div>
+        </div>
+      </div>
     </fieldset>
     <fieldset class="add-new-only">
       <legend>Save as Preset</legend>
@@ -602,6 +644,52 @@ function updateDerived() {
   // Used to render role/channel pills, but the container is now hidden.
   // Kept as a stable entry point; just syncs the channel-count display.
   syncChannelCountFromList();
+  rebuildRgbwChannelOptions();
+}
+
+/* ===================== RGBW helpers ===================== */
+
+function getColorType() {
+  const c = document.querySelector('input[name="colorType"]:checked');
+  return c ? c.value : 'wheel';
+}
+
+// Rebuild the Red/Green/Blue/White <select> options to match the current channel count.
+// Preserves the current selection where possible. All four start at "0 (none)" so the user
+// must deliberately pick a channel — no silent defaults that could leak into the XML.
+function rebuildRgbwChannelOptions() {
+  const n = channelList.length;
+  const ids = ['redChannel','greenChannel','blueChannel','whiteChannel'];
+  ids.forEach(id => {
+    const sel = $(id);
+    if (!sel) return;
+    const prev = sel.value;
+    let opts = '<option value="0">0 (none)</option>';
+    for (let i = 1; i <= n; i++) opts += '<option value="' + i + '">' + i + '</option>';
+    sel.innerHTML = opts;
+    // Restore previous selection if still valid (still within range or zero)
+    if (prev && (prev === '0' || parseInt(prev, 10) <= n)) {
+      sel.value = prev;
+    } else {
+      sel.value = '0';
+    }
+  });
+}
+
+function applyColorTypeUI() {
+  const t = getColorType();
+  const wheel = $('colorWheelBlock');
+  const rgbw  = $('colorRgbwBlock');
+  if (wheel) wheel.style.display = (t === 'wheel') ? '' : 'none';
+  if (rgbw)  rgbw.style.display  = (t === 'rgbw')  ? '' : 'none';
+  // The Color String Group is only meaningful for wheel-style heads; hide it for RGBW.
+  // (xLights drives RGB color natively via DmxColorType/DmxRedChannel/etc.)
+  const colorSubRow = document.querySelector('#submodelList .sub-row input[data-role="color"]');
+  if (colorSubRow) {
+    const row = colorSubRow.closest('.sub-row');
+    if (row) row.style.display = (t === 'rgbw') ? 'none' : '';
+    if (t === 'rgbw') colorSubRow.checked = false;
+  }
 }
 
 /* ===================== Preset load / save ===================== */
@@ -742,6 +830,42 @@ function showSubmitModal(preset) {
   modal.addEventListener('click', (ev) => { if (ev.target === modal) close(); });
 }
 
+// Styled replacement for window.confirm(). Centers on screen, matches the other modals.
+// onOk runs when the user clicks Continue; onCancel runs on Cancel / Esc / backdrop click.
+function showConfirmModal(title, bodyHtml, onOk, onCancel) {
+  const modal = document.getElementById('confirmModal');
+  if (!modal) {
+    // Safety fallback if the modal markup is missing
+    if (window.confirm(title)) { if (onOk) onOk(); } else { if (onCancel) onCancel(); }
+    return;
+  }
+  document.getElementById('confirmModalTitle').textContent = title;
+  document.getElementById('confirmModalBody').innerHTML = bodyHtml;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+
+  const okBtn = document.getElementById('confirmModalOkBtn');
+  const cancelBtn = document.getElementById('confirmModalCancelBtn');
+
+  const close = (result) => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    okBtn.removeEventListener('click', okHandler);
+    cancelBtn.removeEventListener('click', cancelHandler);
+    modal.removeEventListener('click', backdropHandler);
+    if (result) { if (onOk) onOk(); } else { if (onCancel) onCancel(); }
+  };
+  const okHandler = () => close(true);
+  const cancelHandler = () => close(false);
+  const backdropHandler = (ev) => { if (ev.target === modal) close(false); };
+
+  okBtn.addEventListener('click', okHandler);
+  cancelBtn.addEventListener('click', cancelHandler);
+  modal.addEventListener('click', backdropHandler);
+  // Focus Cancel by default so accidental Enter doesn't destroy the user's work
+  setTimeout(() => cancelBtn.focus(), 0);
+}
+
 function applyPreset(p) {
   currentPresetName = p && p.name ? p.name : null;
   channelList = p.channels.map(normalizeChannel);
@@ -767,9 +891,22 @@ function applyPreset(p) {
       if (d && slot.dmx != null) d.value = String(slot.dmx);
     });
   }
+  // Restore color type (wheel | rgbw). Default to wheel for old presets without the field.
+  const ctype = (p.color_type === 'rgbw') ? 'rgbw' : 'wheel';
+  const ctRadio = document.querySelector('input[name="colorType"][value="' + ctype + '"]');
+  if (ctRadio) ctRadio.checked = true;
   buildChannelListUI();
   updateDerived();
+  // Restore RGBW channel assignments (after rebuildRgbwChannelOptions has run inside updateDerived).
+  // All four default to 0 (none) so the user must deliberately pick.
+  if (p.rgbw) {
+    if ($('redChannel'))   $('redChannel').value   = String(p.rgbw.red   || 0);
+    if ($('greenChannel')) $('greenChannel').value = String(p.rgbw.green || 0);
+    if ($('blueChannel'))  $('blueChannel').value  = String(p.rgbw.blue  || 0);
+    if ($('whiteChannel')) $('whiteChannel').value = String(p.rgbw.white || 0);
+  }
   buildSubmodelUI();
+  applyColorTypeUI();
   // Sync the preset dropdown to reflect what's currently loaded
   const presetSel = $('presetSelect');
   if (presetSel) {
@@ -807,7 +944,14 @@ function currentAsPreset(name) {
       orient_home: (parseFloat($('tiltRange').value) || 270) / 2,
       orient_zero: ((parseFloat($('tiltRange').value) || 270) - 180) / 2,
     },
+    color_type: getColorType(),
     color_wheel: wheel,
+    rgbw: {
+      red:   parseInt(($('redChannel')   && $('redChannel').value)   || '0', 10) || 0,
+      green: parseInt(($('greenChannel') && $('greenChannel').value) || '0', 10) || 0,
+      blue:  parseInt(($('blueChannel')  && $('blueChannel').value)  || '0', 10) || 0,
+      white: parseInt(($('whiteChannel') && $('whiteChannel').value) || '0', 10) || 0,
+    },
   };
 }
 
@@ -835,6 +979,14 @@ function readConfig() {
   const roleCh = {};
   ROLES.forEach(r => { roleCh[r.role] = chPos(r.lookup); });
 
+  const colorType = getColorType();
+  const rgbw = {
+    red:   parseInt(($('redChannel')   && $('redChannel').value)   || '0', 10) || 0,
+    green: parseInt(($('greenChannel') && $('greenChannel').value) || '0', 10) || 0,
+    blue:  parseInt(($('blueChannel')  && $('blueChannel').value)  || '0', 10) || 0,
+    white: parseInt(($('whiteChannel') && $('whiteChannel').value) || '0', 10) || 0,
+  };
+
   return {
     modelName: ($('modelName').value || 'MH').trim(),
     headCount: Math.max(1, parseInt($('headCount').value, 10) || 1),
@@ -844,6 +996,8 @@ function readConfig() {
     roleCh: roleCh,
     submodels: submodels,
     wheel: wheel,
+    colorType: colorType,
+    rgbw: rgbw,
 
     panMin: -180,
     panMax: 180,
@@ -965,7 +1119,14 @@ function buildHead(i, cfg) {
     DmxChannelCount: String(cfg.channelCount),
   };
 
-  if (cfg.roleCh.color) {
+  if (cfg.colorType === 'rgbw') {
+    // RGB / RGBW LED head. DmxColorType="0" tells xLights to drive color from R/G/B(/W) channels.
+    a.DmxColorType = '0';
+    if (cfg.rgbw.red)   a.DmxRedChannel   = String(cfg.rgbw.red);
+    if (cfg.rgbw.green) a.DmxGreenChannel = String(cfg.rgbw.green);
+    if (cfg.rgbw.blue)  a.DmxBlueChannel  = String(cfg.rgbw.blue);
+    a.DmxWhiteChannel = String(cfg.rgbw.white || 0);
+  } else if (cfg.roleCh.color) {
     a.DmxColorType = '1';
     a.DmxColorWheelChannel = String(cfg.roleCh.color);
     cfg.wheel.forEach((slot, idx) => { a['DmxColorWheelColor' + idx] = slot.color; });
@@ -1025,6 +1186,8 @@ function buildXmodel(cfg) {
     if (!role || !role.submodelName) return;
     if (!cfg.submodels[roleKey]) return;
     if (!cfg.roleCh[roleKey]) return;
+    // RGBW heads have no single color-wheel channel, so skip the Color string group.
+    if (roleKey === 'color' && cfg.colorType === 'rgbw') return;
     subOut.push(buildSubmodel(role, cfg));
   });
 
@@ -1135,10 +1298,25 @@ function init() {
 
   buildPresetDropdown();
   buildWheelUI();
+  rebuildRgbwChannelOptions();
   // Auto-load the first preset on startup so the preview isn't empty
   if (BUILTIN_PRESETS.length > 0) applyPreset(BUILTIN_PRESETS[0]);
   buildSubmodelUI();
   updateDerived();
+  applyColorTypeUI();
+
+  // Color Type radio toggles which color block is visible + which submodels make sense
+  document.querySelectorAll('input[name="colorType"]').forEach(r => {
+    r.addEventListener('change', () => {
+      applyColorTypeUI();
+      regenerate();
+    });
+  });
+  // Any change to the RGBW channel pickers regenerates
+  ['redChannel','greenChannel','blueChannel','whiteChannel'].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('change', regenerate);
+  });
 
   // Auto-load preset on dropdown change
   $('presetSelect').addEventListener('change', () => {
@@ -1187,6 +1365,16 @@ function init() {
 
   $('generateBtn').addEventListener('click', (ev) => {
     ev.preventDefault();
+    // RGBW sanity check: warn if Red/Green/Blue are all unset
+    if (getColorType() === 'rgbw') {
+      const r = parseInt(($('redChannel')   && $('redChannel').value)   || '0', 10);
+      const g = parseInt(($('greenChannel') && $('greenChannel').value) || '0', 10);
+      const b = parseInt(($('blueChannel')  && $('blueChannel').value)  || '0', 10);
+      if (r === 0 && g === 0 && b === 0) {
+        setStatus('RGBW is selected but no Red/Green/Blue channels are assigned. Pick them in Color Properties.', 'warn');
+        return;
+      }
+    }
     regenerate();
     if (!lastXml) return;
     // Well-formedness check before downloading
@@ -1237,16 +1425,23 @@ function init() {
   document.getElementById('fixtureModeNew').addEventListener('change', () => {
     // Reset channel slots to Blank for a fresh start. Confirm only if there's work to lose.
     const hasNonBlank = channelList.some(c => c && c !== 'Blank');
-    if (hasNonBlank && !confirm('Switching to Add New Moving Head will clear the channel layout. Continue?')) {
-      // Restore the preset radio so the UI matches state
-      document.getElementById('fixtureModePreset').checked = true;
-      return;
-    }
-    channelList = channelList.map(() => 'Blank');
-    buildChannelListUI();
-    updateDerived();
-    buildSubmodelUI();
-    setFixtureMode('new');
+    const proceed = () => {
+      channelList = channelList.map(() => 'Blank');
+      buildChannelListUI();
+      updateDerived();
+      buildSubmodelUI();
+      setFixtureMode('new');
+    };
+    if (!hasNonBlank) { proceed(); return; }
+    showConfirmModal(
+      'Add a new Moving Head?',
+      '<p>Switching to <b>Add new Moving Head</b> will clear the current channel layout.</p><p>Continue?</p>',
+      proceed,
+      () => {
+        // User cancelled - restore the preset radio so the UI matches state
+        document.getElementById('fixtureModePreset').checked = true;
+      }
+    );
   });
 
   // Pan orientation radios + direction change
@@ -1355,6 +1550,17 @@ if (document.readyState === 'loading') {
     <p>The fixture is saved in this browser. To get it added to the shared preset catalog for everyone, click below. A GitHub issue will open in a new tab with all the details pre-filled &mdash; just click the green <b>CREATE</b> button at the bottom of that page.</p>
     <div class="modal-actions">
       <button type="button" id="submitGithubBtn">Open a GitHub issue (new tab)</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal-backdrop info-modal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <h3 id="confirmModalTitle">Confirm</h3>
+    <div class="modal-body" id="confirmModalBody"></div>
+    <div class="modal-actions confirm-actions">
+      <button type="button" id="confirmModalCancelBtn" class="secondary">Cancel</button>
+      <button type="button" id="confirmModalOkBtn">Continue</button>
     </div>
   </div>
 </div>
