@@ -1,95 +1,23 @@
 {
   "moving_heads": [
     {
-      "name": "Dominar IP",
-      "channels": [
-        "Dimming",
-        "Strobe",
-        "Color Wheel",
-        "Gobo",
-        "Color Mirror",
-        "Prism",
-        "Prism Rotate",
-        "Focus",
-        "Pan",
-        "Pan Fine",
-        "Tilt",
-        "Tilt Fine",
-        "Pan",
-        "Pan & Tilt Speed",
-        "Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 0,
-        "orient_home": 270
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 220,
-        "reverse": 0,
-        "orient_home": 110,
-        "orient_zero": 20
-      }
-    },
-    {
-      "name": "Dominar Lempa",
-      "channels": [
-        "Color Wheel",
-        "Strobe",
-        "Dimming",
-        "Gobo",
-        "Prism",
-        "Prism Rotate",
-        "Blank",
-        "Color Mirror",
-        "Focus",
-        "Pan",
-        "Pan Fine",
-        "Tilt",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Blank",
-        "Blank",
-        "Blank",
-        "Blank",
-        "Blank"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      }
-    },
-    {
-      "name": "Mattos - Phoenix Ray LED (14ch)",
+      "name": "YPS Starlight Mini 350w",
       "channels": [
         "Pan / X-axis / Horizontal",
-        "Pan Fine",
         "Tilt / Y-axis / Vertical",
+        "Pan Fine",
         "Tilt Fine",
         "Pan & Tilt Speed",
-        "Dimmer / Intensity",
-        "Shutter / Strobe",
-        "Color",
-        "Gobo",
         "Frost",
-        "Prism 1",
-        "Prism Rotate 1",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Color",
+        "Blank",
+        "Gobo",
+        "Gobo Jitter",
         "Focus",
+        "Prism 1",
+        "Prism 2",
         "Lamp / Reset"
       ],
       "pan_motor": {
@@ -112,59 +40,59 @@
       "color_wheel": [
         {
           "color": "#ffffff",
-          "dmx": "0-6"
+          "dmx": "0-3"
         },
         {
           "color": "#ff0000",
           "dmx": "7-11"
         },
         {
-          "color": "#00ff00",
-          "dmx": "12-16"
+          "color": "#ffff00",
+          "dmx": "16-19"
         },
         {
           "color": "#0000ff",
-          "dmx": "17-21"
+          "dmx": "24-27"
         },
         {
-          "color": "#fff700",
-          "dmx": "22-26"
+          "color": "#00ff00",
+          "dmx": "32-35"
         },
         {
-          "color": "#f74bb8",
-          "dmx": "27-31"
+          "color": "#d4edfc",
+          "dmx": "40-43"
         },
         {
-          "color": "#a5ff9e",
-          "dmx": "32-36"
+          "color": "#ff830f",
+          "dmx": "48-51"
         },
         {
-          "color": "#1d03a0",
-          "dmx": "37-41"
+          "color": "#62fef4",
+          "dmx": "56-59"
         },
         {
-          "color": "#f88bf5",
-          "dmx": "42-46"
+          "color": "#f93ef3",
+          "dmx": "64-67"
         },
         {
-          "color": "#ffc800",
-          "dmx": "47-51"
+          "color": "#ffff00",
+          "dmx": "72-75"
         },
         {
-          "color": "#80fff6",
-          "dmx": "52-56"
+          "color": "#ff80d7",
+          "dmx": "80-83"
         },
         {
-          "color": "#a3d7ff",
-          "dmx": "57-61"
+          "color": "#03138c",
+          "dmx": "88-91"
         },
         {
-          "color": "#c494ff",
+          "color": "#fffb94",
           "dmx": "62-66"
         },
         {
-          "color": "#feeccd",
-          "dmx": "67-71"
+          "color": "#8f8f8f",
+          "dmx": "104-107"
         }
       ],
       "rgbw": {
@@ -175,7 +103,471 @@
       }
     },
     {
-      "name": "Mattos Pheonix Ray MAX",
+      "name": "YPS Outdoor 350w",
+      "channels": [
+        "Color",
+        "Dimmer / Intensity",
+        "Shutter / Strobe",
+        "Gobo",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Blank",
+        "Blank",
+        "Focus",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Frost",
+        "Lamp / Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "3"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "7"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "12"
+        },
+        {
+          "color": "#80eaff",
+          "dmx": "17"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "22"
+        },
+        {
+          "color": "#ff830f",
+          "dmx": "27"
+        },
+        {
+          "color": "#ff3cff",
+          "dmx": "32"
+        },
+        {
+          "color": "#bfff80",
+          "dmx": "37"
+        },
+        {
+          "color": "#0000ff",
+          "dmx": "42"
+        },
+        {
+          "color": "#fefe86",
+          "dmx": "47"
+        },
+        {
+          "color": "#fff5b8",
+          "dmx": "52"
+        },
+        {
+          "color": "#9600fa",
+          "dmx": "57"
+        },
+        {
+          "color": "#ff4d00",
+          "dmx": "62"
+        },
+        {
+          "color": "#dedede",
+          "dmx": "67"
+        },
+        {
+          "color": "#ffffff",
+          "dmx": "137"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
+    },
+    {
+      "name": "YPS Nova 20ch",
+      "channels": [
+        "Pan",
+        "Pan Fine",
+        "Tilt",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Dimming",
+        "Strobe",
+        "Color Wheel",
+        "Gobo",
+        "Gobo Rotate",
+        "Gobo Rotate1",
+        "Gobo RF",
+        "Prism1",
+        "Prism2",
+        "Prism Rotate",
+        "Frost",
+        "Zoom",
+        "Focus",
+        "Focus F",
+        "Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      }
+    },
+    {
+      "name": "YPS Nova 18ch",
+      "channels": [
+        "Pan",
+        "Pan Fine",
+        "Tilt",
+        "Tilt Fine",
+        "Dimming",
+        "Strobe",
+        "Color Wheel",
+        "Gobo",
+        "Gobo Rotate",
+        "Gobo Rotate1",
+        "Gobo RF",
+        "Prism1",
+        "Prism2",
+        "Prism Rotate",
+        "Frost",
+        "Zoom",
+        "Focus",
+        "Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      }
+    },
+    {
+      "name": "YPS 350W",
+      "channels": [
+        "Color Wheel",
+        "Dimming",
+        "Strobe",
+        "Gobo",
+        "Prism",
+        "Prism Rotate",
+        "Blank",
+        "Blank",
+        "Focus",
+        "Pan",
+        "Pan Fine",
+        "Tilt",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Color Mirror",
+        "Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      }
+    },
+    {
+      "name": "YPS 230w",
+      "channels": [
+        "Color Wheel",
+        "Strobe",
+        "Dimming",
+        "Gobo",
+        "Prism",
+        "Prism Rotate",
+        "Zoom",
+        "Color Mirror",
+        "Focus",
+        "Pan",
+        "Pan Fine",
+        "Tilt",
+        "Tilt Fine",
+        "Blank",
+        "Blank",
+        "Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      }
+    },
+    {
+      "name": "Wally's Mini Beam Pro 380w",
+      "channels": [
+        "Pan / X-axis / Horizontal",
+        "Tilt / Y-axis / Vertical",
+        "Pan Fine",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Frost",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Color",
+        "Blank",
+        "Gobo",
+        "Gobo Jitter",
+        "Focus",
+        "Prism 1",
+        "Prism 2",
+        "Lamp / Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "0-3"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "7-11"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "16-19"
+        },
+        {
+          "color": "#0000ff",
+          "dmx": "24-27"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "32-35"
+        },
+        {
+          "color": "#d4edfc",
+          "dmx": "40-43"
+        },
+        {
+          "color": "#ff830f",
+          "dmx": "48-51"
+        },
+        {
+          "color": "#62fef4",
+          "dmx": "56-59"
+        },
+        {
+          "color": "#f93ef3",
+          "dmx": "64-67"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "72-75"
+        },
+        {
+          "color": "#ff80d7",
+          "dmx": "80-83"
+        },
+        {
+          "color": "#03138c",
+          "dmx": "88-91"
+        },
+        {
+          "color": "#fffb94",
+          "dmx": "62-66"
+        },
+        {
+          "color": "#8f8f8f",
+          "dmx": "104-107"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
+    },
+    {
+      "name": "Wally's Mega Beam 380w",
+      "channels": [
+        "Color",
+        "Dimmer / Intensity",
+        "Shutter / Strobe",
+        "Gobo",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Blank",
+        "Blank",
+        "Focus",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Frost",
+        "Lamp / Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "3"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "7"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "12"
+        },
+        {
+          "color": "#80eaff",
+          "dmx": "17"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "22"
+        },
+        {
+          "color": "#ff830f",
+          "dmx": "27"
+        },
+        {
+          "color": "#ff3cff",
+          "dmx": "32"
+        },
+        {
+          "color": "#bfff80",
+          "dmx": "37"
+        },
+        {
+          "color": "#0000ff",
+          "dmx": "42"
+        },
+        {
+          "color": "#fefe86",
+          "dmx": "47"
+        },
+        {
+          "color": "#fff5b8",
+          "dmx": "52"
+        },
+        {
+          "color": "#9600fa",
+          "dmx": "57"
+        },
+        {
+          "color": "#ff4d00",
+          "dmx": "62"
+        },
+        {
+          "color": "#dedede",
+          "dmx": "67"
+        },
+        {
+          "color": "#ffffff",
+          "dmx": "137"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
+    },
+    {
+      "name": "MLS Magicolor Aura",
       "channels": [
         "Color Wheel",
         "Dimming",
@@ -307,7 +699,7 @@
       }
     },
     {
-      "name": "MLS Magicolor Aura",
+      "name": "Mattos Pheonix Ray MAX",
       "channels": [
         "Color Wheel",
         "Dimming",
@@ -343,23 +735,21 @@
       }
     },
     {
-      "name": "Wally's Mega Beam 380w",
+      "name": "Mattos - Phoenix Ray LED (14ch)",
       "channels": [
-        "Color",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
         "Dimmer / Intensity",
         "Shutter / Strobe",
+        "Color",
         "Gobo",
+        "Frost",
         "Prism 1",
         "Prism Rotate 1",
-        "Blank",
-        "Blank",
         "Focus",
-        "Pan / X-axis / Horizontal",
-        "Pan Fine",
-        "Tilt / Y-axis / Vertical",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Frost",
         "Lamp / Reset"
       ],
       "pan_motor": {
@@ -382,165 +772,59 @@
       "color_wheel": [
         {
           "color": "#ffffff",
-          "dmx": "3"
-        },
-        {
-          "color": "#ff0000",
-          "dmx": "7"
-        },
-        {
-          "color": "#00ff00",
-          "dmx": "12"
-        },
-        {
-          "color": "#80eaff",
-          "dmx": "17"
-        },
-        {
-          "color": "#ffff00",
-          "dmx": "22"
-        },
-        {
-          "color": "#ff830f",
-          "dmx": "27"
-        },
-        {
-          "color": "#ff3cff",
-          "dmx": "32"
-        },
-        {
-          "color": "#bfff80",
-          "dmx": "37"
-        },
-        {
-          "color": "#0000ff",
-          "dmx": "42"
-        },
-        {
-          "color": "#fefe86",
-          "dmx": "47"
-        },
-        {
-          "color": "#fff5b8",
-          "dmx": "52"
-        },
-        {
-          "color": "#9600fa",
-          "dmx": "57"
-        },
-        {
-          "color": "#ff4d00",
-          "dmx": "62"
-        },
-        {
-          "color": "#dedede",
-          "dmx": "67"
-        },
-        {
-          "color": "#ffffff",
-          "dmx": "137"
-        }
-      ],
-      "rgbw": {
-        "red": 0,
-        "green": 0,
-        "blue": 0,
-        "white": 0
-      }
-    },
-    {
-      "name": "Wally's Mini Beam Pro 380w",
-      "channels": [
-        "Pan / X-axis / Horizontal",
-        "Tilt / Y-axis / Vertical",
-        "Pan Fine",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Frost",
-        "Shutter / Strobe",
-        "Dimmer / Intensity",
-        "Color",
-        "Blank",
-        "Gobo",
-        "Gobo Jitter",
-        "Focus",
-        "Prism 1",
-        "Prism 2",
-        "Lamp / Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270,
-        "orient_zero": 0
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      },
-      "color_type": "wheel",
-      "color_wheel": [
-        {
-          "color": "#ffffff",
-          "dmx": "0-3"
+          "dmx": "0-6"
         },
         {
           "color": "#ff0000",
           "dmx": "7-11"
         },
         {
-          "color": "#ffff00",
-          "dmx": "16-19"
+          "color": "#00ff00",
+          "dmx": "12-16"
         },
         {
           "color": "#0000ff",
-          "dmx": "24-27"
+          "dmx": "17-21"
         },
         {
-          "color": "#00ff00",
-          "dmx": "32-35"
+          "color": "#fff700",
+          "dmx": "22-26"
         },
         {
-          "color": "#d4edfc",
-          "dmx": "40-43"
+          "color": "#f74bb8",
+          "dmx": "27-31"
         },
         {
-          "color": "#ff830f",
-          "dmx": "48-51"
+          "color": "#a5ff9e",
+          "dmx": "32-36"
         },
         {
-          "color": "#62fef4",
-          "dmx": "56-59"
+          "color": "#1d03a0",
+          "dmx": "37-41"
         },
         {
-          "color": "#f93ef3",
-          "dmx": "64-67"
+          "color": "#f88bf5",
+          "dmx": "42-46"
         },
         {
-          "color": "#ffff00",
-          "dmx": "72-75"
+          "color": "#ffc800",
+          "dmx": "47-51"
         },
         {
-          "color": "#ff80d7",
-          "dmx": "80-83"
+          "color": "#80fff6",
+          "dmx": "52-56"
         },
         {
-          "color": "#03138c",
-          "dmx": "88-91"
+          "color": "#a3d7ff",
+          "dmx": "57-61"
         },
         {
-          "color": "#fffb94",
+          "color": "#c494ff",
           "dmx": "62-66"
         },
         {
-          "color": "#8f8f8f",
-          "dmx": "104-107"
+          "color": "#feeccd",
+          "dmx": "67-71"
         }
       ],
       "rgbw": {
@@ -551,7 +835,7 @@
       }
     },
     {
-      "name": "YPS 230w",
+      "name": "Dominar Lempa",
       "channels": [
         "Color Wheel",
         "Strobe",
@@ -559,16 +843,19 @@
         "Gobo",
         "Prism",
         "Prism Rotate",
-        "Zoom",
+        "Blank",
         "Color Mirror",
         "Focus",
         "Pan",
         "Pan Fine",
         "Tilt",
         "Tilt Fine",
+        "Pan & Tilt Speed",
         "Blank",
         "Blank",
-        "Reset"
+        "Blank",
+        "Blank",
+        "Blank"
       ],
       "pan_motor": {
         "min_limit": -180,
@@ -587,325 +874,38 @@
       }
     },
     {
-      "name": "YPS 350W",
+      "name": "Dominar IP",
       "channels": [
-        "Color Wheel",
         "Dimming",
         "Strobe",
+        "Color Wheel",
         "Gobo",
+        "Color Mirror",
         "Prism",
         "Prism Rotate",
-        "Blank",
-        "Blank",
         "Focus",
         "Pan",
         "Pan Fine",
         "Tilt",
         "Tilt Fine",
+        "Pan",
         "Pan & Tilt Speed",
-        "Color Mirror",
         "Reset"
       ],
       "pan_motor": {
         "min_limit": -180,
         "max_limit": 180,
         "range_of_motion": 540,
-        "reverse": 1,
+        "reverse": 0,
         "orient_home": 270
       },
       "tilt_motor": {
         "min_limit": -180,
         "max_limit": 180,
-        "range_of_motion": 270,
+        "range_of_motion": 220,
         "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      }
-    },
-    {
-      "name": "YPS Nova 18ch",
-      "channels": [
-        "Pan",
-        "Pan Fine",
-        "Tilt",
-        "Tilt Fine",
-        "Dimming",
-        "Strobe",
-        "Color Wheel",
-        "Gobo",
-        "Gobo Rotate",
-        "Gobo Rotate1",
-        "Gobo RF",
-        "Prism1",
-        "Prism2",
-        "Prism Rotate",
-        "Frost",
-        "Zoom",
-        "Focus",
-        "Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      }
-    },
-    {
-      "name": "YPS Nova 20ch",
-      "channels": [
-        "Pan",
-        "Pan Fine",
-        "Tilt",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Dimming",
-        "Strobe",
-        "Color Wheel",
-        "Gobo",
-        "Gobo Rotate",
-        "Gobo Rotate1",
-        "Gobo RF",
-        "Prism1",
-        "Prism2",
-        "Prism Rotate",
-        "Frost",
-        "Zoom",
-        "Focus",
-        "Focus F",
-        "Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      }
-    },
-    {
-      "name": "YPS Outdoor 350w",
-      "channels": [
-        "Color",
-        "Dimmer / Intensity",
-        "Shutter / Strobe",
-        "Gobo",
-        "Prism 1",
-        "Prism Rotate 1",
-        "Blank",
-        "Blank",
-        "Focus",
-        "Pan / X-axis / Horizontal",
-        "Pan Fine",
-        "Tilt / Y-axis / Vertical",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Frost",
-        "Lamp / Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270,
-        "orient_zero": 0
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      },
-      "color_type": "wheel",
-      "color_wheel": [
-        {
-          "color": "#ffffff",
-          "dmx": "3"
-        },
-        {
-          "color": "#ff0000",
-          "dmx": "7"
-        },
-        {
-          "color": "#00ff00",
-          "dmx": "12"
-        },
-        {
-          "color": "#80eaff",
-          "dmx": "17"
-        },
-        {
-          "color": "#ffff00",
-          "dmx": "22"
-        },
-        {
-          "color": "#ff830f",
-          "dmx": "27"
-        },
-        {
-          "color": "#ff3cff",
-          "dmx": "32"
-        },
-        {
-          "color": "#bfff80",
-          "dmx": "37"
-        },
-        {
-          "color": "#0000ff",
-          "dmx": "42"
-        },
-        {
-          "color": "#fefe86",
-          "dmx": "47"
-        },
-        {
-          "color": "#fff5b8",
-          "dmx": "52"
-        },
-        {
-          "color": "#9600fa",
-          "dmx": "57"
-        },
-        {
-          "color": "#ff4d00",
-          "dmx": "62"
-        },
-        {
-          "color": "#dedede",
-          "dmx": "67"
-        },
-        {
-          "color": "#ffffff",
-          "dmx": "137"
-        }
-      ],
-      "rgbw": {
-        "red": 0,
-        "green": 0,
-        "blue": 0,
-        "white": 0
-      }
-    },
-    {
-      "name": "YPS Starlight Mini 350w",
-      "channels": [
-        "Pan / X-axis / Horizontal",
-        "Tilt / Y-axis / Vertical",
-        "Pan Fine",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Frost",
-        "Shutter / Strobe",
-        "Dimmer / Intensity",
-        "Color",
-        "Blank",
-        "Gobo",
-        "Gobo Jitter",
-        "Focus",
-        "Prism 1",
-        "Prism 2",
-        "Lamp / Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270,
-        "orient_zero": 0
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      },
-      "color_type": "wheel",
-      "color_wheel": [
-        {
-          "color": "#ffffff",
-          "dmx": "0-3"
-        },
-        {
-          "color": "#ff0000",
-          "dmx": "7-11"
-        },
-        {
-          "color": "#ffff00",
-          "dmx": "16-19"
-        },
-        {
-          "color": "#0000ff",
-          "dmx": "24-27"
-        },
-        {
-          "color": "#00ff00",
-          "dmx": "32-35"
-        },
-        {
-          "color": "#d4edfc",
-          "dmx": "40-43"
-        },
-        {
-          "color": "#ff830f",
-          "dmx": "48-51"
-        },
-        {
-          "color": "#62fef4",
-          "dmx": "56-59"
-        },
-        {
-          "color": "#f93ef3",
-          "dmx": "64-67"
-        },
-        {
-          "color": "#ffff00",
-          "dmx": "72-75"
-        },
-        {
-          "color": "#ff80d7",
-          "dmx": "80-83"
-        },
-        {
-          "color": "#03138c",
-          "dmx": "88-91"
-        },
-        {
-          "color": "#fffb94",
-          "dmx": "62-66"
-        },
-        {
-          "color": "#8f8f8f",
-          "dmx": "104-107"
-        }
-      ],
-      "rgbw": {
-        "red": 0,
-        "green": 0,
-        "blue": 0,
-        "white": 0
+        "orient_home": 110,
+        "orient_zero": 20
       }
     }
   ],
