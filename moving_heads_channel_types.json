@@ -333,7 +333,7 @@
             }
         },
         {
-            "name": "Mattos Pheonix Ray",
+            "name": "Mattos Phoenix Ray",
             "channels": [
                 "Color Wheel",
                 "Dimming",
@@ -369,7 +369,7 @@
             }
         },
 		{
-            "name": "Mattos Pheonix Ray MAX",
+            "name": "Mattos Phoenix Ray MAX",
             "channels": [
                 "Color Wheel",
                 "Dimming",
@@ -404,7 +404,103 @@
                 "orient_zero": 45
             }
         },
-        		{
+		{
+			  "name": "Mattos PhoenixRay 1.6 LED Beam",
+			  "channels": [
+			    "Pan / X-axis / Horizontal",
+			    "Pan Fine",
+			    "Tilt / Y-axis / Vertical",
+			    "Tilt Fine",
+			    "Pan & Tilt Speed",
+			    "Dimmer / Intensity",
+			    "Shutter / Strobe",
+			    "Color",
+			    "Gobo",
+			    "Frost",
+			    "Prism 1",
+			    "Prism Rotate 1",
+			    "Focus",
+			    "Lamp / Reset"
+			  ],
+			  "pan_motor": {
+			    "min_limit": -180,
+			    "max_limit": 180,
+			    "range_of_motion": 540,
+			    "reverse": 1,
+			    "orient_home": 270,
+			    "orient_zero": 0
+			  },
+			  "tilt_motor": {
+			    "min_limit": -180,
+			    "max_limit": 180,
+			    "range_of_motion": 270,
+			    "reverse": 0,
+			    "orient_home": 135,
+			    "orient_zero": 45
+			  },
+			  "color_type": "wheel",
+			  "color_wheel": [
+			    {
+			      "color": "#ffffff",
+			      "dmx": "0-6"
+			    },
+			    {
+			      "color": "#ff0000",
+			      "dmx": "7-11"
+			    },
+			    {
+			      "color": "#00ff00",
+			      "dmx": "12-16"
+			    },
+			    {
+			      "color": "#0000ff",
+			      "dmx": "17-21"
+			    },
+			    {
+			      "color": "#ffff00",
+			      "dmx": "22-26"
+			    },
+			    {
+			      "color": "#ff00ff",
+			      "dmx": "27-31"
+			    },
+			    {
+			      "color": "#90ee90",
+			      "dmx": "32-36"
+			    },
+			    {
+			      "color": "#0b2275",
+			      "dmx": "37-41"
+			    },
+			    {
+			      "color": "#ff66cc",
+			      "dmx": "42-46"
+			    },
+			    {
+			      "color": "#ffbf00",
+			      "dmx": "47-51"
+			    },
+			    {
+			      "color": "#00ffff",
+			      "dmx": "52-56"
+			    },
+			    {
+			      "color": "#0000ff",
+			      "dmx": "57-61"
+			    },
+			    {
+			      "color": "#b19cd9",
+			      "dmx": "62-66"
+			    }
+			  ],
+			  "rgbw": {
+			    "red": 0,
+			    "green": 0,
+			    "blue": 0,
+			    "white": 0
+			  }
+			},
+        	{
             "name": "MLS Magicolor Aura",
             "channels": [
                 "Color Wheel",
