@@ -538,6 +538,13 @@ function chPos(name) {
 
 /* ===================== UI builders ===================== */
 
+// True if this preset has color choices defined (color wheel slots or RGBW LED channels assigned)
+function presetHasColorChoices(p) {
+  if (Array.isArray(p.color_wheel) && p.color_wheel.length > 0) return true;
+  if (p.rgbw && (p.rgbw.red || p.rgbw.green || p.rgbw.blue || p.rgbw.white)) return true;
+  return false;
+}
+
 function buildPresetDropdown() {
   const sel = $('presetSelect');
   sel.innerHTML = '';
@@ -547,7 +554,8 @@ function buildPresetDropdown() {
     BUILTIN_PRESETS.forEach((p, i) => {
       const o = document.createElement('option');
       o.value = 'b:' + i;
-      o.textContent = p.name + ' (' + p.channels.length + ' ch)';
+      const colorTag = presetHasColorChoices(p) ? ' w/color' : '';
+      o.textContent = p.name + ' (' + p.channels.length + ' ch)' + colorTag;
       og.appendChild(o);
     });
     sel.appendChild(og);
