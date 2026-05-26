@@ -1253,6 +1253,8 @@ function regenerate() {
 }
 
 const REMOTE_PRESETS_URL = 'https://raw.githubusercontent.com/AGFazio/Moving-Heads/main/moving_heads_channel_types.json';
+const DEFAULT_PRESET_NAME = 'YPS Starlight Mini 350w';
+let userHasChangedPreset = false;
 
 // Try to fetch the latest preset catalog from the GitHub repo and refresh the
 // preset dropdown. Falls back to baked-in BUILTIN_PRESETS silently on failure
@@ -1271,7 +1273,18 @@ async function loadRemotePresets() {
     // Remember the currently-loaded preset name so we can re-select it after rebuilding the dropdown
     const currentName = (typeof currentPresetName === 'string') ? currentPresetName : null;
     buildPresetDropdown();
-    if (currentName) {
+    // If the user hasn't manually picked anything yet, switch to the default preset
+    // (the initial auto-load ran against the baked-in fallback, which may not have it).
+    if (!userHasChangedPreset) {
+      const def = BUILTIN_PRESETS.find(bp => bp.name === DEFAULT_PRESET_NAME);
+      if (def) {
+        applyPreset(def);
+      } else if (currentName) {
+        const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === currentName);
+        const sel = $('presetSelect');
+        if (idx >= 0 && sel) sel.value = 'b:' + idx;
+      }
+    } else if (currentName) {
       const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === currentName);
       const sel = $('presetSelect');
       if (idx >= 0 && sel) sel.value = 'b:' + idx;
@@ -1304,8 +1317,12 @@ function init() {
   buildPresetDropdown();
   buildWheelUI();
   rebuildRgbwChannelOptions();
-  // Auto-load the first preset on startup so the preview isn't empty
-  if (BUILTIN_PRESETS.length > 0) applyPreset(BUILTIN_PRESETS[0]);
+  // Auto-load the default preset on startup so the preview isn't empty.
+  // Defaults to "YPS Starlight Mini 350w" if present; otherwise the first preset.
+  if (BUILTIN_PRESETS.length > 0) {
+    const def = BUILTIN_PRESETS.find(p => p.name === DEFAULT_PRESET_NAME) || BUILTIN_PRESETS[0];
+    applyPreset(def);
+  }
   buildSubmodelUI();
   updateDerived();
   applyColorTypeUI();
@@ -1331,6 +1348,7 @@ function init() {
     const idx = parseInt(idxStr, 10);
     const p = BUILTIN_PRESETS[idx];
     if (p) {
+      userHasChangedPreset = true;
       applyPreset(p);
       setStatus('Loaded preset: ' + p.name);
     }
