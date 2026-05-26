@@ -17,11 +17,11 @@ A short welcome dialog appears on first load with a quick-start summary. After d
 Pick a Moving Head from the preset list (or build a new one), set the number of heads, and the tool generates a ready-to-import xLights `.xmodel` file with:
 
 - One `DmxMovingHeadAdv` model per physical head (e.g. `MH1`, `MH2`, ...)
-- "String Group" sub-models you can drive together from the layout view (Dimmer, Pan, Shutter, Tilt by default; Color, Gobo, Prism, Prism Rotate, Focus, Frost optional)
+- Per-channel "String Groups" (Dimmer, Pan, Shutter, Tilt by default; Color, Gobo, Prism, Prism Rotate, Focus, Frost optional) so you can drive the same channel across every head at once from the layout view
 - A Model Group named `Group - MH ALL` containing all heads (when you have more than one)
 - Properly mapped channel positions, pan/tilt motor parameters, color wheel slots, and head orientation
 
-> **Note on quantity:** The xLights *Advanced Moving Head* effect supports a maximum of **8 fixtures** at a time, so this tool caps **Quantity of heads** at 8. If you need more than 8 of the same fixture, generate another `.xmodel` and import it separately. xLights will continue head numbering (MH9, MH10, ...) but will spawn a new group `Group - MH ALL-2` — manually merge the new heads into the existing group in the Layout view.
+> **Note on quantity:** The xLights *Advanced Moving Head* effect supports a maximum of **8 fixtures** at a time, so this tool caps **Quantity of heads** at 8.
 
 The output matches xLights' native `.xmodel` format — import it, place your heads in the layout, and you're done.
 
@@ -83,7 +83,7 @@ Only valid combinations are selectable: **CCW** direction grays out Left, **CW**
 
 The tool's channel-type dropdown matches the xLights `NodeNames` convention. Available types:
 
-`Blank` · `Dimmer / Intensity` · `Shutter / Strobe` · `Pan / X-axis / Horizontal` · `Pan Fine` · `Tilt / Y-axis / Vertical` · `Tilt Fine` · `Prism 1` · `Prism 2` · `Prism Rotate 1` · `Prism Rotate 2` · `Focus` · `Frost` · `Color` · `Pan & Tilt Speed` · `Lamp / Reset` · `Gobo` · `Gobo Jitter`
+`Blank` · `Dimmer / Intensity` · `Shutter / Strobe` · `Pan / X-axis / Horizontal` · `Pan Fine` · `Tilt / Y-axis / Vertical` · `Tilt Fine` · `Prism 1` · `Prism 2` · `Prism Rotate 1` · `Prism Rotate 2` · `Focus` · `Frost` · `Color` · `Pan & Tilt Speed` · `Lamp / Reset` · `Gobo` · `Gobo Rotate` · `Gobo Jitter`
 
 Older preset names (e.g. `Dimming`, `Strobe`, `Color Wheel`) are automatically translated to the new names on load.
 

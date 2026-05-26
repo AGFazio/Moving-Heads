@@ -14,6 +14,10 @@
   header::after { content: ""; display: block; width: 60px; height: 3px; margin: 12px auto 0; border-radius: 2px; background: linear-gradient(90deg, #cba6f7 0%, #f9e2af 100%); box-shadow: 0 0 8px rgba(203,166,247,0.4); }
   header h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.015em; background: linear-gradient(180deg, #f5e7ff 0%, #cba6f7 60%, #b08fe8 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; text-shadow: 0 2px 24px rgba(203,166,247,0.25); }
   header p { margin: 8px 0 0; color: #a6adc8; font-size: 13.5px; font-style: italic; letter-spacing: 0.02em; }
+  header p.version-disclaimer { margin: 10px auto 0; max-width: 640px; padding: 6px 14px; color: #f9e2af; background: rgba(249,226,175,0.08); border: 1px solid rgba(249,226,175,0.35); border-radius: 6px; font-size: 12.5px; font-style: normal; letter-spacing: 0.02em; }
+  header p.version-disclaimer code { background: rgba(0,0,0,0.25); padding: 0 4px; border-radius: 3px; font-size: 12px; color: #f5e7ff; }
+  p.version-disclaimer-modal { margin: 10px 0 14px; padding: 8px 12px; color: #f9e2af; background: rgba(249,226,175,0.08); border: 1px solid rgba(249,226,175,0.35); border-radius: 6px; font-size: 13px; }
+  p.version-disclaimer-modal code { background: rgba(0,0,0,0.25); padding: 0 4px; border-radius: 3px; font-size: 12px; color: #f5e7ff; }
   main { display: block; min-height: calc(100vh - 70px); }
   .form-pane { padding: 28px 32px 40px; max-width: 900px; margin: 0 auto; }
   fieldset { border: 1px solid #45475a; border-radius: 10px; padding: 18px 20px 20px; margin: 0 0 18px 0; background: linear-gradient(180deg, #2b2b40 0%, #25253a 100%); box-shadow: 0 2px 6px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15); position: relative; }
@@ -107,6 +111,7 @@
   <a class="about-link" href="https://github.com/AGFazio/Moving-Heads#readme" target="_blank" rel="noopener" aria-label="About this tool">About</a>
   <h1>xLights Moving Head .xmodel Builder</h1>
   <p>Generate a DMX moving-head .xmodel for any quantity of heads (up to 8).</p>
+  <p class="version-disclaimer">Requires <b>xLights 2026.09 or newer</b> &mdash; earlier versions don't support multi-model <code>.xmodel</code> import.</p>
 </header>
 
 <main>
@@ -320,8 +325,7 @@ const LEGACY_MAP = {
   'Prism Rotate':            'Prism Rotate 1',
   'Prism1':                  'Prism 1',
   'Prism2':                  'Prism 2',
-  'Gobo Rotate':             'Gobo Jitter',
-  'Gobo Rotate1':            'Gobo Jitter',
+  'Gobo Rotate1':            'Gobo Rotate',
   'Reset':                   'Lamp / Reset',
   'Lamp/Reset':              'Lamp / Reset',
   'Focus F':                 'Focus',
@@ -351,6 +355,7 @@ const CHANNEL_TYPES = [
   'Pan & Tilt Speed',
   'Lamp / Reset',
   'Gobo',
+  'Gobo Rotate',
   'Gobo Jitter',
 ];
 
@@ -1518,6 +1523,7 @@ if (document.readyState === 'loading') {
     <h3 id="welcomeModalTitle">Welcome to the xLights Moving Head .xmodel Builder</h3>
     <div class="modal-body">
       <p>This tool generates ready-to-import <b>.xmodel</b> files for xLights, for any DMX moving-head fixture.</p>
+      <p class="version-disclaimer-modal">⚠️ Requires <b>xLights 2026.09 or newer</b> &mdash; earlier versions don't support multi-model <code>.xmodel</code> import.</p>
       <p><b>Quick start:</b></p>
       <ol>
         <li>Pick your fixture from the <b>Choose preset</b> dropdown (or switch to <b>Add new Moving Head</b> if it isn't listed).</li>
