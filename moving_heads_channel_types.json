@@ -531,31 +531,32 @@
       }
     },
     {
-      "name": "MLS Magicolor Aura",
+      "name": "MLS Aura IP (16ch) w/color",
       "channels": [
-        "Color Wheel",
-        "Dimming",
-        "Strobe",
+        "Color",
+        "Dimmer / Intensity",
+        "Shutter / Strobe",
         "Gobo",
-        "Prism",
-        "Prism Rotate",
+        "Prism 1",
+        "Prism Rotate 1",
         "Blank",
         "Blank",
         "Focus",
-        "Pan",
+        "Pan / X-axis / Horizontal",
         "Pan Fine",
-        "Tilt",
+        "Tilt / Y-axis / Vertical",
         "Tilt Fine",
         "Pan & Tilt Speed",
-        "Color Mirror",
-        "Reset"
+        "Frost",
+        "Lamp / Reset"
       ],
       "pan_motor": {
         "min_limit": -180,
         "max_limit": 180,
         "range_of_motion": 540,
         "reverse": 1,
-        "orient_home": 270
+        "orient_home": 270,
+        "orient_zero": 0
       },
       "tilt_motor": {
         "min_limit": -180,
@@ -564,6 +565,71 @@
         "reverse": 0,
         "orient_home": 135,
         "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "0"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "10"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "20"
+        },
+        {
+          "color": "#0000ff",
+          "dmx": "30"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "40"
+        },
+        {
+          "color": "#ff8800",
+          "dmx": "50"
+        },
+        {
+          "color": "#ef0fff",
+          "dmx": "60"
+        },
+        {
+          "color": "#cdfe62",
+          "dmx": "70"
+        },
+        {
+          "color": "#3ef9da",
+          "dmx": "80"
+        },
+        {
+          "color": "#a600ff",
+          "dmx": "90"
+        },
+        {
+          "color": "#502b02",
+          "dmx": "100"
+        },
+        {
+          "color": "#03138c",
+          "dmx": "110"
+        },
+        {
+          "color": "#a30000",
+          "dmx": "120"
+        },
+        {
+          "color": "#590288",
+          "dmx": "130"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
       }
     },
     {
