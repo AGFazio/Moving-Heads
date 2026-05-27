@@ -1178,7 +1178,7 @@ function buildHead(i, cfg) {
   }
 
   if (cfg.roleCh.dimmer)  a.DmxDimmerChannel  = String(cfg.roleCh.dimmer);
-  a.DmxFixture = cfg.modelName + '1';
+  a.DmxFixture = cfg.modelName + i;
   if (cfg.roleCh.shutter) {
     a.DmxShutterChannel = String(cfg.roleCh.shutter);
     a.DmxShutterOnValue = '255';
