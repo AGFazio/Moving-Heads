@@ -404,7 +404,7 @@ const DEFAULT_WHEEL = [
   { color: '#c0c0c0', dmx: 105 },
 ];
 
-// 14 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
+// 13 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
 let BUILTIN_PRESETS = [
   {
     name: 'YPS Starlight Mini 350w',
@@ -437,12 +437,6 @@ let BUILTIN_PRESETS = [
     tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
   },
   {
-    name: 'YPS 350W',
-    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
-    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270 },
-    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
-  },
-  {
     name: 'YPS 230w',
     channels: ['Color Wheel','Strobe','Dimming','Gobo','Prism','Prism Rotate','Zoom','Color Mirror','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Blank','Blank','Reset'],
     pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270 },
@@ -467,10 +461,13 @@ let BUILTIN_PRESETS = [
     rgbw: { red: 0, green: 0, blue: 0, white: 0 },
   },
   {
-    name: 'MLS Magicolor Aura',
-    channels: ['Color Wheel','Dimming','Strobe','Gobo','Prism','Prism Rotate','Blank','Blank','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan & Tilt Speed','Color Mirror','Reset'],
-    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270 },
+    name: 'MLS Aura IP',
+    channels: ['Color','Dimmer / Intensity','Shutter / Strobe','Gobo','Prism 1','Prism Rotate 1','Blank','Blank','Focus','Pan / X-axis / Horizontal','Pan Fine','Tilt / Y-axis / Vertical','Tilt Fine','Pan & Tilt Speed','Frost','Lamp / Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
     tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+    color_type: 'wheel',
+    color_wheel: [{ color: '#ffffff', dmx: '0' }, { color: '#ff0000', dmx: '10' }, { color: '#00ff00', dmx: '20' }, { color: '#0000ff', dmx: '30' }, { color: '#ffff00', dmx: '40' }, { color: '#ff8800', dmx: '50' }, { color: '#ef0fff', dmx: '60' }, { color: '#cdfe62', dmx: '70' }, { color: '#3ef9da', dmx: '80' }, { color: '#a600ff', dmx: '90' }, { color: '#502b02', dmx: '100' }, { color: '#03138c', dmx: '110' }, { color: '#a30000', dmx: '120' }, { color: '#590288', dmx: '130' }],
+    rgbw: { red: 0, green: 0, blue: 0, white: 0 },
   },
   {
     name: 'Mattos PhoenixRay 1.6 LED Beam',

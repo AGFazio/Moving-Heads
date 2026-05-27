@@ -531,7 +531,7 @@
       }
     },
     {
-      "name": "MLS Aura IP ",
+      "name": "MLS Aura IP",
       "channels": [
         "Color",
         "Dimmer / Intensity",
