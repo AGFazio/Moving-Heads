@@ -937,6 +937,116 @@
         "orient_home": 110,
         "orient_zero": 20
       }
+    },
+    {
+      "name": "Mattos Phoenix Ray MAX",
+      "channels": [
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Color",
+        "Gobo",
+        "Blank",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Prism 2",
+        "Prism Rotate 2",
+        "Frost",
+        "Focus",
+        "Blank",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Blank",
+        "Lamp",
+        "Blank"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "0-3"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "7-11"
+        },
+        {
+          "color": "#ffa200",
+          "dmx": "16-19"
+        },
+        {
+          "color": "#00e1ff",
+          "dmx": "24-27"
+        },
+        {
+          "color": "#048604",
+          "dmx": "32-35"
+        },
+        {
+          "color": "#8af750",
+          "dmx": "40-43"
+        },
+        {
+          "color": "#b30fff",
+          "dmx": "48-51"
+        },
+        {
+          "color": "#fe62f9",
+          "dmx": "56-59"
+        },
+        {
+          "color": "#f5f7a1",
+          "dmx": "64-67"
+        },
+        {
+          "color": "#fa00cc",
+          "dmx": "72-75"
+        },
+        {
+          "color": "#1201fe",
+          "dmx": "80-83"
+        },
+        {
+          "color": "#fffb94",
+          "dmx": "88-91"
+        },
+        {
+          "color": "#fbe3a2",
+          "dmx": "62-66"
+        },
+        {
+          "color": "#caf2fc",
+          "dmx": "104-107"
+        },
+        {
+          "color": "#9b05ff",
+          "dmx": "0"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
     }
   ],
   "channel_types": [
