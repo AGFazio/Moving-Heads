@@ -1,0 +1,147 @@
+name: Add Moving Head from Issue
+
+on:
+  issues:
+    types: [opened, reopened]
+
+jobs:
+  add-moving-head:
+    # Only run on issues whose title contains "New Moving Head:"
+    if: contains(github.event.issue.title, 'New Moving Head:')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # to commit back to the repo
+      issues: write     # to comment on the issue
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract and append moving head
+        id: merge
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python3 << 'EOF'
+          import json, re, os, sys
+
+          body = os.environ.get("ISSUE_BODY", "")
+
+          # Pull the first JSON code block out of the issue body
+          match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', body, re.DOTALL)
+          if not match:
+              print("::error::No JSON block found in issue body.")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=no_json\n")
+              sys.exit(1)
+
+          try:
+              entry = json.loads(match.group(1))
+          except json.JSONDecodeError as e:
+              print(f"::error::Could not parse JSON: {e}")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=bad_json\n")
+              sys.exit(1)
+
+          name = entry.get("name", "").strip()
+          if not name:
+              print("::error::JSON block has no 'name' field.")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=no_name\n")
+              sys.exit(1)
+
+          with open("moving_heads_channel_types.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          existing = {mh["name"].lower() for mh in data.get("moving_heads", [])}
+
+          if name.lower() in existing:
+              print(f"'{name}' already exists — nothing to do.")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("status=duplicate\n")
+                  f.write(f"name={name}\n")
+              sys.exit(0)
+
+          data["moving_heads"].append(entry)
+
+          with open("moving_heads_channel_types.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+
+          print(f"Added '{name}'")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("status=added\n")
+              f.write(f"name={name}\n")
+          EOF
+
+      - name: Commit and push
+        if: steps.merge.outputs.status == 'added'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add moving_heads_channel_types.json
+          git commit -m "feat: add '${{ steps.merge.outputs.name }}' (issue #${{ github.event.issue.number }})"
+          git push
+
+      - name: Comment and close — success
+        if: steps.merge.outputs.status == 'added'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Moving Head added Automagically\n\n**${{ steps.merge.outputs.name }}** has been appended to \`moving_heads_channel_types.json\` and committed to main.`
+            });
+            await github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed',
+              state_reason: 'completed'
+            });
+
+      - name: Send email notification
+        if: steps.merge.outputs.status == 'added'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          to: xlights.andy@kulplights.com
+          from: Moving Heads Bot <${{ secrets.MAIL_USERNAME }}>
+          subject: "Moving Head added Automagically: ${{ steps.merge.outputs.name }}"
+          body: |
+            A new moving head was added to moving_heads_channel_types.json.
+
+            Name: ${{ steps.merge.outputs.name }}
+            Issue: #${{ github.event.issue.number }} — ${{ github.event.issue.title }}
+            Submitted by: ${{ github.event.issue.user.login }}
+
+            View the issue: ${{ github.event.issue.html_url }}
+
+      - name: Comment — duplicate
+        if: steps.merge.outputs.status == 'duplicate'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `ℹ️ **${{ steps.merge.outputs.name }}** already exists in \`moving_heads_channel_types.json\` — no changes made.`
+            })
+
+      - name: Comment — parse error
+        if: contains(fromJson('["no_json","bad_json","no_name"]'), steps.merge.outputs.status)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `⚠️ Could not parse a valid moving head from this issue body. Please check that the JSON block is present and correctly formatted.`
+            })
