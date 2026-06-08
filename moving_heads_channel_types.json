@@ -1047,6 +1047,108 @@
         "blue": 0,
         "white": 0
       }
+    },
+    {
+      "name": "Light Sky AquaBeam",
+      "channels": [
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "Blank",
+        "Color",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Blank",
+        "Gobo",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Frost",
+        "Focus",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Blank",
+        "Reset",
+        "Lamp"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 250,
+        "reverse": 0,
+        "orient_home": 125,
+        "orient_zero": 35
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "0-5"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "12-17"
+        },
+        {
+          "color": "#831100",
+          "dmx": "24-29"
+        },
+        {
+          "color": "#00ffd1",
+          "dmx": "36-41"
+        },
+        {
+          "color": "#263e0f",
+          "dmx": "48-53"
+        },
+        {
+          "color": "#00f900",
+          "dmx": "60-65"
+        },
+        {
+          "color": "#942192",
+          "dmx": "72-77"
+        },
+        {
+          "color": "#f550fe",
+          "dmx": "84-89"
+        },
+        {
+          "color": "#0433ff",
+          "dmx": "96-101"
+        },
+        {
+          "color": "#fefcdd",
+          "dmx": "108-113"
+        },
+        {
+          "color": "#fff995",
+          "dmx": "120-125"
+        },
+        {
+          "color": "#03138c",
+          "dmx": "132-137"
+        },
+        {
+          "color": "#000000",
+          "dmx": "144-255"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
     }
   ],
   "channel_types": [
