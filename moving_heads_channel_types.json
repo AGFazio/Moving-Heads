@@ -1149,6 +1149,108 @@
         "blue": 0,
         "white": 0
       }
+    },
+    {
+      "name": "test heads",
+      "channels": [
+        "Dimmer / Intensity",
+        "Shutter / Strobe",
+        "Pan / X-axis / Horizontal",
+        "Tilt / Y-axis / Vertical",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank",
+        "Blank"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#fe0101",
+          "dmx": "0-3"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "7-11"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "16-19"
+        },
+        {
+          "color": "#0000ff",
+          "dmx": "24-27"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "32-35"
+        },
+        {
+          "color": "#d4edfc",
+          "dmx": "40-43"
+        },
+        {
+          "color": "#ff830f",
+          "dmx": "48-51"
+        },
+        {
+          "color": "#62fef4",
+          "dmx": "56-59"
+        },
+        {
+          "color": "#f93ef3",
+          "dmx": "64-67"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "72-75"
+        },
+        {
+          "color": "#ff80d7",
+          "dmx": "80-83"
+        },
+        {
+          "color": "#03138c",
+          "dmx": "88-91"
+        },
+        {
+          "color": "#fffb94",
+          "dmx": "62-66"
+        },
+        {
+          "color": "#8f8f8f",
+          "dmx": "104-107"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
     }
   ],
   "channel_types": [
