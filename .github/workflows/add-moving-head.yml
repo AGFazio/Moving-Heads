@@ -14,7 +14,7 @@ jobs:
       issues: write     # to comment on the issue
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Extract and append moving head
         id: merge
@@ -84,7 +84,7 @@ jobs:
 
       - name: Comment and close — success
         if: steps.merge.outputs.status == 'added'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             await github.rest.issues.createComment({
@@ -124,7 +124,7 @@ jobs:
 
       - name: Comment — duplicate
         if: steps.merge.outputs.status == 'duplicate'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             github.rest.issues.createComment({
@@ -136,7 +136,7 @@ jobs:
 
       - name: Comment — parse error
         if: contains(fromJson('["no_json","bad_json","no_name"]'), steps.merge.outputs.status)
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             github.rest.issues.createComment({
