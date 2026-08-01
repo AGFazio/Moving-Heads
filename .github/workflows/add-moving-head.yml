@@ -49,6 +49,7 @@ jobs:
                   f.write("status=no_name\n")
               sys.exit(1)
 
+          # ── Update moving_heads_channel_types.json ──────────────────────────
           with open("moving_heads_channel_types.json", encoding="utf-8") as f:
               data = json.load(f)
 
@@ -67,6 +68,59 @@ jobs:
               json.dump(data, f, indent=2, ensure_ascii=False)
               f.write("\n")
 
+          # ── Update BUILTIN_PRESETS in xmodel-builder.html ───────────────────
+          def sq(s):
+              return "'" + str(s).replace("\\", "\\\\").replace("'", "\\'") + "'"
+
+          def motor(m):
+              parts = [
+                  f"min_limit:{m['min_limit']}",
+                  f"max_limit:{m['max_limit']}",
+                  f"range_of_motion:{m['range_of_motion']}",
+                  f"reverse:{m['reverse']}",
+                  f"orient_home:{m['orient_home']}",
+              ]
+              if "orient_zero" in m:
+                  parts.append(f"orient_zero:{m['orient_zero']}")
+              return "{ " + ", ".join(parts) + " }"
+
+          def entry_to_js(e):
+              lines = ["  {"]
+              lines.append(f"    name: {sq(e['name'])},")
+              lines.append("    channels: [" + ", ".join(sq(c) for c in e["channels"]) + "],")
+              lines.append(f"    pan_motor:  {motor(e['pan_motor'])},")
+              lines.append(f"    tilt_motor: {motor(e['tilt_motor'])},")
+              if e.get("color_type"):
+                  lines.append(f"    color_type: {sq(e['color_type'])},")
+              if e.get("color_wheel"):
+                  lines.append("    color_wheel: [")
+                  items = [f"{{ color:{sq(w['color'])}, dmx:{sq(str(w['dmx']))} }}"
+                           for w in e["color_wheel"]]
+                  for i in range(0, len(items), 3):
+                      lines.append("      " + ", ".join(items[i:i+3]) + ",")
+                  lines.append("    ],")
+              if e.get("rgbw") is not None:
+                  r = e["rgbw"]
+                  lines.append(f"    rgbw: {{ red:{r['red']}, green:{r['green']}, blue:{r['blue']}, white:{r['white']} }},")
+              lines.append("  },")
+              return "\n".join(lines)
+
+          HTML_FILE = "xmodel-builder.html"
+          MARKER = "];\n\n\n/* ===================== State ===================== */"
+          with open(HTML_FILE, encoding="utf-8") as f:
+              html = f.read()
+
+          if MARKER not in html:
+              print(f"Warning: insertion marker not found in {HTML_FILE} — HTML not updated.")
+          else:
+              js_entry = entry_to_js(entry)
+              html = html.replace(MARKER, js_entry + "\n" + MARKER, 1)
+              count = len(data["moving_heads"])
+              html = re.sub(r"// \d+ built-in fixture presets", f"// {count} built-in fixture presets", html)
+              with open(HTML_FILE, "w", encoding="utf-8") as f:
+                  f.write(html)
+              print(f"Updated {HTML_FILE} BUILTIN_PRESETS")
+
           print(f"Added '{name}'")
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("status=added\n")
@@ -78,7 +132,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add moving_heads_channel_types.json
+          git add moving_heads_channel_types.json xmodel-builder.html
           git commit -m "feat: add '${{ steps.merge.outputs.name }}' (issue #${{ github.event.issue.number }})"
           git push
 
