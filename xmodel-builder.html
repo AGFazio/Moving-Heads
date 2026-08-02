@@ -410,7 +410,7 @@ const DEFAULT_WHEEL = [
   { color: '#c0c0c0', dmx: 105 },
 ];
 
-// 13 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
+// 15 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
 let BUILTIN_PRESETS = [
   {
     name: 'YPS Starlight Mini 350w',
@@ -510,6 +510,36 @@ let BUILTIN_PRESETS = [
     channels: ['Dimming','Strobe','Color Wheel','Gobo','Color Mirror','Prism','Prism Rotate','Focus','Pan','Pan Fine','Tilt','Tilt Fine','Pan','Pan & Tilt Speed','Reset'],
     pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:0, orient_home:270 },
     tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:220, reverse:0, orient_home:110, orient_zero:20 },
+  },
+  {
+    name: 'Light Sky AquaBeam',
+    channels: ['Cyan','Magenta','Yellow','Blank','Color','Shutter / Strobe','Dimmer / Intensity','Blank','Gobo','Prism 1','Prism Rotate 1','Frost','Focus','Pan / X-axis / Horizontal','Pan Fine','Tilt / Y-axis / Vertical','Tilt Fine','Blank','Reset','Lamp'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:250, reverse:0, orient_home:125, orient_zero:35 },
+    color_type: 'wheel',
+    color_wheel: [
+      { color:'#ffffff', dmx:'0-5' }, { color:'#ff0000', dmx:'12-17' }, { color:'#831100', dmx:'24-29' },
+      { color:'#00ffd1', dmx:'36-41' }, { color:'#263e0f', dmx:'48-53' }, { color:'#00f900', dmx:'60-65' },
+      { color:'#942192', dmx:'72-77' }, { color:'#f550fe', dmx:'84-89' }, { color:'#0433ff', dmx:'96-101' },
+      { color:'#fefcdd', dmx:'108-113' }, { color:'#fff995', dmx:'120-125' }, { color:'#03138c', dmx:'132-137' },
+      { color:'#000000', dmx:'144-255' },
+    ],
+    rgbw: { red:0, green:0, blue:0, white:0 },
+  },
+  {
+    name: 'Mattos Phoenix Ray MAX',
+    channels: ['Pan / X-axis / Horizontal','Pan Fine','Tilt / Y-axis / Vertical','Tilt Fine','Pan & Tilt Speed','Color','Gobo','Blank','Prism 1','Prism Rotate 1','Prism 2','Prism Rotate 2','Frost','Focus','Blank','Shutter / Strobe','Dimmer / Intensity','Blank','Lamp','Blank'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+    color_type: 'wheel',
+    color_wheel: [
+      { color:'#ffffff', dmx:'0-3' }, { color:'#ff0000', dmx:'7-11' }, { color:'#ffa200', dmx:'16-19' },
+      { color:'#00e1ff', dmx:'24-27' }, { color:'#048604', dmx:'32-35' }, { color:'#8af750', dmx:'40-43' },
+      { color:'#b30fff', dmx:'48-51' }, { color:'#fe62f9', dmx:'56-59' }, { color:'#f5f7a1', dmx:'64-67' },
+      { color:'#fa00cc', dmx:'72-75' }, { color:'#1201fe', dmx:'80-83' }, { color:'#fffb94', dmx:'88-91' },
+      { color:'#fbe3a2', dmx:'62-66' }, { color:'#caf2fc', dmx:'104-107' }, { color:'#9b05ff', dmx:'0' },
+    ],
+    rgbw: { red:0, green:0, blue:0, white:0 },
   },
 ];
 
@@ -1215,9 +1245,9 @@ function buildHead(i, cfg) {
   const inner =
     '\t\t<PanMotor ChannelCoarse="' + panCh + '" ChannelFine="' + panFineCh + '" MinLimit="' + cfg.panMin + '" MaxLimit="' + cfg.panMax + '" RangeOfMotion="' + cfg.panRange.toFixed(6) + '" OrientZero="' + cfg.panOrientZero + '" OrientHome="' + cfg.panOrientHome + '" SlewLimit="180.000000" Reverse="' + cfg.panReverse + '" UpsideDown="0" />\n' +
     '\t\t<TiltMotor ChannelCoarse="' + tiltCh + '" ChannelFine="' + tiltFineCh + '" MinLimit="' + cfg.tiltMin + '" MaxLimit="' + cfg.tiltMax + '" RangeOfMotion="' + cfg.tiltRange.toFixed(6) + '" OrientZero="' + cfg.tiltOrientZero + '" OrientHome="' + cfg.tiltOrientHome + '" SlewLimit="180.000000" Reverse="0" UpsideDown="' + cfg.tiltUpsideDown + '" />\n' +
-    '\t\t<BaseMesh ObjFile="C:\\Program Files\\xLights\\meshobjects\\SimpleMovingHead\\MovingHeadBase.obj" MeshOnly="0" Brightness="40.000000" Width="32.090599" Height="9.159451" Depth="25.529499" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="0.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
-    '\t\t<YokeMesh ObjFile="C:\\Program Files\\xLights\\meshobjects\\SimpleMovingHead\\MovingHeadYoke.obj" MeshOnly="0" Brightness="50.000000" Width="26.763802" Height="19.488209" Depth="15.915359" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
-    '\t\t<HeadMesh ObjFile="C:\\Program Files\\xLights\\meshobjects\\SimpleMovingHead\\MovingHead.obj" MeshOnly="0" Brightness="80.000000" Width="22.069799" Height="24.279701" Depth="11.368110" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="90.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="0.000000" OffsetZ="0.000000" />';
+    '\t\t<BaseMesh ObjFile="MovingHeadBase.obj" MeshOnly="0" Brightness="40.000000" Width="32.090599" Height="9.159451" Depth="25.529499" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="0.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
+    '\t\t<YokeMesh ObjFile="MovingHeadYoke.obj" MeshOnly="0" Brightness="50.000000" Width="26.763802" Height="19.488209" Depth="15.915359" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
+    '\t\t<HeadMesh ObjFile="MovingHead.obj" MeshOnly="0" Brightness="80.000000" Width="22.069799" Height="24.279701" Depth="11.368110" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="90.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="0.000000" OffsetZ="0.000000" />';
 
   return '\t<model ' + attrs(a) + '>\n' + inner + '\n\t</model>';
 }
