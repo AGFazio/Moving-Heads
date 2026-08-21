@@ -1413,6 +1413,98 @@
         "blue": 0,
         "white": 0
       }
+    },
+    {
+      "name": "MATTOS Phoenix Ray PRO 600W",
+      "channels": [
+        "Color",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Gobo",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Blank",
+        "Frost",
+        "Focus",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Lamp / Reset",
+        "Pan & Tilt Speed",
+        "Blank",
+        "Blank",
+        "Blank"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "1"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "10"
+        },
+        {
+          "color": "#ff8000",
+          "dmx": "20"
+        },
+        {
+          "color": "#00ffe1",
+          "dmx": "30"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "40"
+        },
+        {
+          "color": "#b6fcb7",
+          "dmx": "50"
+        },
+        {
+          "color": "#d37df2",
+          "dmx": "60"
+        },
+        {
+          "color": "#f604ca",
+          "dmx": "70"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "80"
+        },
+        {
+          "color": "#ff0080",
+          "dmx": "90"
+        },
+        {
+          "color": "#4229ff",
+          "dmx": "100"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
     }
   ],
   "channel_types": [
