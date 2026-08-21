@@ -1347,7 +1347,7 @@
       }
     },
     {
-      "name": "Mattos BM380 14ch",
+      "name": "MATTOS BM380 14ch",
       "channels": [
         "Color",
         "Shutter / Strobe",
@@ -1451,7 +1451,7 @@
       }
     },
     {
-      "name": "MATTOS Phoenix Ray MAX 20ch",
+      "name": "MATTOS Phoenix Ray MAX",
       "channels": [
         "Pan / X-axis / Horizontal",
         "Pan Fine",
