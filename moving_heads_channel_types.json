@@ -729,42 +729,6 @@
       }
     },
     {
-      "name": "Mattos Pheonix Ray MAX",
-      "channels": [
-        "Color Wheel",
-        "Dimming",
-        "Strobe",
-        "Gobo",
-        "Prism",
-        "Prism Rotate",
-        "Blank",
-        "Blank",
-        "Focus",
-        "Pan",
-        "Pan Fine",
-        "Tilt",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Color Mirror",
-        "Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      }
-    },
-    {
       "name": "Mattos - Phoenix Ray LED (14ch)",
       "channels": [
         "Pan / X-axis / Horizontal",
