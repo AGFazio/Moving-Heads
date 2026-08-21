@@ -1345,6 +1345,110 @@
         "blue": 11,
         "white": 12
       }
+    },
+    {
+      "name": "Mattos BM380 14ch",
+      "channels": [
+        "Color",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Gobo",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Frost",
+        "Focus",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Lamp / Reset"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "1"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "10"
+        },
+        {
+          "color": "#ff9500",
+          "dmx": "20"
+        },
+        {
+          "color": "#00ffd5",
+          "dmx": "30"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "40"
+        },
+        {
+          "color": "#c6fcc5",
+          "dmx": "50"
+        },
+        {
+          "color": "#f76ef2",
+          "dmx": "60"
+        },
+        {
+          "color": "#f570aa",
+          "dmx": "70"
+        },
+        {
+          "color": "#f9f33e",
+          "dmx": "80"
+        },
+        {
+          "color": "#ff007b",
+          "dmx": "90"
+        },
+        {
+          "color": "#80f6ff",
+          "dmx": "100"
+        },
+        {
+          "color": "#03138c",
+          "dmx": "110"
+        },
+        {
+          "color": "#fffb94",
+          "dmx": "120"
+        },
+        {
+          "color": "#8f8f8f",
+          "dmx": "130"
+        },
+        {
+          "color": "#ffffff",
+          "dmx": "140"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
     }
   ],
   "channel_types": [
