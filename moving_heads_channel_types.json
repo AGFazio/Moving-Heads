@@ -1605,6 +1605,112 @@
         "blue": 0,
         "white": 0
       }
+    },
+    {
+      "name": "Dominar XM",
+      "channels": [
+        "Color",
+        "Shutter / Strobe",
+        "Dimmer / Intensity",
+        "Gobo",
+        "Prism 1",
+        "Prism Rotate 1",
+        "Blank",
+        "Frost",
+        "Focus",
+        "Pan / X-axis / Horizontal",
+        "Pan Fine",
+        "Tilt / Y-axis / Vertical",
+        "Tilt Fine",
+        "Pan & Tilt Speed",
+        "Function",
+        "Lamp"
+      ],
+      "pan_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 540,
+        "reverse": 1,
+        "orient_home": 270,
+        "orient_zero": 0
+      },
+      "tilt_motor": {
+        "min_limit": -180,
+        "max_limit": 180,
+        "range_of_motion": 270,
+        "reverse": 0,
+        "orient_home": 135,
+        "orient_zero": 45
+      },
+      "color_type": "wheel",
+      "color_wheel": [
+        {
+          "color": "#ffffff",
+          "dmx": "0-9"
+        },
+        {
+          "color": "#ff0000",
+          "dmx": "16-20"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "26-30"
+        },
+        {
+          "color": "#0000ff",
+          "dmx": "36-40"
+        },
+        {
+          "color": "#00ff00",
+          "dmx": "46-50"
+        },
+        {
+          "color": "#f7f5c5",
+          "dmx": "56-60"
+        },
+        {
+          "color": "#f29cdf",
+          "dmx": "66-70"
+        },
+        {
+          "color": "#2a02ca",
+          "dmx": "76-80"
+        },
+        {
+          "color": "#3ea8f9",
+          "dmx": "86-90"
+        },
+        {
+          "color": "#94ffa9",
+          "dmx": "96-100"
+        },
+        {
+          "color": "#e00099",
+          "dmx": "106-110"
+        },
+        {
+          "color": "#99eeff",
+          "dmx": "116-120"
+        },
+        {
+          "color": "#e4a801",
+          "dmx": "126-130"
+        },
+        {
+          "color": "#ffff00",
+          "dmx": "136-140"
+        },
+        {
+          "color": "#c9dde4",
+          "dmx": "146-150"
+        }
+      ],
+      "rgbw": {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "white": 0
+      }
     }
   ],
   "channel_types": [
