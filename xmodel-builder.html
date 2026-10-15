@@ -410,7 +410,7 @@ const DEFAULT_WHEEL = [
   { color: '#c0c0c0', dmx: 105 },
 ];
 
-// 22 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
+// 23 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
 let BUILTIN_PRESETS = [
   {
     name: 'YPS Starlight Mini 350w',
@@ -656,6 +656,19 @@ let BUILTIN_PRESETS = [
       { color:'#ff00f7', dmx:'30-39' }, { color:'#00ffee', dmx:'40-49' }, { color:'#fcf3d4', dmx:'50-59' },
       { color:'#ae00ff', dmx:'60-69' }, { color:'#ff7b00', dmx:'70-79' }, { color:'#00ff00', dmx:'80-89' },
       { color:'#c7fbff', dmx:'90-99' }, { color:'#eeff00', dmx:'100-109' }, { color:'#fed7f2', dmx:'110-119' },
+    ],
+    rgbw: { red:0, green:0, blue:0, white:0 },
+  },
+  {
+    name: 'ADJ Focus Spot 4Z',
+    channels: ['Pan / X-axis / Horizontal', 'Pan Fine', 'Tilt / Y-axis / Vertical', 'Tilt Fine', 'Color', 'Gobo', 'Gobo Rotate', 'Shutter / Strobe', 'Dimmer / Intensity', 'Prism 1', 'Prism Rotate 1', 'Prism 2', 'Prism Rotate 2', 'Focus', 'Blank', 'Blank', 'Pan & Tilt Speed', 'Reset'],
+    pan_motor:  { min_limit:-180, max_limit:180, range_of_motion:540, reverse:1, orient_home:270, orient_zero:0 },
+    tilt_motor: { min_limit:-180, max_limit:180, range_of_motion:270, reverse:0, orient_home:135, orient_zero:45 },
+    color_type: 'wheel',
+    color_wheel: [
+      { color:'#ffffff', dmx:'0-7' }, { color:'#ff0000', dmx:'8-14' }, { color:'#ff8000', dmx:'15-21' },
+      { color:'#ffff00', dmx:'22-28' }, { color:'#00ff00', dmx:'29-35' }, { color:'#0000ff', dmx:'36-42' },
+      { color:'#ff69b4', dmx:'43-49' }, { color:'#00ffff', dmx:'50-56' }, { color:'#ff00ff', dmx:'57-63' },
     ],
     rgbw: { red:0, green:0, blue:0, white:0 },
   },
