@@ -25,6 +25,8 @@ Pick a Moving Head from the preset list (or build a new one), set the number of 
 
 The output matches xLights' native `.xmodel` format — import it, place your heads in the layout, and you're done.
 
+> **⚠️ IMPORTANT: Delete any existing moving head models and groups in xLights *before* importing a new `.xmodel`.** Leftover moving head models or groups (including `MH1`, `MH2`…, the `MH Dimmer` / `MH Pan` / `MH Shutter` / `MH Tilt` string groups, and `Group - MH ALL`) will conflict with the new import and **break the way the heads work.**
+
 The DMX start channel always defaults to 1 in the generated file. Set the actual start channel inside xLights after import (right-click the model → Channel Properties).
 
 ---
@@ -39,7 +41,8 @@ The DMX start channel always defaults to 1 in the generated file. Set the actual
 4. In **Pan motor parameters**, choose the **Head orientation at rest** (Right / Left / Front / Back) — this is which way the head points when powered off, viewed from in front of the stage. The currently-recommended orientation for the preset's pan direction is labeled `(Recommended Position)` in green.
 5. Tick **Mount → Upside Down** if the fixtures are hung upside down.
 6. Click **Generate and Download xmodel**.
-7. In xLights Layout, click the **Import** icon, drag a box on the layout, and choose your `.xmodel` file from your Downloads folder.
+7. **Delete any existing moving head models and groups in xLights Layout first** — leftovers will break the way the heads work.
+8. In xLights Layout, click the **Import** icon, drag a box on the layout, and choose your `.xmodel` file from your Downloads folder.
 
 ### If your Moving Head isn't in the list
 

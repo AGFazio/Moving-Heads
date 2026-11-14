@@ -1744,12 +1744,14 @@ if (document.readyState === 'loading') {
     <div class="modal-body">
       <p>This tool generates ready-to-import <b>.xmodel</b> files for xLights, for any DMX moving-head fixture.</p>
       <p class="version-disclaimer-modal">⚠️ Requires <b>xLights 2026.09 or newer</b> &mdash; earlier versions don't support multi-model <code>.xmodel</code> import.</p>
+      <p class="version-disclaimer-modal">⚠️ <b>Delete any existing moving head models and groups in xLights before importing.</b> Leftover moving head models or groups (including <code>MH1</code>, <code>MH2</code>&hellip;, the <code>MH Dimmer / Pan / Shutter / Tilt</code> string groups, and <code>Group - MH ALL</code>) will conflict with the new import and break the way the heads work.</p>
       <p><b>Quick start:</b></p>
       <ol>
         <li>Pick your fixture from the <b>Choose preset</b> dropdown (or switch to <b>Add new Moving Head</b> if it isn't listed).</li>
         <li>Set the <b>Quantity of heads</b> for your show.</li>
         <li>Pick the <b>Head orientation at rest</b>.</li>
         <li>Click <b>Generate and Download xmodel</b>.</li>
+        <li><b>Delete</b> any existing moving head models and groups in xLights Layout first.</li>
         <li>In xLights Layout, click the <b>Import</b> icon, drag a box on the layout, and choose your <code>.xmodel</code> file from your Downloads folder.</li>
       </ol>
       <p>For full details, the channel-type reference, and how to submit a new fixture to the catalog, see the <a href="https://github.com/AGFazio/Moving-Heads#readme" target="_blank" rel="noopener" style="color:#cba6f7;">README on GitHub</a>.</p>
