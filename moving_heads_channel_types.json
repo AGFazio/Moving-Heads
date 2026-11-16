@@ -729,106 +729,6 @@
       }
     },
     {
-      "name": "Mattos - Phoenix Ray LED (14ch)",
-      "channels": [
-        "Pan / X-axis / Horizontal",
-        "Pan Fine",
-        "Tilt / Y-axis / Vertical",
-        "Tilt Fine",
-        "Pan & Tilt Speed",
-        "Dimmer / Intensity",
-        "Shutter / Strobe",
-        "Color",
-        "Gobo",
-        "Frost",
-        "Prism 1",
-        "Prism Rotate 1",
-        "Focus",
-        "Lamp / Reset"
-      ],
-      "pan_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 540,
-        "reverse": 1,
-        "orient_home": 270,
-        "orient_zero": 0
-      },
-      "tilt_motor": {
-        "min_limit": -180,
-        "max_limit": 180,
-        "range_of_motion": 270,
-        "reverse": 0,
-        "orient_home": 135,
-        "orient_zero": 45
-      },
-      "color_type": "wheel",
-      "color_wheel": [
-        {
-          "color": "#ffffff",
-          "dmx": "0-6"
-        },
-        {
-          "color": "#ff0000",
-          "dmx": "7-11"
-        },
-        {
-          "color": "#00ff00",
-          "dmx": "12-16"
-        },
-        {
-          "color": "#0000ff",
-          "dmx": "17-21"
-        },
-        {
-          "color": "#fff700",
-          "dmx": "22-26"
-        },
-        {
-          "color": "#f74bb8",
-          "dmx": "27-31"
-        },
-        {
-          "color": "#a5ff9e",
-          "dmx": "32-36"
-        },
-        {
-          "color": "#1d03a0",
-          "dmx": "37-41"
-        },
-        {
-          "color": "#f88bf5",
-          "dmx": "42-46"
-        },
-        {
-          "color": "#ffc800",
-          "dmx": "47-51"
-        },
-        {
-          "color": "#80fff6",
-          "dmx": "52-56"
-        },
-        {
-          "color": "#a3d7ff",
-          "dmx": "57-61"
-        },
-        {
-          "color": "#c494ff",
-          "dmx": "62-66"
-        },
-        {
-          "color": "#feeccd",
-          "dmx": "67-71"
-        }
-      ],
-      "rgbw": {
-        "red": 0,
-        "green": 0,
-        "blue": 0,
-        "white": 0
-      }
-    },
-    {
       "name": "Dominar Lempa",
       "channels": [
         "Color Wheel",
@@ -1305,7 +1205,7 @@
       }
     },
     {
-      "name": "MATTOS Phoenix Ray MAX",
+      "name": "MATTOS Phoenix Ray MAX 380w",
       "channels": [
         "Pan / X-axis / Horizontal",
         "Pan Fine",
