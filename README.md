@@ -38,7 +38,7 @@ The DMX start channel always defaults to 1 in the generated file. Set the actual
 1. **Choose preset** mode is selected by default.
 2. Pick your Moving Head from the **Load a preset Moving Head** dropdown — the tool **auto-loads** it the moment you change the selection.
 3. Use the **Quantity of heads** radio buttons (1 - 8) to set how many you have.
-4. In **Pan motor parameters**, choose the **Head orientation at rest** (Right / Left / Front / Back) — this is which way the head points when powered off, viewed from in front of the stage. The currently-recommended orientation for the preset's pan direction is labeled `(Recommended Position)` in green.
+4. In **Pan motor parameters**, choose the **Head orientation at rest** (Right / Left / Front / Back) — this is which way the head points when powered on, viewed from in front of the stage. The currently-recommended orientation for the preset's pan direction is labeled `(Recommended Position)` in green.
 5. Tick **Mount → Upside Down** if the fixtures are hung upside down.
 6. Click **Generate and Download xmodel**.
 7. **Delete any existing moving head models and groups in xLights Layout first** — leftovers will break the way the heads work.

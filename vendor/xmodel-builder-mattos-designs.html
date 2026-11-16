@@ -140,6 +140,7 @@
 
 <header>
   <a class="about-link" href="https://www.mattosdesigns.com" target="_blank" rel="noopener" aria-label="Mattos Designs website">Mattos Designs</a>
+  <a class="about-link" style="right:auto; left:20px;" href="instructions-mattos-designs.html" target="_blank" rel="noopener">Instructions</a>
   <h1>Mattos Designs &mdash; xLights Moving Head .xmodel Builder</h1>
   <p>Generate a DMX moving-head .xmodel for your Mattos Designs fixtures, for any quantity of heads (up to 8).</p>
   <p class="version-disclaimer">Requires <b>xLights 2026.09 or newer</b> &mdash; earlier versions don't support multi-model <code>.xmodel</code> import.</p>
@@ -149,7 +150,7 @@
   <section class="form-pane">
 
     <fieldset>
-      <legend>Fixture</legend>
+      <legend>Step 1 &middot; Fixture</legend>
       <div style="display:none;">
         <div>
           <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#cdd6f4; margin:0;">
@@ -175,7 +176,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Model</legend>
+      <legend>Step 2 &middot; Model</legend>
       <div class="row cols-2">
         <div><label>Quantity of heads (max 8) <button type="button" class="help-btn" id="headCountHelpBtn" title="Why 8?" aria-label="Why 8?">?</button><span class="field-tip">Number of heads to be added in layout.</span></label><div class="head-radios" id="headCountRadios"><label class="head-radio"><input type="radio" name="headCountRadio" value="1" checked>1</label><label class="head-radio"><input type="radio" name="headCountRadio" value="2">2</label><label class="head-radio"><input type="radio" name="headCountRadio" value="3">3</label><label class="head-radio"><input type="radio" name="headCountRadio" value="4">4</label><label class="head-radio"><input type="radio" name="headCountRadio" value="5">5</label><label class="head-radio"><input type="radio" name="headCountRadio" value="6">6</label><label class="head-radio"><input type="radio" name="headCountRadio" value="7">7</label><label class="head-radio"><input type="radio" name="headCountRadio" value="8">8</label></div><input type="hidden" id="headCount" value="1"></div>
         <div></div>
@@ -201,13 +202,13 @@
     </fieldset>
 
     <fieldset>
-      <legend>String Groups</legend>
+      <legend>Step 3 &middot; String Groups</legend>
       <p class="help">Generate String Groups so you can drive all heads' values for one function from one place.</p><p class="help" style="color:#f9e2af;"><b>Note:</b> The four pre-checked items (Dimmer, Pan, Shutter, Tilt) are the most commonly used and should be left checked. The others are optional.</p>
       <div id="submodelList"></div>
     </fieldset>
 
     <fieldset>
-      <legend>Pan motor parameters</legend>
+      <legend>Step 4 &middot; Pan motor parameters</legend>
       <div class="row cols-2">
         <div>
           <label for="panReverse">Pan Direction (CW/CCW) <button type="button" class="help-btn" id="panDirHelpBtn" title="How to test" aria-label="How to test pan direction">?</button><span class="preset-lock-hint">(from preset)</span>
@@ -245,7 +246,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Tilt motor parameters</legend>
+      <legend>Step 5 &middot; Tilt motor parameters</legend>
       <div class="row cols-2">
         <div class="add-new-only"><label for="tiltRange">Tilt range<span class="field-tip">Found in your manual or from the vendor.</span></label><input type="number" id="tiltRange" value="270" step="1"></div>
         <div>
@@ -321,7 +322,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Output</legend>
+      <legend>Step 6 &middot; Output</legend>
       <div class="actions">
         <button type="button" id="generateBtn">Generate and Download xmodel</button>
       </div>
@@ -2022,13 +2023,15 @@ if (document.readyState === 'loading') {
       <p class="version-disclaimer-modal">⚠️ <b>Delete any existing moving head models and groups in xLights before importing.</b> Leftover moving head models or groups (including <code>MH1</code>, <code>MH2</code>&hellip;, the <code>MH Dimmer / Pan / Shutter / Tilt</code> string groups, and <code>Group - MH ALL</code>) will conflict with the new import and break the way the heads work.</p>
       <p><b>Quick start:</b></p>
       <ol>
-        <li>Pick your fixture from the <b>Choose your Mattos Designs Moving Head</b> dropdown.</li>
-        <li>Set the <b>Quantity of heads</b> for your show.</li>
-        <li>Pick the <b>Head orientation at rest</b>.</li>
-        <li>Click <b>Generate and Download xmodel</b>.</li>
-        <li><b>Delete</b> any existing moving head models and groups in xLights Layout first.</li>
-        <li>In xLights Layout, click the <b>Import</b> icon, drag a box on the layout, and choose your <code>.xmodel</code> file from your Downloads folder.</li>
+        <li><b>Step 1:</b> Choose your Mattos Designs Moving Head.</li>
+        <li><b>Step 2:</b> Set the <b>Quantity of heads</b>.</li>
+        <li><b>Step 3:</b> Leave the String Groups as they are (or tick any extras you want).</li>
+        <li><b>Step 4:</b> Confirm the <b>Head orientation at rest</b>.</li>
+        <li><b>Step 5:</b> Tick <b>Upside Down</b> if the heads are hung upside down.</li>
+        <li><b>Step 6:</b> Click <b>Generate and Download xmodel</b>.</li>
+        <li>In xLights, <b>delete any existing moving head models and groups</b>, then use the <b>Import</b> icon in Layout to import your <code>.xmodel</code>.</li>
       </ol>
+      <p>Need more detail? Open the <a href="instructions-mattos-designs.html" target="_blank" rel="noopener" style="color:#fbbf24;">Instructions</a> page.</p>
       <p>Questions about your fixtures? Visit <a href="https://www.mattosdesigns.com" target="_blank" rel="noopener" style="color:#fbbf24;">Mattos Designs</a>.</p>
     </div>
     <div class="modal-actions">
