@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mattos Designs xLights .xmodel Builder</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background: #181825; color: #cdd6f4; line-height: 1.5; }
+  header { background: radial-gradient(ellipse at 50% 0%, #2a1a3a 0%, #181825 60%, #11111b 100%); padding: 30px 28px 26px; border-bottom: 1px solid #313244; box-shadow: 0 4px 14px rgba(0,0,0,0.35); text-align: center; position: relative; overflow: hidden; }
+  header::before { content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 240px; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(203,166,247,0.6) 50%, transparent 100%); }
+  .about-link { position: absolute; top: 16px; right: 20px; font-size: 12px; color: #a6adc8; text-decoration: none; padding: 6px 12px; border: 1px solid #45475a; border-radius: 6px; transition: color 0.15s, border-color 0.15s, background 0.15s; background: rgba(0,0,0,0.15); letter-spacing: 0.04em; }
+  .about-link:hover { color: #cba6f7; border-color: #cba6f7; background: rgba(203,166,247,0.08); }
+
+  header::after { content: ""; display: block; width: 60px; height: 3px; margin: 12px auto 0; border-radius: 2px; background: linear-gradient(90deg, #cba6f7 0%, #f9e2af 100%); box-shadow: 0 0 8px rgba(203,166,247,0.4); }
+  header h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.015em; background: linear-gradient(180deg, #f5e7ff 0%, #cba6f7 60%, #b08fe8 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; text-shadow: 0 2px 24px rgba(203,166,247,0.25); }
+  header p { margin: 8px 0 0; color: #a6adc8; font-size: 13.5px; font-style: italic; letter-spacing: 0.02em; }
+  header p.version-disclaimer { margin: 10px auto 0; max-width: 640px; padding: 6px 14px; color: #f9e2af; background: rgba(249,226,175,0.08); border: 1px solid rgba(249,226,175,0.35); border-radius: 6px; font-size: 12.5px; font-style: normal; letter-spacing: 0.02em; }
+  header p.version-disclaimer code { background: rgba(0,0,0,0.25); padding: 0 4px; border-radius: 3px; font-size: 12px; color: #f5e7ff; }
+  p.version-disclaimer-modal { margin: 10px 0 14px; padding: 8px 12px; color: #f9e2af; background: rgba(249,226,175,0.08); border: 1px solid rgba(249,226,175,0.35); border-radius: 6px; font-size: 13px; }
+  p.version-disclaimer-modal code { background: rgba(0,0,0,0.25); padding: 0 4px; border-radius: 3px; font-size: 12px; color: #f5e7ff; }
+  main { display: block; min-height: calc(100vh - 70px); }
+  .form-pane { padding: 28px 32px 40px; max-width: 900px; margin: 0 auto; }
+  fieldset { border: 1px solid #45475a; border-radius: 10px; padding: 18px 20px 20px; margin: 0 0 18px 0; background: linear-gradient(180deg, #2b2b40 0%, #25253a 100%); box-shadow: 0 2px 6px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.15); position: relative; }
+  legend { padding: 2px 10px; color: #f9e2af; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: linear-gradient(180deg, #181825 0%, #1e1e2e 100%); border: 1px solid #45475a; border-radius: 6px; }
+  label { display: block; margin-bottom: 4px; font-size: 12px; color: #bac2de; font-weight: 500; }
+  input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 8px 11px; background: #1c1c2c; border: 1px solid #45475a; border-radius: 6px; color: #cdd6f4; font-family: inherit; font-size: 13px; transition: border-color 0.15s, box-shadow 0.15s; }
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { outline: none; border-color: #cba6f7; box-shadow: 0 0 0 3px rgba(203, 166, 247, 0.18); }
+  input[type="color"] { width: 100%; height: 32px; padding: 2px; background: #1e1e2e; border: 1px solid #45475a; border-radius: 5px; cursor: pointer; }
+  textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; min-height: 60px; resize: vertical; }
+  .row { display: grid; gap: 10px; margin-bottom: 10px; }
+  .row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .chlist-header, .chlist-row { display: grid; grid-template-columns: 40px 1fr 32px; gap: 8px; align-items: center; margin-bottom: 4px; }
+  .chlist-header { font-size: 10.5px; color: #a6adc8; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .chlist-header .center { text-align: center; }
+  .chlist-row .ch-num { text-align: center; color: #a6adc8; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .chlist-row .ch-remove { background: transparent; border: 1px solid #45475a; color: #f38ba8; padding: 4px 0; font-size: 14px; line-height: 1; cursor: pointer; border-radius: 4px; }
+  .chlist-row .ch-remove:hover { background: #45475a; }
+  .chlist-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .chlist-actions button { padding: 6px 12px; font-size: 12px; }
+  .sub-row { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: center; margin-bottom: 6px; }
+  .sub-row input[type="checkbox"] { width: 18px; height: 18px; }
+  .wheel-grid { display: grid; grid-template-columns: 30px 1fr 90px; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .wheel-grid .slot-num { color: #a6adc8; font-size: 12px; text-align: center; }
+  .rgbw-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .rgbw-cell label { display: block; margin: 0 0 4px 0; font-size: 12px; color: #a6adc8; text-transform: uppercase; letter-spacing: 0.04em; }
+  .rgbw-cell select { width: 100%; padding: 6px 8px; font-size: 13px; }
+  button { background: linear-gradient(180deg, #cba6f7 0%, #b694f5 100%); color: #1e1e2e; border: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: filter 0.15s, transform 0.05s, box-shadow 0.15s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  button:hover { filter: brightness(1.08); box-shadow: 0 3px 6px rgba(0,0,0,0.25); }
+  button.secondary { background: #313244; color: #cdd6f4; box-shadow: 0 1px 3px rgba(0,0,0,0.18); }
+  button.secondary:hover { background: #45475a; box-shadow: 0 2px 5px rgba(0,0,0,0.22); }
+  .actions { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  pre.preview { flex: 1; background: #1e1e2e; border: 1px solid #313244; border-radius: 6px; padding: 14px; overflow: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; margin: 0; white-space: pre; color: #cdd6f4; }
+  .help { color: #a6adc8; font-size: 12px; margin: -4px 0 8px 0; }
+  .pane-title { color: #f9e2af; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px 0; }
+  details { margin-bottom: 10px; }
+  summary { cursor: pointer; color: #f9e2af; font-size: 13px; font-weight: 600; padding: 4px 0; }
+  .status { font-size: 12px; color: #a6e3a1; margin-bottom: 8px; min-height: 16px; }
+  .status.warn { color: #f9e2af; }
+  .status.err { color: #f38ba8; }
+  .preset-row { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: end; }
+  .preset-row button { padding: 8px 14px; font-size: 12px; }
+  .preset-select { font-size: 15px; padding: 9px 12px; width: auto; }
+  body.preset-mode .add-new-only { display: none; }
+  .preset-lock-hint { display: none; font-size: 11px; color: #fab387; font-style: italic; font-weight: 400; margin-left: 6px; }
+  body.preset-mode .preset-lock-hint { display: inline; }
+  .orient-grid { display: grid; grid-template-columns: 140px 1fr; gap: 16px; align-items: center; }
+  .orient-radios { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .orient-radios label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; color: #cdd6f4; margin: 0; }
+  .orient-radios input[type="radio"] { width: 16px; height: 16px; }
+  .orient-radios label.disabled { opacity: 0.35; cursor: not-allowed; }
+  #orientIcon { width: 126px; height: 90px; }
+  #orientIcon .ring { fill: #313244; stroke: #45475a; stroke-width: 2; }
+  #orientIcon text { fill: #6c7086; font-size: 9px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  #orientIcon .head-body { fill: #cba6f7; }
+  #orientIcon .beam { stroke: #f9e2af; stroke-width: 3; fill: none; stroke-linecap: round; }
+  #orientArrowGroup { transform-origin: 50px 50px; transition: transform 0.25s ease; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+  .modal-backdrop.show { display: flex; }
+  .modal-box { background: linear-gradient(180deg, #2b2b40 0%, #25253a 100%); border: 1px solid #45475a; border-radius: 12px; padding: 28px; max-width: 460px; width: 90%; box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.35); }
+  .modal-box h3 { margin: 0 0 8px 0; color: #cba6f7; font-size: 18px; }
+  .modal-box p { margin: 0 0 16px 0; color: #bac2de; font-size: 13px; line-height: 1.5; }
+  .modal-box .modal-actions { display: flex; flex-direction: column; gap: 8px; }
+  .modal-box .modal-actions button { width: 100%; text-align: left; padding: 12px 14px; }
+  .modal-box .modal-actions.confirm-actions { flex-direction: row; justify-content: flex-end; }
+  .modal-box .modal-actions.confirm-actions button { width: auto; text-align: center; padding: 10px 18px; }
+  .modal-box .modal-actions.confirm-actions button.secondary { background: #313244; color: #cdd6f4; border: 1px solid #45475a; }
+  .modal-box .modal-actions.confirm-actions button.secondary:hover { background: #45475a; }
+  .field-tip { display: block; margin-top: 2px; font-size: 11px; color: #a6adc8; font-weight: 400; font-style: italic; }
+  .field-warn { display: none; margin-top: 6px; padding: 8px 10px; font-size: 12px; line-height: 1.45; color: #1e1e2e; background: #f9e2af; border-radius: 6px; font-weight: 500; }
+  .head-radios { display: flex; gap: 6px; flex-wrap: nowrap; margin-top: 4px; }
+  .head-radio { flex: 1 1 0; display: flex; align-items: center; justify-content: center; min-width: 0; padding: 8px 6px; border: 1px solid #45475a; border-radius: 6px; font-size: 14px; color: #cdd6f4; cursor: pointer; background: #1e1e2e; margin: 0; }
+  .head-radio:hover { background: #313244; }
+  .head-radio input { margin-right: 6px; }
+  .head-radio:has(input:checked) { border-color: #22c55e; background: #313244; }
+  .field-warn.show { display: block; }
+  input[type="radio"], input[type="checkbox"] { accent-color: #22c55e; }
+  .help-btn { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #45475a; color: #f9e2af; border: none; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 6px; padding: 0; vertical-align: middle; }
+  .help-btn:hover { background: #585b70; }
+  .info-modal .modal-box { max-width: 520px; }
+  .info-modal .modal-box .modal-body { color: #cdd6f4; font-size: 13px; line-height: 1.6; max-height: 60vh; overflow-y: auto; margin-bottom: 16px; }
+  .info-modal .modal-box .modal-body p { margin: 0 0 10px 0; color: #cdd6f4; }
+  .info-modal .modal-box .modal-body ol, .info-modal .modal-box .modal-body ul { margin: 0 0 10px 18px; padding: 0; }
+  .info-modal .modal-box .modal-body li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="about-link" href="https://www.mattosdesigns.com" target="_blank" rel="noopener" aria-label="Mattos Designs website">Mattos Designs</a>
+  <h1>Mattos Designs &mdash; xLights Moving Head .xmodel Builder</h1>
+  <p>Generate a DMX moving-head .xmodel for your Mattos Designs fixtures, for any quantity of heads (up to 8).</p>
+  <p class="version-disclaimer">Requires <b>xLights 2026.09 or newer</b> &mdash; earlier versions don't support multi-model <code>.xmodel</code> import.</p>
+</header>
+
+<main>
+  <section class="form-pane">
+
+    <fieldset>
+      <legend>Fixture</legend>
+      <div style="display:none;">
+        <div>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#cdd6f4; margin:0;">
+            <input type="radio" name="fixtureMode" id="fixtureModePreset" value="preset" checked>
+            Choose preset
+          </label>
+          <span class="field-tip" style="margin-left:24px;">Look here first to see if your head is listed.</span>
+        </div>
+        <div>
+          <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px; color:#cdd6f4; margin:0;">
+            <input type="radio" name="fixtureMode" id="fixtureModeNew" value="new">
+            Add new Moving Head
+          </label>
+        </div>
+      </div>
+
+      <div id="presetModeContainer">
+        <label for="presetSelect" style="color:#f9e2af; font-size:13px;">Choose your Mattos Designs Moving Head &darr;</label>
+        <select id="presetSelect" class="preset-select"></select>
+      </div>
+
+      <p class="help">Pre-configured settings for Mattos Designs Moving Heads.</p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Model</legend>
+      <div class="row cols-2">
+        <div><label>Quantity of heads (max 8) <button type="button" class="help-btn" id="headCountHelpBtn" title="Why 8?" aria-label="Why 8?">?</button><span class="field-tip">Number of heads to be added in layout.</span></label><div class="head-radios" id="headCountRadios"><label class="head-radio"><input type="radio" name="headCountRadio" value="1" checked>1</label><label class="head-radio"><input type="radio" name="headCountRadio" value="2">2</label><label class="head-radio"><input type="radio" name="headCountRadio" value="3">3</label><label class="head-radio"><input type="radio" name="headCountRadio" value="4">4</label><label class="head-radio"><input type="radio" name="headCountRadio" value="5">5</label><label class="head-radio"><input type="radio" name="headCountRadio" value="6">6</label><label class="head-radio"><input type="radio" name="headCountRadio" value="7">7</label><label class="head-radio"><input type="radio" name="headCountRadio" value="8">8</label></div><input type="hidden" id="headCount" value="1"></div>
+        <div></div>
+      </div>
+      <!-- DMX Start Channel removed; defaults to 1. Hidden input kept for backward compat. -->
+      <input type="hidden" id="startChannel" value="1">
+      <div class="row cols-2 add-new-only" id="channelCountRow">
+        <div><label for="channelCount">Channels per fixture</label><input type="number" id="channelCount" value="16" min="1" max="64"></div>
+        <div></div>
+      </div>
+      <input type="hidden" id="modelName" value="MH">
+    </fieldset>
+
+    <fieldset class="add-new-only">
+      <legend>Channel layout</legend>
+      <p class="help">One entry per DMX channel for this fixture, in order. The role channels below (Dimmer, Pan, Tilt, etc.) are looked up by name in this list. <b>RGBW heads:</b> leave the Red/Green/Blue/White channels as <code>Blank</code> here — assign them in the <b>Color Properties</b> section below.</p>
+      <div class="chlist-header"><div class="center">Ch #</div><div>Channel type</div><div></div></div>
+      <div id="channelList"></div>
+      <div class="chlist-actions">
+        <button type="button" class="secondary" id="clearChBtn">Clear all</button>
+      </div>
+      <div id="derivedRoles" style="display:none;"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>String Groups</legend>
+      <p class="help">Generate String Groups so you can drive all heads' values for one function from one place.</p><p class="help" style="color:#f9e2af;"><b>Note:</b> The four pre-checked items (Dimmer, Pan, Shutter, Tilt) are the most commonly used and should be left checked. The others are optional.</p>
+      <div id="submodelList"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Pan motor parameters</legend>
+      <div class="row cols-2">
+        <div>
+          <label for="panReverse">Pan Direction (CW/CCW) <button type="button" class="help-btn" id="panDirHelpBtn" title="How to test" aria-label="How to test pan direction">?</button><span class="preset-lock-hint">(from preset)</span>
+            <span class="field-tip">Direction head spins when powered on.</span>
+          </label>
+          <select id="panReverse">
+            <option value="1" selected>CCW - Counter Clockwise</option>
+            <option value="0">CW - Clockwise</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+      <label>Head orientation at rest (viewer's POV)<span class="field-tip">Grayed options are not recommended for the set Pan Direction.</span></label>
+      <div class="orient-grid" style="margin-top:6px;">
+        <svg id="orientIcon" viewBox="-20 0 140 100" xmlns="http://www.w3.org/2000/svg">
+          <circle class="ring" cx="50" cy="50" r="40"/>
+          <text x="50" y="14" text-anchor="middle">BACK</text>
+          <text x="50" y="92" text-anchor="middle">FRONT</text>
+          <text x="-2" y="53" text-anchor="middle">LEFT</text>
+          <text x="102" y="53" text-anchor="middle">RIGHT</text>
+          <g id="orientArrowGroup">
+            <circle class="head-body" cx="50" cy="50" r="11"/>
+            <path class="beam" d="M 50 50 L 80 50 M 73 44 L 80 50 L 73 56"/>
+          </g>
+        </svg>
+        <div class="orient-radios">
+          <label data-orient="right"><input type="radio" name="panOrient" value="right" checked> Right <span class="orient-rec" data-for="right" style="color:#a6e3a1; font-size:11px;">(Recommended Position)</span></label>
+          <label data-orient="left"><input type="radio" name="panOrient" value="left"> Left <span class="orient-rec" data-for="left" style="color:#a6e3a1; font-size:11px;">(Recommended Position)</span></label>
+          <label data-orient="front"><input type="radio" name="panOrient" value="front"> Front (toward viewer)</label>
+          <label data-orient="back"><input type="radio" name="panOrient" value="back"> Back (away from viewer)</label>
+        </div>
+      </div>
+      <input type="hidden" id="panOrientHome" value="270">
+      <input type="hidden" id="panOrientZero" value="0">
+    </fieldset>
+
+    <fieldset>
+      <legend>Tilt motor parameters</legend>
+      <div class="row cols-2">
+        <div class="add-new-only"><label for="tiltRange">Tilt range<span class="field-tip">Found in your manual or from the vendor.</span></label><input type="number" id="tiltRange" value="270" step="1"></div>
+        <div>
+          <label for="tiltUpsideDown">Mount</label>
+          <div style="display:flex; align-items:center; gap:8px; padding-top:6px;">
+            <input type="checkbox" id="tiltUpsideDown" style="width:18px; height:18px;">
+            <label for="tiltUpsideDown" style="margin:0; cursor:pointer;">Upside Down</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="add-new-only">
+      <legend>Color Properties</legend>
+      <p class="help">Pick how this Moving Head produces color. <b>Color Wheel</b> = a rotating wheel with fixed color slots (one DMX channel). <b>RGBW</b> = separate Red, Green, Blue (and optional White) LED channels.</p>
+      <div class="row" style="margin-bottom:12px;">
+        <div>
+          <label>Color Type</label>
+          <div class="orient-radios" style="display:flex; gap:18px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0;"><input type="radio" name="colorType" value="wheel" checked> Color Wheel</label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0;"><input type="radio" name="colorType" value="rgbw"> RGBW</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="colorWheelBlock">
+        <p class="help">DMX value is where the wheel lands on that color. Single number (<code>4</code>) or range (<code>2-5</code>).</p>
+        <div class="row cols-2" style="margin-bottom:12px;">
+          <div>
+            <label for="wheelSlots">Number of slots</label>
+            <input type="number" id="wheelSlots" value="13" min="1" max="64">
+          </div>
+          <div></div>
+        </div>
+        <div class="wheel-grid" style="margin-bottom:8px; font-size:10.5px; color:#a6adc8; text-transform:uppercase; letter-spacing:0.04em;"><div class="slot-num">Slot#</div><div style="text-align:center;">Color</div><div style="text-align:center;">DMX Range</div></div>
+        <div id="wheelEditor"></div>
+      </div>
+
+      <div id="colorRgbwBlock" style="display:none;">
+        <p class="help">Pick the DMX channel number for each color LED. Set White to <b>0</b> if your fixture has no dedicated white LED (it becomes a pure RGB head).</p>
+        <div class="rgbw-row">
+          <div class="rgbw-cell">
+            <label for="redChannel">Red</label>
+            <select id="redChannel"></select>
+          </div>
+          <div class="rgbw-cell">
+            <label for="greenChannel">Green</label>
+            <select id="greenChannel"></select>
+          </div>
+          <div class="rgbw-cell">
+            <label for="blueChannel">Blue</label>
+            <select id="blueChannel"></select>
+          </div>
+          <div class="rgbw-cell">
+            <label for="whiteChannel">White</label>
+            <select id="whiteChannel"></select>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="add-new-only">
+      <legend>Save as Preset</legend>
+      <p class="help">Use the vendor and model as the name (e.g. "ADJ Vizi Hex Wash 7", "Chauvet Intimidator Spot 360"). Click <b>Add New Model as Preset</b> to send it to the preset repository.</p>
+      <div class="row cols-2" style="align-items:end;">
+        <div>
+          <label for="newModelName">Model name</label>
+          <input type="text" id="newModelName" placeholder="e.g. YPS 400W">
+        </div>
+        <div>
+          <button type="button" id="saveAsPresetBtn" style="width:100%;">Add New Model as Preset</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Output</legend>
+      <div class="actions">
+        <button type="button" id="generateBtn">Generate and Download xmodel</button>
+      </div>
+      <div class="status" id="status">Pick a preset or build a channel list, then Generate.</div>
+      <pre class="preview" id="preview" style="display:none; max-height:400px;"></pre>
+    </fieldset>
+
+  </section>
+</main>
+
+<script>
+
+'use strict';
+
+/* ===================== Reference data ===================== */
+
+// Legacy preset channel names -> new dropdown options. Keeps old presets working.
+const LEGACY_MAP = {
+  'Dimming':                 'Dimmer / Intensity',
+  'Dimmer/Intensity':        'Dimmer / Intensity',
+  'Strobe':                  'Shutter / Strobe',
+  'Shutter/Strobe':          'Shutter / Strobe',
+  'Pan':                     'Pan / X-axis / Horizontal',
+  'Pan/X-axis':              'Pan / X-axis / Horizontal',
+  'Pan/X-axis/Horizontal':   'Pan / X-axis / Horizontal',
+  'Tilt':                    'Tilt / Y-axis / Vertical',
+  'Tilt/Y-axis':             'Tilt / Y-axis / Vertical',
+  'Tilt/Y-axis/Vertical':    'Tilt / Y-axis / Vertical',
+  'Color Wheel':             'Color',
+  'Color Mirror':            'Frost',
+  'Prism':                   'Prism 1',
+  'Prism Rotate':            'Prism Rotate 1',
+  'Prism1':                  'Prism 1',
+  'Prism2':                  'Prism 2',
+  'Gobo Rotate1':            'Gobo Rotate',
+  'Reset':                   'Lamp / Reset',
+  'Lamp/Reset':              'Lamp / Reset',
+  'Focus F':                 'Focus',
+  'Gobo RF':                 'Blank',
+  'Zoom':                    'Blank',
+};
+function normalizeChannel(name) {
+  return (LEGACY_MAP.hasOwnProperty(name)) ? LEGACY_MAP[name] : name;
+}
+
+// Channel type options for the per-channel dropdown
+const CHANNEL_TYPES = [
+  'Blank',
+  'Dimmer / Intensity',
+  'Shutter / Strobe',
+  'Pan / X-axis / Horizontal',
+  'Pan Fine',
+  'Tilt / Y-axis / Vertical',
+  'Tilt Fine',
+  'Prism 2',
+  'Prism 1',
+  'Prism Rotate 2',
+  'Prism Rotate 1',
+  'Focus',
+  'Frost',
+  'Color',
+  'Cyan',
+  'Magenta',
+  'Yellow',
+  'Pan & Tilt Speed',
+  'Lamp / Reset',
+  'Lamp',
+  'Reset',
+  'Function',
+  'Gobo',
+  'Gobo Rotate',
+  'Gobo Jitter',
+];
+
+// Role -> derived xLights attribute mapping.
+// `lookup` is a list of channel-type names. First name found in the channel list wins.
+// This lets old preset names ("Dimming", "Strobe", "Pan", etc.) still resolve to the right role.
+const ROLES = [
+  { role: 'dimmer',      lookup: ['Dimmer / Intensity','Dimmer/Intensity','Dimming'],   label: 'Dimmer',      submodelName: 'Dimmer',       submodelDefault: true,
+    aliases: ['mh dimmers','intensity','mh intensity'], worldPosY: 478.566010 },
+  { role: 'shutter',     lookup: ['Shutter / Strobe','Shutter/Strobe','Strobe'],      label: 'Shutter',     submodelName: 'Shutter',      submodelDefault: true,
+    aliases: ['mh shutters','mh strobe','mh strobes'], worldPosY: 458.200409 },
+  { role: 'pan',         lookup: ['Pan / X-axis / Horizontal','Pan/X-axis/Horizontal','Pan/X-axis','Pan'],             label: 'Pan',         submodelName: 'Pan',          submodelDefault: true,
+    aliases: [], worldPosY: 517.977295 },
+  { role: 'panFine',     lookup: ['Pan Fine'],                     label: 'Pan Fine',    submodelName: null,           submodelDefault: false, aliases: [] },
+  { role: 'tilt',        lookup: ['Tilt / Y-axis / Vertical','Tilt/Y-axis/Vertical','Tilt/Y-axis','Tilt'],           label: 'Tilt',        submodelName: 'Tilt',         submodelDefault: true,
+    aliases: [], worldPosY: 497.631714 },
+  { role: 'tiltFine',    lookup: ['Tilt Fine'],                    label: 'Tilt Fine',   submodelName: null,           submodelDefault: false, aliases: [] },
+  { role: 'color',       lookup: ['Color','Color Wheel'],          label: 'Color Wheel', submodelName: 'Color',        submodelDefault: false,
+    aliases: [], worldPosY: 538.000000 },
+  { role: 'gobo',        lookup: ['Gobo'],                         label: 'Gobo',        submodelName: 'Gobo',         submodelDefault: false,
+    aliases: [], worldPosY: 572.000000 },
+  { role: 'prism',       lookup: ['Prism 1','Prism','Prism1'],     label: 'Prism',       submodelName: 'Prism',        submodelDefault: false,
+    aliases: [], worldPosY: 589.000000 },
+  { role: 'prismRotate', lookup: ['Prism Rotate 1','Prism Rotate'], label: 'Prism Rotate', submodelName: 'Prism Rotate', submodelDefault: false,
+    aliases: [], worldPosY: 600.000000 },
+  { role: 'focus',       lookup: ['Focus'],                        label: 'Focus',       submodelName: 'Focus',        submodelDefault: false,
+    aliases: [], worldPosY: 606.000000 },
+  { role: 'frost',       lookup: ['Frost'],                        label: 'Frost',       submodelName: 'Frost',        submodelDefault: false,
+    aliases: [], worldPosY: 623.000000 },
+];
+
+// Default color wheel (matches your sample YPS 350W)
+const DEFAULT_WHEEL = [
+  { color: '#ffffff', dmx: 2  },
+  { color: '#ff0000', dmx: 9  },
+  { color: '#ffff00', dmx: 17 },
+  { color: '#0000ff', dmx: 25 },
+  { color: '#00ff00', dmx: 33 },
+  { color: '#e1fdff', dmx: 41 },
+  { color: '#cc3232', dmx: 49 },
+  { color: '#00ffff', dmx: 57 },
+  { color: '#ff00ff', dmx: 65 },
+  { color: '#ffff80', dmx: 73 },
+  { color: '#ff80c0', dmx: 81 },
+  { color: '#0000d0', dmx: 90 },
+  { color: '#c0c0c0', dmx: 105 },
+];
+
+// 23 built-in fixture presets - mirrors moving_heads_channel_types.json on GitHub
+let BUILTIN_PRESETS = [
+  {
+    "name": "Mattos Phoenix Ray 300W LED 1.6 Beam",
+    "channels": [
+      "Pan / X-axis / Horizontal",
+      "Pan Fine",
+      "Tilt / Y-axis / Vertical",
+      "Tilt Fine",
+      "Pan & Tilt Speed",
+      "Dimmer / Intensity",
+      "Shutter / Strobe",
+      "Color",
+      "Gobo",
+      "Frost",
+      "Prism 1",
+      "Prism Rotate 1",
+      "Focus",
+      "Lamp / Reset"
+    ],
+    "pan_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 540,
+      "reverse": 1,
+      "orient_home": 270,
+      "orient_zero": 0
+    },
+    "tilt_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 270,
+      "reverse": 0,
+      "orient_home": 135,
+      "orient_zero": 45
+    },
+    "color_type": "wheel",
+    "color_wheel": [
+      {
+        "color": "#ffffff",
+        "dmx": "0-6"
+      },
+      {
+        "color": "#ff0000",
+        "dmx": "7-11"
+      },
+      {
+        "color": "#00ff00",
+        "dmx": "12-16"
+      },
+      {
+        "color": "#0000ff",
+        "dmx": "17-21"
+      },
+      {
+        "color": "#ffff00",
+        "dmx": "22-26"
+      },
+      {
+        "color": "#ff00ff",
+        "dmx": "27-31"
+      },
+      {
+        "color": "#90ee90",
+        "dmx": "32-36"
+      },
+      {
+        "color": "#0b2275",
+        "dmx": "37-41"
+      },
+      {
+        "color": "#ff66cc",
+        "dmx": "42-46"
+      },
+      {
+        "color": "#ffbf00",
+        "dmx": "47-51"
+      },
+      {
+        "color": "#00ffff",
+        "dmx": "52-56"
+      },
+      {
+        "color": "#0000ff",
+        "dmx": "57-61"
+      },
+      {
+        "color": "#b19cd9",
+        "dmx": "62-66"
+      }
+    ],
+    "rgbw": {
+      "red": 0,
+      "green": 0,
+      "blue": 0,
+      "white": 0
+    }
+  },
+  {
+    "name": "Mattos BM380 14ch",
+    "channels": [
+      "Color",
+      "Shutter / Strobe",
+      "Dimmer / Intensity",
+      "Gobo",
+      "Prism 1",
+      "Prism Rotate 1",
+      "Frost",
+      "Focus",
+      "Pan / X-axis / Horizontal",
+      "Pan Fine",
+      "Tilt / Y-axis / Vertical",
+      "Tilt Fine",
+      "Pan & Tilt Speed",
+      "Lamp / Reset"
+    ],
+    "pan_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 540,
+      "reverse": 1,
+      "orient_home": 270,
+      "orient_zero": 0
+    },
+    "tilt_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 270,
+      "reverse": 0,
+      "orient_home": 135,
+      "orient_zero": 45
+    },
+    "color_type": "wheel",
+    "color_wheel": [
+      {
+        "color": "#ffffff",
+        "dmx": "1"
+      },
+      {
+        "color": "#ff0000",
+        "dmx": "10"
+      },
+      {
+        "color": "#ff9500",
+        "dmx": "20"
+      },
+      {
+        "color": "#00ffd5",
+        "dmx": "30"
+      },
+      {
+        "color": "#00ff00",
+        "dmx": "40"
+      },
+      {
+        "color": "#c6fcc5",
+        "dmx": "50"
+      },
+      {
+        "color": "#f76ef2",
+        "dmx": "60"
+      },
+      {
+        "color": "#f570aa",
+        "dmx": "70"
+      },
+      {
+        "color": "#f9f33e",
+        "dmx": "80"
+      },
+      {
+        "color": "#ff007b",
+        "dmx": "90"
+      },
+      {
+        "color": "#80f6ff",
+        "dmx": "100"
+      },
+      {
+        "color": "#03138c",
+        "dmx": "110"
+      },
+      {
+        "color": "#fffb94",
+        "dmx": "120"
+      },
+      {
+        "color": "#8f8f8f",
+        "dmx": "130"
+      },
+      {
+        "color": "#ffffff",
+        "dmx": "140"
+      }
+    ],
+    "rgbw": {
+      "red": 0,
+      "green": 0,
+      "blue": 0,
+      "white": 0
+    }
+  },
+  {
+    "name": "Mattos Phoenix Ray MAX 380W",
+    "channels": [
+      "Pan / X-axis / Horizontal",
+      "Pan Fine",
+      "Tilt / Y-axis / Vertical",
+      "Tilt Fine",
+      "Pan & Tilt Speed",
+      "Color",
+      "Gobo",
+      "Blank",
+      "Prism 1",
+      "Prism Rotate 1",
+      "Prism 2",
+      "Prism Rotate 2",
+      "Frost",
+      "Focus",
+      "Blank",
+      "Shutter / Strobe",
+      "Dimmer / Intensity",
+      "Blank",
+      "Lamp / Reset",
+      "Blank"
+    ],
+    "pan_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 540,
+      "reverse": 1,
+      "orient_home": 270,
+      "orient_zero": 0
+    },
+    "tilt_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 270,
+      "reverse": 0,
+      "orient_home": 135,
+      "orient_zero": 45
+    },
+    "color_type": "wheel",
+    "color_wheel": [
+      {
+        "color": "#ffffff",
+        "dmx": "0-7"
+      },
+      {
+        "color": "#ff0000",
+        "dmx": "8-11"
+      },
+      {
+        "color": "#ff8000",
+        "dmx": "12-15"
+      },
+      {
+        "color": "#00ffee",
+        "dmx": "16-19"
+      },
+      {
+        "color": "#00ff00",
+        "dmx": "20-23"
+      },
+      {
+        "color": "#cef4be",
+        "dmx": "24-27"
+      },
+      {
+        "color": "#be55f7",
+        "dmx": "28-31"
+      },
+      {
+        "color": "#fc62fe",
+        "dmx": "32-35"
+      },
+      {
+        "color": "#fefcbe",
+        "dmx": "36-39"
+      },
+      {
+        "color": "#ff0000",
+        "dmx": "40-43"
+      },
+      {
+        "color": "#80dfff",
+        "dmx": "44-47"
+      },
+      {
+        "color": "#ffff00",
+        "dmx": "48-51"
+      },
+      {
+        "color": "#f2e591",
+        "dmx": "52-55"
+      },
+      {
+        "color": "#d6f5ff",
+        "dmx": "56-59"
+      },
+      {
+        "color": "#4d0070",
+        "dmx": "60-63"
+      }
+    ],
+    "rgbw": {
+      "red": 0,
+      "green": 0,
+      "blue": 0,
+      "white": 0
+    }
+  },
+  {
+    "name": "Mattos Phoenix Ray PRO 600W",
+    "channels": [
+      "Color",
+      "Shutter / Strobe",
+      "Dimmer / Intensity",
+      "Gobo",
+      "Prism 1",
+      "Prism Rotate 1",
+      "Blank",
+      "Frost",
+      "Focus",
+      "Pan / X-axis / Horizontal",
+      "Pan Fine",
+      "Tilt / Y-axis / Vertical",
+      "Tilt Fine",
+      "Lamp / Reset",
+      "Pan & Tilt Speed",
+      "Blank",
+      "Blank",
+      "Blank"
+    ],
+    "pan_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 540,
+      "reverse": 1,
+      "orient_home": 270,
+      "orient_zero": 0
+    },
+    "tilt_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 270,
+      "reverse": 0,
+      "orient_home": 135,
+      "orient_zero": 45
+    },
+    "color_type": "wheel",
+    "color_wheel": [
+      {
+        "color": "#ffffff",
+        "dmx": "1"
+      },
+      {
+        "color": "#ff0000",
+        "dmx": "10"
+      },
+      {
+        "color": "#ff8000",
+        "dmx": "20"
+      },
+      {
+        "color": "#00ffe1",
+        "dmx": "30"
+      },
+      {
+        "color": "#00ff00",
+        "dmx": "40"
+      },
+      {
+        "color": "#b6fcb7",
+        "dmx": "50"
+      },
+      {
+        "color": "#d37df2",
+        "dmx": "60"
+      },
+      {
+        "color": "#f604ca",
+        "dmx": "70"
+      },
+      {
+        "color": "#ffff00",
+        "dmx": "80"
+      },
+      {
+        "color": "#ff0080",
+        "dmx": "90"
+      },
+      {
+        "color": "#4229ff",
+        "dmx": "100"
+      }
+    ],
+    "rgbw": {
+      "red": 0,
+      "green": 0,
+      "blue": 0,
+      "white": 0
+    }
+  },
+  {
+    "name": "Mattos Phoenix Ray 230W Hobby",
+    "channels": [
+      "Pan / X-axis / Horizontal",
+      "Pan Fine",
+      "Tilt / Y-axis / Vertical",
+      "Tilt Fine",
+      "Pan & Tilt Speed",
+      "Dimmer / Intensity",
+      "Shutter / Strobe",
+      "Color",
+      "Gobo",
+      "Gobo Jitter",
+      "Prism 1",
+      "Prism Rotate 1",
+      "Focus",
+      "Reset"
+    ],
+    "pan_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 540,
+      "reverse": 1,
+      "orient_home": 270,
+      "orient_zero": 0
+    },
+    "tilt_motor": {
+      "min_limit": -180,
+      "max_limit": 180,
+      "range_of_motion": 270,
+      "reverse": 0,
+      "orient_home": 135,
+      "orient_zero": 45
+    },
+    "color_type": "wheel",
+    "color_wheel": [
+      {
+        "color": "#ffffff",
+        "dmx": "0-3"
+      },
+      {
+        "color": "#ff0000",
+        "dmx": "7-11"
+      },
+      {
+        "color": "#ffff00",
+        "dmx": "16-19"
+      },
+      {
+        "color": "#0000ff",
+        "dmx": "24-27"
+      },
+      {
+        "color": "#00ff00",
+        "dmx": "32-35"
+      },
+      {
+        "color": "#d4edfc",
+        "dmx": "40-43"
+      },
+      {
+        "color": "#ff830f",
+        "dmx": "48-51"
+      },
+      {
+        "color": "#62fef4",
+        "dmx": "56-59"
+      },
+      {
+        "color": "#f93ef3",
+        "dmx": "64-67"
+      },
+      {
+        "color": "#ffff00",
+        "dmx": "72-75"
+      },
+      {
+        "color": "#ff80d7",
+        "dmx": "80-83"
+      },
+      {
+        "color": "#03138c",
+        "dmx": "88-91"
+      },
+      {
+        "color": "#fffb94",
+        "dmx": "62-66"
+      },
+      {
+        "color": "#8f8f8f",
+        "dmx": "104-107"
+      }
+    ],
+    "rgbw": {
+      "red": 0,
+      "green": 0,
+      "blue": 0,
+      "white": 0
+    }
+  }
+];
+const VENDOR_MATCH = new RegExp("mattos", "i");
+
+
+/* ===================== State ===================== */
+
+// The ordered channel list — array of strings, e.g. ['Color Wheel','Dimming',...]
+let channelList = [];
+// Name of the currently-loaded preset (for restoring selection after remote refresh)
+let currentPresetName = null;
+
+/* ===================== Utilities ===================== */
+
+function $(id) { return document.getElementById(id); }
+
+
+
+
+// 1-based position of `name` in channelList, or 0 if absent.
+// `name` can be a string OR an array of candidate names (first found wins).
+function chPos(name) {
+  const candidates = Array.isArray(name) ? name : [name];
+  for (const n of candidates) {
+    const idx = channelList.indexOf(n);
+    if (idx >= 0) return idx + 1;
+  }
+  return 0;
+}
+
+/* ===================== UI builders ===================== */
+
+// True if this preset has color choices defined (color wheel slots or RGBW LED channels assigned)
+function presetHasColorChoices(p) {
+  if (Array.isArray(p.color_wheel) && p.color_wheel.length > 0) return true;
+  if (p.rgbw && (p.rgbw.red || p.rgbw.green || p.rgbw.blue || p.rgbw.white)) return true;
+  return false;
+}
+
+function buildPresetDropdown() {
+  const sel = $('presetSelect');
+  sel.innerHTML = '';
+  if (BUILTIN_PRESETS.length) {
+    const og = document.createElement('optgroup');
+    og.label = 'Built-in';
+    BUILTIN_PRESETS.forEach((p, i) => {
+      const o = document.createElement('option');
+      o.value = 'b:' + i;
+      const colorTag = presetHasColorChoices(p) ? ' w/color' : '';
+      o.textContent = p.name + ' (' + p.channels.length + ' ch)' + colorTag;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  }
+  // Auto-size the select to ~5ch wider than the longest option text
+  let longest = 0;
+  Array.from(sel.options).forEach(o => { if (o.text.length > longest) longest = o.text.length; });
+  sel.style.width = (longest + 5) + 'ch';
+  // Note: user-saved presets are intentionally NOT listed here.
+  // New models are submitted via the GitHub issue flow; once the catalog JSON
+  // on the repo is updated, they appear under the Built-in group above.
+}
+
+function buildChannelListUI() {
+  const wrap = $('channelList');
+  wrap.innerHTML = '';
+  channelList.forEach((val, idx) => {
+    const row = document.createElement('div');
+    row.className = 'chlist-row';
+    const inList = CHANNEL_TYPES.indexOf(val) >= 0;
+    let optsHtml = '';
+    if (!inList && val) {
+      optsHtml += '<option value="' + escapeAttr(val) + '" selected>' + escapeAttr(val) + '</option>';
+    }
+    // Channel types already used elsewhere in the list (Blank may repeat freely)
+    const usedElsewhere = new Set();
+    channelList.forEach((other, otherIdx) => {
+      if (otherIdx === idx) return;
+      if (other && other !== 'Blank') usedElsewhere.add(other);
+    });
+    CHANNEL_TYPES.forEach(t => {
+      const selAttr = (t === val) ? ' selected' : '';
+      // Disable if already used somewhere else; current row's selection + Blank always stay enabled
+      const disabledAttr = (t !== 'Blank' && t !== val && usedElsewhere.has(t)) ? ' disabled' : '';
+      optsHtml += '<option value="' + escapeAttr(t) + '"' + selAttr + disabledAttr + '>' + escapeAttr(t) + '</option>';
+    });
+    row.innerHTML =
+      '<div class="ch-num">' + (idx + 1) + '</div>' +
+      '<select data-idx="' + idx + '">' + optsHtml + '</select>' +
+      '<div></div>';
+    wrap.appendChild(row);
+  });
+  wrap.querySelectorAll('select').forEach(sel => {
+    sel.addEventListener('change', (e) => {
+      const i = parseInt(e.target.getAttribute('data-idx'), 10);
+      channelList[i] = e.target.value;
+      // Rebuild list so other rows' disabled options update to reflect the new state
+      buildChannelListUI();
+      updateDerived();
+      buildSubmodelUI();
+      regenerate();
+    });
+  });
+}
+
+// HTML attribute escape (just the chars that matter in attribute context)
+function escapeAttr(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Sync the visible channelCount input to channelList.length
+function syncChannelCountFromList() {
+  const cc = $('channelCount');
+  if (cc) cc.value = String(channelList.length);
+}
+
+// Resize channelList to match a target count, padding with 'Blank' or truncating
+function resizeChannelList(target) {
+  target = Math.max(1, target | 0);
+  if (channelList.length < target) {
+    while (channelList.length < target) channelList.push('Blank');
+  } else if (channelList.length > target) {
+    channelList.length = target;
+  }
+}
+
+function buildSubmodelUI() {
+  const wrap = $('submodelList');
+  // preserve existing checked state per role
+  const prev = {};
+  wrap.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    prev[cb.getAttribute('data-role')] = cb.checked;
+  });
+  wrap.innerHTML = '';
+  let any = false;
+  ROLES.forEach(r => {
+    if (!r.submodelName) return; // role can't be a submodel
+    const pos = chPos(r.lookup);
+    if (pos === 0) return; // role not present in channel list
+    any = true;
+    const checkedAttr = (r.role in prev) ? (prev[r.role] ? 'checked' : '')
+                                         : (r.submodelDefault ? 'checked' : '');
+    const row = document.createElement('div');
+    row.className = 'sub-row';
+    row.innerHTML =
+      '<input type="checkbox" id="sub_' + r.role + '" data-role="' + r.role + '" ' + checkedAttr + '>' +
+      '<label for="sub_' + r.role + '">MH ' + r.submodelName + ' &mdash; ch ' + pos + '</label>';
+    wrap.appendChild(row);
+  });
+  if (!any) {
+    wrap.innerHTML = '<p class="help">No roles present in the channel list yet.</p>';
+  }
+}
+
+function buildWheelUI() {
+  const wrap = $('wheelEditor');
+  // Snapshot current edits so we keep them across slot-count changes
+  const existing = [];
+  wrap.querySelectorAll('.wheel-grid').forEach((row, i) => {
+    const c = row.querySelector('input[type="color"]');
+    const d = row.querySelector('input[type="text"], input[type="number"]');
+    if (c && d) existing.push({ color: c.value, dmx: d.value });
+  });
+  const n = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
+  wrap.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const slot = existing[i] || DEFAULT_WHEEL[i] || { color: '#ffffff', dmx: 0 };
+    const row = document.createElement('div');
+    row.className = 'wheel-grid';
+    row.innerHTML =
+      '<div class="slot-num">' + (i + 1) + '</div>' +
+      '<input type="color" id="wc_' + i + '" value="' + slot.color + '">' +
+      '<input type="text" id="wd_' + i + '" value="' + slot.dmx + '" placeholder="e.g. 4 or 2-5">';
+    wrap.appendChild(row);
+  }
+}
+
+function updateDerived() {
+  // Used to render role/channel pills, but the container is now hidden.
+  // Kept as a stable entry point; just syncs the channel-count display.
+  syncChannelCountFromList();
+  rebuildRgbwChannelOptions();
+}
+
+/* ===================== RGBW helpers ===================== */
+
+function getColorType() {
+  const c = document.querySelector('input[name="colorType"]:checked');
+  return c ? c.value : 'wheel';
+}
+
+// Rebuild the Red/Green/Blue/White <select> options to match the current channel count.
+// Preserves the current selection where possible. All four start at "0 (none)" so the user
+// must deliberately pick a channel — no silent defaults that could leak into the XML.
+function rebuildRgbwChannelOptions() {
+  const n = channelList.length;
+  const ids = ['redChannel','greenChannel','blueChannel','whiteChannel'];
+  ids.forEach(id => {
+    const sel = $(id);
+    if (!sel) return;
+    const prev = sel.value;
+    let opts = '<option value="0">0 (none)</option>';
+    for (let i = 1; i <= n; i++) opts += '<option value="' + i + '">' + i + '</option>';
+    sel.innerHTML = opts;
+    // Restore previous selection if still valid (still within range or zero)
+    if (prev && (prev === '0' || parseInt(prev, 10) <= n)) {
+      sel.value = prev;
+    } else {
+      sel.value = '0';
+    }
+  });
+}
+
+function applyColorTypeUI() {
+  const t = getColorType();
+  const wheel = $('colorWheelBlock');
+  const rgbw  = $('colorRgbwBlock');
+  if (wheel) wheel.style.display = (t === 'wheel') ? '' : 'none';
+  if (rgbw)  rgbw.style.display  = (t === 'rgbw')  ? '' : 'none';
+  // The Color String Group is only meaningful for wheel-style heads; hide it for RGBW.
+  // (xLights drives RGB color natively via DmxColorType/DmxRedChannel/etc.)
+  const colorSubRow = document.querySelector('#submodelList .sub-row input[data-role="color"]');
+  if (colorSubRow) {
+    const row = colorSubRow.closest('.sub-row');
+    if (row) row.style.display = (t === 'rgbw') ? 'none' : '';
+    if (t === 'rgbw') colorSubRow.checked = false;
+  }
+}
+
+/* ===================== Preset load / save ===================== */
+
+/* ===== Pan orientation logic ===== */
+const ORIENT_MAP = {
+  1: { right: { zero: 0,   home: 270 }, front: { zero: 270, home: 0 }, back: { zero: 90,  home: 180 } },
+  0: { left:  { zero: 180, home: 270 }, front: { zero: 90,  home: 0 }, back: { zero: 270, home: 90  } },
+};
+const ORIENT_ROT = { right: 0, front: 90, left: 180, back: 270 };
+
+function getSelectedOrient() {
+  const c = document.querySelector('input[name="panOrient"]:checked');
+  return c ? c.value : 'right';
+}
+function getDirection() {
+  return parseInt(($('panReverse') && $('panReverse').value) || '1', 10);
+}
+function updateOrientUI() {
+  const dir = getDirection();
+  const disallowed = (dir === 1) ? 'left' : 'right';
+  const recommended = (dir === 1) ? 'right' : 'left';
+  let cur = getSelectedOrient();
+  document.querySelectorAll('input[name="panOrient"]').forEach(r => {
+    const allowed = (r.value !== disallowed);
+    r.disabled = !allowed;
+    const lbl = r.closest('label');
+    if (lbl) lbl.classList.toggle('disabled', !allowed);
+  });
+  document.querySelectorAll('.orient-rec').forEach(span => {
+    span.style.display = (span.getAttribute('data-for') === recommended) ? '' : 'none';
+  });
+  if (cur === disallowed) {
+    const fbr = document.querySelector('input[name="panOrient"][value="' + recommended + '"]');
+    if (fbr) fbr.checked = true;
+  }
+  applyOrientation();
+}
+function applyOrientation() {
+  const dir = getDirection();
+  const orient = getSelectedOrient();
+  const map = ORIENT_MAP[dir] && ORIENT_MAP[dir][orient];
+  if (map) {
+    $('panOrientZero').value = map.zero;
+    $('panOrientHome').value = map.home;
+  }
+  const arrow = document.getElementById('orientArrowGroup');
+  if (arrow) {
+    const rot = ORIENT_ROT[orient] || 0;
+    arrow.style.transform = 'rotate(' + rot + 'deg)';
+  }
+}
+function syncOrientationFromPreset() {
+  const dir = getDirection();
+  const zero = parseInt($('panOrientZero').value, 10);
+  const home = parseInt($('panOrientHome').value, 10);
+  const table = ORIENT_MAP[dir] || {};
+  let found = null;
+  for (const k in table) {
+    if (table[k].zero === zero && table[k].home === home) { found = k; break; }
+  }
+  if (!found) found = (dir === 1) ? 'right' : 'left';
+  const radio = document.querySelector('input[name="panOrient"][value="' + found + '"]');
+  if (radio) radio.checked = true;
+  updateOrientUI();
+}
+
+/* ===== Fixture mode ===== */
+function setFixtureMode(mode) {
+  document.body.classList.toggle('preset-mode', mode === 'preset');
+  const presetWrap = document.getElementById('presetModeContainer');
+  if (presetWrap) presetWrap.style.display = (mode === 'preset') ? '' : 'none';
+  const lock = (mode === 'preset');
+  const dir = $('panReverse'); if (dir) dir.disabled = lock;
+  const ups = $('tiltUpsideDown'); if (ups) ups.disabled = false;
+  const tr = $('tiltRange'); if (tr) tr.disabled = lock;
+  regenerate();
+}
+
+/* ===== Admin / export ===== */
+const REPO_ISSUES_URL = 'https://github.com/AGFazio/Moving-Heads/issues/new';
+
+function showInfoModal(title, html) {
+  const modal = document.getElementById('infoModal');
+  if (!modal) return;
+  document.getElementById('infoModalTitle').textContent = title;
+  document.getElementById('infoModalBody').innerHTML = html;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  const closeBtn = document.getElementById('infoModalCloseBtn');
+  const fresh = closeBtn.cloneNode(true);
+  closeBtn.parentNode.replaceChild(fresh, closeBtn);
+  const trigger = document.activeElement;
+  const close = () => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    if (trigger && typeof trigger.focus === 'function') trigger.focus();
+  };
+  fresh.addEventListener('click', close);
+  modal.addEventListener('click', (ev) => { if (ev.target === modal) close(); });
+  setTimeout(() => fresh.focus(), 0);
+}
+
+function showSubmitModal(preset) {
+  const modal = document.getElementById('submitModal');
+  if (!modal) return;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  const fresh = (id) => {
+    const btn = document.getElementById(id);
+    const c = btn.cloneNode(true);
+    btn.parentNode.replaceChild(c, btn);
+    return c;
+  };
+  const eGh = fresh('submitGithubBtn');
+  const trigger = document.activeElement;
+  const close = () => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    if (trigger && typeof trigger.focus === 'function') trigger.focus();
+  };
+  setTimeout(() => eGh.focus(), 0);
+
+  eGh.addEventListener('click', () => {
+    const title = 'New Moving Head: ' + preset.name;
+    const json = JSON.stringify(preset, null, 2);
+    const body = 'A new Moving Head was created via the .xmodel builder.\n\n' +
+      '**Name:** ' + preset.name + '\n' +
+      '**Channels:** ' + preset.channels.length + '\n\n' +
+      'Please append this object to `moving_heads_channel_types.json` -> `moving_heads`:\n\n' +
+      '```json\n' + json + '\n```\n';
+    const url = REPO_ISSUES_URL +
+      '?title=' + encodeURIComponent(title) +
+      '&body=' + encodeURIComponent(body);
+    window.open(url, '_blank', 'noopener');
+    close();
+  });
+  modal.addEventListener('click', (ev) => { if (ev.target === modal) close(); });
+}
+
+// Styled replacement for window.confirm(). Centers on screen, matches the other modals.
+// onOk runs when the user clicks Continue; onCancel runs on Cancel / Esc / backdrop click.
+function showConfirmModal(title, bodyHtml, onOk, onCancel) {
+  const modal = document.getElementById('confirmModal');
+  if (!modal) {
+    // Safety fallback if the modal markup is missing
+    if (window.confirm(title)) { if (onOk) onOk(); } else { if (onCancel) onCancel(); }
+    return;
+  }
+  document.getElementById('confirmModalTitle').textContent = title;
+  document.getElementById('confirmModalBody').innerHTML = bodyHtml;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+
+  const okBtn = document.getElementById('confirmModalOkBtn');
+  const cancelBtn = document.getElementById('confirmModalCancelBtn');
+
+  const close = (result) => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    okBtn.removeEventListener('click', okHandler);
+    cancelBtn.removeEventListener('click', cancelHandler);
+    modal.removeEventListener('click', backdropHandler);
+    if (result) { if (onOk) onOk(); } else { if (onCancel) onCancel(); }
+  };
+  const okHandler = () => close(true);
+  const cancelHandler = () => close(false);
+  const backdropHandler = (ev) => { if (ev.target === modal) close(false); };
+
+  okBtn.addEventListener('click', okHandler);
+  cancelBtn.addEventListener('click', cancelHandler);
+  modal.addEventListener('click', backdropHandler);
+  // Focus Cancel by default so accidental Enter doesn't destroy the user's work
+  setTimeout(() => cancelBtn.focus(), 0);
+}
+
+function applyPreset(p) {
+  currentPresetName = p && p.name ? p.name : null;
+  channelList = p.channels.map(normalizeChannel);
+  syncChannelCountFromList();
+  if (p.pan_motor) {
+    if ($('panReverse')) $('panReverse').value = p.pan_motor.reverse;
+    if ($('panOrientHome')) $('panOrientHome').value = p.pan_motor.orient_home;
+    if ($('panOrientZero')) $('panOrientZero').value = (p.pan_motor.orient_zero != null) ? p.pan_motor.orient_zero : 0;
+    if (typeof syncOrientationFromPreset === 'function') syncOrientationFromPreset();
+  }
+  if (p.tilt_motor) {
+    if ($('tiltRange')) $('tiltRange').value = p.tilt_motor.range_of_motion;
+    if ($('tiltUpsideDown')) $('tiltUpsideDown').checked = !!p.tilt_motor.reverse;
+    // Tilt orient values are derived from tilt range; nothing to set here.
+  }
+  // Restore color wheel slots if the preset carries them
+  if (Array.isArray(p.color_wheel) && p.color_wheel.length) {
+    if ($('wheelSlots')) $('wheelSlots').value = String(p.color_wheel.length);
+    buildWheelUI();
+    p.color_wheel.forEach((slot, i) => {
+      const c = $('wc_' + i), d = $('wd_' + i);
+      if (c && slot.color) c.value = slot.color;
+      if (d && slot.dmx != null) d.value = String(slot.dmx);
+    });
+  }
+  // Restore color type (wheel | rgbw). Default to wheel for old presets without the field.
+  const ctype = (p.color_type === 'rgbw') ? 'rgbw' : 'wheel';
+  const ctRadio = document.querySelector('input[name="colorType"][value="' + ctype + '"]');
+  if (ctRadio) ctRadio.checked = true;
+  buildChannelListUI();
+  updateDerived();
+  // Restore RGBW channel assignments (after rebuildRgbwChannelOptions has run inside updateDerived).
+  // All four default to 0 (none) so the user must deliberately pick.
+  if (p.rgbw) {
+    if ($('redChannel'))   $('redChannel').value   = String(p.rgbw.red   || 0);
+    if ($('greenChannel')) $('greenChannel').value = String(p.rgbw.green || 0);
+    if ($('blueChannel'))  $('blueChannel').value  = String(p.rgbw.blue  || 0);
+    if ($('whiteChannel')) $('whiteChannel').value = String(p.rgbw.white || 0);
+  }
+  buildSubmodelUI();
+  applyColorTypeUI();
+  // Sync the preset dropdown to reflect what's currently loaded
+  const presetSel = $('presetSelect');
+  if (presetSel) {
+    const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === p.name);
+    if (idx >= 0) presetSel.value = 'b:' + idx;
+  }
+  regenerate();
+}
+
+function currentAsPreset(name) {
+  // Snapshot current wheel slots so custom colors/DMX values (including ranges like "2-5") travel with the preset
+  const slotCount = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
+  const wheel = [];
+  for (let i = 0; i < slotCount; i++) {
+    const c = $('wc_' + i), d = $('wd_' + i);
+    if (!c || !d) break;
+    wheel.push({ color: c.value, dmx: d.value });
+  }
+  return {
+    name: name,
+    channels: channelList.slice(),
+    pan_motor: {
+      min_limit: -180,
+      max_limit: 180,
+      range_of_motion: 540,
+      reverse: parseInt($('panReverse').value, 10),
+      orient_home: parseInt($('panOrientHome').value, 10),
+      orient_zero: parseInt($('panOrientZero').value, 10),
+    },
+    tilt_motor: {
+      min_limit: -180,
+      max_limit: 180,
+      range_of_motion: parseFloat($('tiltRange').value),
+      reverse: $('tiltUpsideDown').checked ? 1 : 0,
+      orient_home: (parseFloat($('tiltRange').value) || 270) / 2,
+      orient_zero: ((parseFloat($('tiltRange').value) || 270) - 180) / 2,
+    },
+    color_type: getColorType(),
+    color_wheel: wheel,
+    rgbw: {
+      red:   parseInt(($('redChannel')   && $('redChannel').value)   || '0', 10) || 0,
+      green: parseInt(($('greenChannel') && $('greenChannel').value) || '0', 10) || 0,
+      blue:  parseInt(($('blueChannel')  && $('blueChannel').value)  || '0', 10) || 0,
+      white: parseInt(($('whiteChannel') && $('whiteChannel').value) || '0', 10) || 0,
+    },
+  };
+}
+
+/* ===================== Read inputs ===================== */
+
+function readConfig() {
+  // Submodel checks (only for roles present in list)
+  const submodels = {};
+  ROLES.forEach(r => {
+    if (!r.submodelName) return;
+    const cb = document.querySelector('input[data-role="' + r.role + '"]');
+    submodels[r.role] = cb ? cb.checked : r.submodelDefault;
+  });
+
+  const slotCount = Math.max(1, parseInt(($('wheelSlots') && $('wheelSlots').value) || '13', 10));
+  const wheel = [];
+  for (let i = 0; i < slotCount; i++) {
+    const c = $('wc_' + i);
+    const d = $('wd_' + i);
+    if (!c || !d) break;
+    wheel.push({ color: c.value, dmx: parseDmxValue(d.value) });
+  }
+
+  // Derived role channel numbers
+  const roleCh = {};
+  ROLES.forEach(r => { roleCh[r.role] = chPos(r.lookup); });
+
+  const colorType = getColorType();
+  const rgbw = {
+    red:   parseInt(($('redChannel')   && $('redChannel').value)   || '0', 10) || 0,
+    green: parseInt(($('greenChannel') && $('greenChannel').value) || '0', 10) || 0,
+    blue:  parseInt(($('blueChannel')  && $('blueChannel').value)  || '0', 10) || 0,
+    white: parseInt(($('whiteChannel') && $('whiteChannel').value) || '0', 10) || 0,
+  };
+
+  return {
+    modelName: ($('modelName').value || 'MH').trim(),
+    headCount: Math.max(1, parseInt($('headCount').value, 10) || 1),
+    channelCount: channelList.length,
+    startChannel: Math.max(1, parseInt($('startChannel').value, 10) || 1),
+    channels: channelList.slice(),
+    roleCh: roleCh,
+    submodels: submodels,
+    wheel: wheel,
+    colorType: colorType,
+    rgbw: rgbw,
+
+    panMin: -180,
+    panMax: 180,
+    panRange: 540,
+    panReverse: parseInt($('panReverse').value, 10) || 0,
+    panOrientHome: parseInt($('panOrientHome').value, 10),
+    panOrientZero: parseInt($('panOrientZero').value, 10) || 0,
+
+    tiltMin: -180,
+    tiltMax: 180,
+    tiltRange: parseFloat($('tiltRange').value) || 270,
+    tiltUpsideDown: $('tiltUpsideDown').checked ? 1 : 0,
+    // Tilt orient values are derived from tilt range:
+    //   OrientUp   = range / 2
+    //   OrientZero = (range - 180) / 2
+    tiltOrientHome: (parseFloat($('tiltRange').value) || 270) / 2,
+    tiltOrientZero: ((parseFloat($('tiltRange').value) || 270) - 180) / 2,
+
+    beamLength: 20,
+    beamWidth: 4,
+  };
+}
+
+/* ===================== XML generation ===================== */
+
+// Color wheel DMX Range parser. Accepts a single number ("4") or hyphenated range
+// ("2-5"); returns ceil((lo+hi)/2). Returns 0 for invalid input.
+function parseDmxValue(s) {
+  if (s == null) return 0;
+  s = String(s).trim();
+  if (!s) return 0;
+  const m = s.match(/^(\d+)\s*-\s*(\d+)$/);
+  if (m) {
+    const lo = parseInt(m[1], 10), hi = parseInt(m[2], 10);
+    if (isNaN(lo) || isNaN(hi)) return 0;
+    return Math.ceil((lo + hi) / 2);
+  }
+  const n = parseInt(s, 10);
+  return isNaN(n) ? 0 : n;
+}
+
+function xmlEscape(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Empty-string values ARE rendered (e.g. Controller="" matches xLights format).
+function attrs(obj) {
+  return Object.entries(obj)
+    .filter(([k, v]) => v !== undefined && v !== null)
+    .map(([k, v]) => k + '="' + xmlEscape(v) + '"')
+    .join(' ');
+}
+
+function buildSubmodel(role, cfg) {
+  const ch = cfg.roleCh[role.role];
+  if (!ch) return '';
+  const submodelName = cfg.modelName + ' ' + role.submodelName;
+  const firstRef = '@' + cfg.modelName + '1:' + ch;
+
+  const a = {
+    name: submodelName,
+    DisplayAs: 'Single Line',
+    Advanced: '1',
+    Antialias: '1',
+    Controller: '',
+    Dir: 'L',
+    LayoutGroup: 'Default',
+    LightsPerNode: '1',
+    NodesPerString: '1',
+    NumStrings: String(cfg.headCount),
+    PixelSize: '10',
+    SourceVersion: '2026.09.1',
+    StartChannel: firstRef,
+    StartSide: 'B',
+    String1: firstRef,
+  };
+  for (let i = 2; i <= cfg.headCount; i++) {
+    a['String' + i] = '@' + cfg.modelName + i + ':' + ch;
+  }
+  a.StringType = 'Single Color Intensity';
+  a.Transparency = '0';
+  a.versionNumber = '8';
+  a.WorldPosX = '155.322006';
+  a.WorldPosY = (role.worldPosY || 478.566010).toFixed(6);
+  a.WorldPosZ = '0.000000';
+  a.X2 = '63.696701';
+  a.Y2 = '-0.866577';
+  a.Z2 = '0.000000';
+
+  if (role.aliases && role.aliases.length) {
+    const aliasXml = '\n\t\t<Aliases>\n' +
+      role.aliases.map(al => '\t\t\t<alias name="' + xmlEscape(al) + '" />').join('\n') +
+      '\n\t\t</Aliases>\n\t';
+    return '\t<model ' + attrs(a) + '>' + aliasXml + '</model>';
+  }
+  return '\t<model ' + attrs(a) + ' />';
+}
+
+function buildHead(i, cfg) {
+  const name = cfg.modelName + i;
+  const startCh = cfg.startChannel + (i - 1) * cfg.channelCount;
+  const worldPosX = (265.093201 + (i - 1) * 40).toFixed(6);
+  const nodeNames = cfg.channels.join(',');
+
+  const a = {
+    name: name,
+    DisplayAs: 'DmxMovingHeadAdv',
+    Antialias: '1',
+    Controller: 'No Controller',
+    Dir: 'L',
+    DmxBeamLength: cfg.beamLength.toFixed(6),
+    DmxBeamOrient: '0',
+    DmxBeamWidth: cfg.beamWidth.toFixed(6),
+    DmxBeamYOffset: '0.000000',
+    DmxChannelCount: String(cfg.channelCount),
+  };
+
+  if (cfg.colorType === 'rgbw') {
+    // RGB / RGBW LED head. DmxColorType="0" tells xLights to drive color from R/G/B(/W) channels.
+    a.DmxColorType = '0';
+    if (cfg.rgbw.red)   a.DmxRedChannel   = String(cfg.rgbw.red);
+    if (cfg.rgbw.green) a.DmxGreenChannel = String(cfg.rgbw.green);
+    if (cfg.rgbw.blue)  a.DmxBlueChannel  = String(cfg.rgbw.blue);
+    a.DmxWhiteChannel = String(cfg.rgbw.white || 0);
+  } else if (cfg.roleCh.color) {
+    a.DmxColorType = '1';
+    a.DmxColorWheelChannel = String(cfg.roleCh.color);
+    cfg.wheel.forEach((slot, idx) => { a['DmxColorWheelColor' + idx] = slot.color; });
+    a.DmxColorWheelDelay = '0';
+    cfg.wheel.forEach((slot, idx) => { a['DmxColorWheelDMX' + idx] = String(slot.dmx); });
+  }
+
+  if (cfg.roleCh.dimmer)  a.DmxDimmerChannel  = String(cfg.roleCh.dimmer);
+  a.DmxFixture = cfg.modelName + i;
+  if (cfg.roleCh.shutter) {
+    a.DmxShutterChannel = String(cfg.roleCh.shutter);
+    a.DmxShutterOnValue = '255';
+    a.DmxShutterOpen = '1';
+  }
+  a.LayoutGroup = 'Default';
+  if (cfg.roleCh.dimmer)  a.MhDimmerChannel  = String(cfg.roleCh.dimmer);
+  a.NodeNames = nodeNames;
+  a.PixelSize = '2';
+  a.RotateX = '0.000000';
+  a.RotateY = '0.000000';
+  a.RotateZ = '0.000000';
+  a.ScaleX = '1.000000';
+  a.ScaleY = '1.000000';
+  a.ScaleZ = '1.000000';
+  a.SourceVersion = '2026.09.1';
+  a.StartChannel = String(startCh);
+  a.StartSide = 'B';
+  a.StringType = 'Single Color White';
+  a.Transparency = '0';
+  a.versionNumber = '8';
+  a.WorldPosX = worldPosX;
+  a.WorldPosY = '506.157715';
+  a.WorldPosZ = '0.000000';
+
+  const panCh = cfg.roleCh.pan || 0;
+  const panFineCh = cfg.roleCh.panFine || 0;
+  const tiltCh = cfg.roleCh.tilt || 0;
+  const tiltFineCh = cfg.roleCh.tiltFine || 0;
+
+  const inner =
+    '\t\t<PanMotor ChannelCoarse="' + panCh + '" ChannelFine="' + panFineCh + '" MinLimit="' + cfg.panMin + '" MaxLimit="' + cfg.panMax + '" RangeOfMotion="' + cfg.panRange.toFixed(6) + '" OrientZero="' + cfg.panOrientZero + '" OrientHome="' + cfg.panOrientHome + '" SlewLimit="180.000000" Reverse="' + cfg.panReverse + '" UpsideDown="0" />\n' +
+    '\t\t<TiltMotor ChannelCoarse="' + tiltCh + '" ChannelFine="' + tiltFineCh + '" MinLimit="' + cfg.tiltMin + '" MaxLimit="' + cfg.tiltMax + '" RangeOfMotion="' + cfg.tiltRange.toFixed(6) + '" OrientZero="' + cfg.tiltOrientZero + '" OrientHome="' + cfg.tiltOrientHome + '" SlewLimit="180.000000" Reverse="0" UpsideDown="' + cfg.tiltUpsideDown + '" />\n' +
+    '\t\t<BaseMesh ObjFile="MovingHeadBase.obj" MeshOnly="0" Brightness="40.000000" Width="32.090599" Height="9.159451" Depth="25.529499" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="0.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
+    '\t\t<YokeMesh ObjFile="MovingHeadYoke.obj" MeshOnly="0" Brightness="50.000000" Width="26.763802" Height="19.488209" Depth="15.915359" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="0.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="-20.000000" OffsetZ="0.000000" />\n' +
+    '\t\t<HeadMesh ObjFile="MovingHead.obj" MeshOnly="0" Brightness="80.000000" Width="22.069799" Height="24.279701" Depth="11.368110" ScaleX="1.000000" ScaleY="1.000000" ScaleZ="1.000000" RotateX="90.000000" RotateY="90.000000" RotateZ="0.000000" OffsetX="0.000000" OffsetY="0.000000" OffsetZ="0.000000" />';
+
+  return '\t<model ' + attrs(a) + '>\n' + inner + '\n\t</model>';
+}
+
+// Order of submodels in output matches PS1: Dimmer, Pan, Shutter, Tilt, then any others
+const SUBMODEL_ORDER = ['dimmer','pan','shutter','tilt','color','gobo','prism','prismRotate','focus','frost'];
+
+function buildXmodel(cfg) {
+  const subOut = [];
+  SUBMODEL_ORDER.forEach(roleKey => {
+    const role = ROLES.find(r => r.role === roleKey);
+    if (!role || !role.submodelName) return;
+    if (!cfg.submodels[roleKey]) return;
+    if (!cfg.roleCh[roleKey]) return;
+    // RGBW heads have no single color-wheel channel, so skip the Color string group.
+    if (roleKey === 'color' && cfg.colorType === 'rgbw') return;
+    subOut.push(buildSubmodel(role, cfg));
+  });
+
+  const heads = [];
+  for (let i = 1; i <= cfg.headCount; i++) heads.push(buildHead(i, cfg));
+
+  // When >1 head, also emit a <modelGroup> containing just the head models.
+  let groupXml = '';
+  if (cfg.headCount > 1) {
+    const headNames = [];
+    for (let i = 1; i <= cfg.headCount; i++) headNames.push(cfg.modelName + i);
+    const groupAttrs = {
+      name: 'Group - MH ALL',
+      models: headNames.join(','),
+      LayoutGroup: 'Default',
+      GridSize: '400',
+      Transparency: '0',
+      SourceVersion: '2026.09.1',
+      selected: '0',
+      layout: 'minimalGrid',
+      showWhenSearched: '0',
+    };
+    groupXml = '\n\t<modelGroup ' + attrs(groupAttrs) + ' />';
+  }
+  const body = [...subOut, ...heads].join('\n');
+  return '<?xml version="1.0"?>\n<models type="exported">\n' + body + groupXml + '\n</models>';
+}
+
+/* ===================== Wire up ===================== */
+
+let lastXml = '';
+function setStatus(msg, kind) {
+  const el = $('status');
+  el.textContent = msg;
+  el.className = 'status' + (kind ? ' ' + kind : '');
+}
+
+function regenerate() {
+  try {
+    const cfg = readConfig();
+    if (cfg.channelCount === 0) {
+      setStatus('Channel list is empty. Load a preset or add channels.', 'warn');
+      $('preview').textContent = '';
+      lastXml = '';
+      return;
+    }
+    if (!cfg.roleCh.pan && !cfg.roleCh.tilt && !cfg.roleCh.dimmer && !cfg.roleCh.shutter) {
+      setStatus('Warning: no Pan / Tilt / Dimming / Strobe found in channel list.', 'warn');
+    } else {
+      setStatus('Generated - ' + cfg.headCount + ' head' + (cfg.headCount === 1 ? '' : 's') + ', ' + cfg.channelCount + ' channels each, total ' + (cfg.headCount * cfg.channelCount) + ' channels.');
+    }
+    lastXml = buildXmodel(cfg);
+    $('preview').textContent = lastXml;
+  } catch (err) {
+    setStatus('Error: ' + err.message, 'err');
+    console.error(err);
+  }
+}
+
+const REMOTE_PRESETS_URL = 'https://raw.githubusercontent.com/AGFazio/Moving-Heads/main/moving_heads_channel_types.json';
+const DEFAULT_PRESET_NAME = "Mattos Phoenix Ray 300W LED 1.6 Beam";
+let userHasChangedPreset = false;
+
+// Try to fetch the latest preset catalog from the GitHub repo and refresh the
+// preset dropdown. Falls back to baked-in BUILTIN_PRESETS silently on failure
+// (offline, CORS, repo unreachable, etc.).
+async function loadRemotePresets() {
+  try {
+    const resp = await fetch(REMOTE_PRESETS_URL, { cache: 'no-cache' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (!data || !Array.isArray(data.moving_heads) || data.moving_heads.length === 0) {
+      throw new Error('Catalog is empty or malformed');
+    }
+    // Replace baked-in presets and rebuild the dropdown. Don't disturb the
+    // currently-selected preset / form state.
+    BUILTIN_PRESETS = data.moving_heads.filter(p => VENDOR_MATCH.test(p.name));
+    if (BUILTIN_PRESETS.length === 0) throw new Error("No vendor presets in catalog");
+    // Remember the currently-loaded preset name so we can re-select it after rebuilding the dropdown
+    const currentName = (typeof currentPresetName === 'string') ? currentPresetName : null;
+    buildPresetDropdown();
+    // If the user hasn't manually picked anything yet, switch to the default preset
+    // (the initial auto-load ran against the baked-in fallback, which may not have it).
+    if (!userHasChangedPreset) {
+      const def = BUILTIN_PRESETS.find(bp => bp.name === DEFAULT_PRESET_NAME);
+      if (def) {
+        applyPreset(def);
+      } else if (currentName) {
+        const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === currentName);
+        const sel = $('presetSelect');
+        if (idx >= 0 && sel) sel.value = 'b:' + idx;
+      }
+    } else if (currentName) {
+      const idx = BUILTIN_PRESETS.findIndex(bp => bp.name === currentName);
+      const sel = $('presetSelect');
+      if (idx >= 0 && sel) sel.value = 'b:' + idx;
+    }
+    setStatus('Loaded ' + BUILTIN_PRESETS.length + ' Mattos Designs moving heads.');
+  } catch (err) {
+    console.warn('Using baked-in preset fallback (remote fetch failed):', err.message);
+    setStatus('Using built-in preset list.', 'warn');
+  }
+}
+
+function init() {
+  // Welcome modal: dismiss on Start click or backdrop click; Esc handler covers keyboard
+  const wm = document.getElementById('welcomeModal');
+  if (wm) {
+    const startBtn = document.getElementById('welcomeStartBtn');
+    const closeWelcome = () => {
+      wm.classList.remove('show');
+      wm.setAttribute('aria-hidden', 'true');
+    };
+    if (startBtn) {
+      startBtn.addEventListener('click', closeWelcome);
+      // Move focus into the welcome dialog so Enter dismisses it
+      setTimeout(() => startBtn.focus(), 0);
+    }
+    wm.addEventListener('click', (ev) => { if (ev.target === wm) closeWelcome(); });
+  }
+
+
+  buildPresetDropdown();
+  buildWheelUI();
+  rebuildRgbwChannelOptions();
+  // Auto-load the default preset on startup so the preview isn't empty.
+  // Defaults to "YPS Starlight Mini 350w" if present; otherwise the first preset.
+  if (BUILTIN_PRESETS.length > 0) {
+    const def = BUILTIN_PRESETS.find(p => p.name === DEFAULT_PRESET_NAME) || BUILTIN_PRESETS[0];
+    applyPreset(def);
+  }
+  buildSubmodelUI();
+  updateDerived();
+  applyColorTypeUI();
+
+  // Color Type radio toggles which color block is visible + which submodels make sense
+  document.querySelectorAll('input[name="colorType"]').forEach(r => {
+    r.addEventListener('change', () => {
+      applyColorTypeUI();
+      regenerate();
+    });
+  });
+  // Any change to the RGBW channel pickers regenerates
+  ['redChannel','greenChannel','blueChannel','whiteChannel'].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('change', regenerate);
+  });
+
+  // Auto-load preset on dropdown change
+  $('presetSelect').addEventListener('change', () => {
+    const v = $('presetSelect').value;
+    if (!v) return;
+    const idxStr = v.split(':')[1];
+    const idx = parseInt(idxStr, 10);
+    const p = BUILTIN_PRESETS[idx];
+    if (p) {
+      userHasChangedPreset = true;
+      applyPreset(p);
+      setStatus('Loaded preset: ' + p.name);
+    }
+  });
+
+  $('saveAsPresetBtn').addEventListener('click', (ev) => {
+    ev.preventDefault();
+    if (channelList.length === 0) { setStatus('Nothing to save - channel list is empty.', 'warn'); return; }
+    const nameInput = $('newModelName');
+    const name = nameInput ? nameInput.value.trim() : '';
+    if (!name) { alert('Please enter a Model name first.'); if (nameInput) nameInput.focus(); return; }
+    const newPreset = currentAsPreset(name);
+    setStatus('Preparing to submit: ' + name);
+    showSubmitModal(newPreset);
+  });
+
+  // Channel count input drives channelList length
+  $('channelCount').addEventListener('change', () => {
+    const target = parseInt($('channelCount').value, 10) || 1;
+    resizeChannelList(target);
+    buildChannelListUI();
+    updateDerived();
+    buildSubmodelUI();
+    regenerate();
+  });
+
+  $('clearChBtn').addEventListener('click', () => {
+    if (channelList.length === 0) return;
+    if (!confirm('Clear all channels from the list?')) return;
+    channelList = [];
+    buildChannelListUI();
+    updateDerived();
+    buildSubmodelUI();
+    $('preview').textContent = '';
+    lastXml = '';
+  });
+
+  $('generateBtn').addEventListener('click', (ev) => {
+    ev.preventDefault();
+    // RGBW sanity check: warn if Red/Green/Blue are all unset
+    if (getColorType() === 'rgbw') {
+      const r = parseInt(($('redChannel')   && $('redChannel').value)   || '0', 10);
+      const g = parseInt(($('greenChannel') && $('greenChannel').value) || '0', 10);
+      const b = parseInt(($('blueChannel')  && $('blueChannel').value)  || '0', 10);
+      if (r === 0 && g === 0 && b === 0) {
+        setStatus('RGBW is selected but no Red/Green/Blue channels are assigned. Pick them in Color Properties.', 'warn');
+        return;
+      }
+    }
+    regenerate();
+    if (!lastXml) return;
+    // Well-formedness check before downloading
+    try {
+      const doc = new DOMParser().parseFromString(lastXml, 'application/xml');
+      const errEl = doc.querySelector('parsererror');
+      if (errEl) {
+        setStatus('Cannot download - generated XML is malformed. See browser console (F12).', 'err');
+        console.error('Generated .xmodel XML parse error:', errEl.textContent);
+        return;
+      }
+    } catch (e) {
+      setStatus('Cannot download - XML parser error: ' + e.message, 'err');
+      console.error(e);
+      return;
+    }
+    const cfg = readConfig();
+    const filename = cfg.headCount + ' head' + (cfg.headCount === 1 ? '' : 's') + ' ' + cfg.modelName + '.xmodel';
+    const BOM = '\uFEFF';
+    const dataUrl = 'data:application/xml;charset=utf-8,' + encodeURIComponent(BOM + lastXml);
+    const a = document.createElement('a');
+    a.href = dataUrl; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setStatus('Generated + downloaded "' + filename + '" - check your browser downloads (Ctrl+J).');
+  });
+
+
+
+  const liveIds = ['modelName',
+    'panReverse','panOrientHome','panOrientZero',
+    'tiltRange','tiltUpsideDown',
+    'channelCount'];
+  liveIds.forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('change', regenerate);
+  });
+
+  const ws = $('wheelSlots');
+  if (ws) {
+    ws.addEventListener('change', () => {
+      buildWheelUI();
+      regenerate();
+    });
+  }
+
+  // Fixture mode toggle
+  document.getElementById('fixtureModePreset').addEventListener('change', () => setFixtureMode('preset'));
+  document.getElementById('fixtureModeNew').addEventListener('change', () => {
+    // Reset channel slots to Blank for a fresh start. Confirm only if there's work to lose.
+    const hasNonBlank = channelList.some(c => c && c !== 'Blank');
+    const proceed = () => {
+      channelList = channelList.map(() => 'Blank');
+      buildChannelListUI();
+      updateDerived();
+      buildSubmodelUI();
+      setFixtureMode('new');
+    };
+    if (!hasNonBlank) { proceed(); return; }
+    showConfirmModal(
+      'Add a new Moving Head?',
+      '<p>Switching to <b>Add new Moving Head</b> will clear the current channel layout.</p><p>Continue?</p>',
+      proceed,
+      () => {
+        // User cancelled - restore the preset radio so the UI matches state
+        document.getElementById('fixtureModePreset').checked = true;
+      }
+    );
+  });
+
+  // Pan orientation radios + direction change
+  document.querySelectorAll('input[name="panOrient"]').forEach(r => {
+    r.addEventListener('change', () => { applyOrientation(); regenerate(); });
+  });
+  if ($('panReverse')) {
+    $('panReverse').addEventListener('change', () => { updateOrientUI(); regenerate(); });
+  }
+  updateOrientUI();
+
+
+  // Quantity of heads radio buttons -> mirror to hidden #headCount input
+  document.querySelectorAll('input[name="headCountRadio"]').forEach(r => {
+    r.addEventListener('change', () => {
+      if (!r.checked) return;
+      const hc = $('headCount');
+      if (hc) hc.value = r.value;
+      regenerate();
+    });
+  });
+
+  // Esc key closes any open modal
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Escape') return;
+    document.querySelectorAll('.modal-backdrop.show').forEach(m => { m.classList.remove('show'); m.setAttribute('aria-hidden', 'true'); });
+  });
+
+  // Quantity of heads info button -> explains the >8 limit
+  if ($('headCountHelpBtn')) {
+    $('headCountHelpBtn').addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const html =
+        '<p>The xLights <b>Advanced Moving Head effect</b> supports a maximum of <b>8 fixtures</b> at a time.</p>';
+      showInfoModal('Quantity of heads - 8 fixture limit', html);
+    });
+  }
+
+  // Pan Direction help button -> info modal
+  if ($('panDirHelpBtn')) {
+    $('panDirHelpBtn').addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const html =
+        '<p><b>How to test the pan direction:</b></p>' +
+        '<ol>' +
+        '<li>With the moving head <b>powered off</b>, manually turn the head clockwise (as viewed from above) until it stops.</li>' +
+        '<li>Power on the moving head and observe the direction the head turns to reach its rest position.</li>' +
+        '<li><b>If the head turns counter-clockwise</b> back to rest &rarr; Pan Direction is <b>CCW - Counter Clockwise</b>.</li>' +
+        '<li><b>If the head stays put, or moves slightly and returns clockwise</b> to rest &rarr; Pan Direction is <b>CW - Clockwise</b>.</li>' +
+        '</ol>';
+      showInfoModal('Test Pan Direction', html);
+    });
+  }
+
+  // Start in preset mode (the auto-loaded first preset)
+  setFixtureMode('preset');
+
+  regenerate();
+
+  // Kick off remote catalog fetch (non-blocking). Updates the dropdown when it lands.
+  loadRemotePresets();
+}
+
+// Defer init until the full DOM is parsed (the modals live after this <script>).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+
+<div id="welcomeModal" class="modal-backdrop info-modal show" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle" aria-hidden="false">
+  <div class="modal-box">
+    <h3 id="welcomeModalTitle">Welcome to the Mattos Designs xLights .xmodel Builder</h3>
+    <div class="modal-body">
+      <p>This tool generates ready-to-import <b>.xmodel</b> files for xLights, for Mattos Designs moving-head fixtures.</p>
+      <p class="version-disclaimer-modal">⚠️ Requires <b>xLights 2026.09 or newer</b> &mdash; earlier versions don't support multi-model <code>.xmodel</code> import.</p>
+      <p class="version-disclaimer-modal">⚠️ <b>Delete any existing moving head models and groups in xLights before importing.</b> Leftover moving head models or groups (including <code>MH1</code>, <code>MH2</code>&hellip;, the <code>MH Dimmer / Pan / Shutter / Tilt</code> string groups, and <code>Group - MH ALL</code>) will conflict with the new import and break the way the heads work.</p>
+      <p><b>Quick start:</b></p>
+      <ol>
+        <li>Pick your fixture from the <b>Choose your Mattos Designs Moving Head</b> dropdown.</li>
+        <li>Set the <b>Quantity of heads</b> for your show.</li>
+        <li>Pick the <b>Head orientation at rest</b>.</li>
+        <li>Click <b>Generate and Download xmodel</b>.</li>
+        <li><b>Delete</b> any existing moving head models and groups in xLights Layout first.</li>
+        <li>In xLights Layout, click the <b>Import</b> icon, drag a box on the layout, and choose your <code>.xmodel</code> file from your Downloads folder.</li>
+      </ol>
+      <p>Questions about your fixtures? Visit <a href="https://www.mattosdesigns.com" target="_blank" rel="noopener" style="color:#cba6f7;">Mattos Designs</a>.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" id="welcomeStartBtn">Start</button>
+    </div>
+  </div>
+</div>
+
+<div id="infoModal" class="modal-backdrop info-modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <h3 id="infoModalTitle"></h3>
+    <div class="modal-body" id="infoModalBody"></div>
+    <div class="modal-actions">
+      <button type="button" id="infoModalCloseBtn">Got it</button>
+    </div>
+  </div>
+</div>
+
+<div id="submitModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="submitModalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <h3 id="submitModalTitle">Share your new fixture?</h3>
+    <p>The fixture is saved in this browser. To get it added to the shared preset catalog for everyone, click below. A GitHub issue will open in a new tab with all the details pre-filled &mdash; just click the green <b>CREATE</b> button at the bottom of that page.</p>
+    <div class="modal-actions">
+      <button type="button" id="submitGithubBtn">Open a GitHub issue (new tab)</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal-backdrop info-modal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" aria-hidden="true">
+  <div class="modal-box">
+    <h3 id="confirmModalTitle">Confirm</h3>
+    <div class="modal-body" id="confirmModalBody"></div>
+    <div class="modal-actions confirm-actions">
+      <button type="button" id="confirmModalCancelBtn" class="secondary">Cancel</button>
+      <button type="button" id="confirmModalOkBtn">Continue</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

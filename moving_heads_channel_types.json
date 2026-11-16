@@ -633,7 +633,7 @@
       }
     },
     {
-      "name": "MATTOS Phoenix Ray 300w LED 1.6 Beam",
+      "name": "Mattos Phoenix Ray 300W LED 1.6 Beam",
       "channels": [
         "Pan / X-axis / Horizontal",
         "Pan Fine",
@@ -1101,7 +1101,7 @@
       }
     },
     {
-      "name": "MATTOS BM380 14ch",
+      "name": "Mattos BM380 14ch",
       "channels": [
         "Color",
         "Shutter / Strobe",
@@ -1205,7 +1205,7 @@
       }
     },
     {
-      "name": "MATTOS Phoenix Ray MAX 380w",
+      "name": "Mattos Phoenix Ray MAX 380W",
       "channels": [
         "Pan / X-axis / Horizontal",
         "Pan Fine",
@@ -1315,7 +1315,7 @@
       }
     },
     {
-      "name": "MATTOS Phoenix Ray PRO 600W",
+      "name": "Mattos Phoenix Ray PRO 600W",
       "channels": [
         "Color",
         "Shutter / Strobe",
@@ -1407,7 +1407,7 @@
       }
     },
     {
-      "name": "MATTOS Phoenix Ray 230W Hobby",
+      "name": "Mattos Phoenix Ray 230W Hobby",
       "channels": [
         "Pan / X-axis / Horizontal",
         "Pan Fine",
