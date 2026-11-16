@@ -32,7 +32,7 @@ function replaceRegex(label, rx, to) {
 }
 
 const vendor = args.vendor;
-const vendorLink = args.url ? '<a href="' + args.url + '" target="_blank" rel="noopener" style="color:' + (args.accent2 || '#ffc857') + ';">' + vendor + '</a>' : vendor;
+const vendorLink = args.url ? '<a href="' + args.url + '" target="_blank" rel="noopener" style="color:' + (args.gold || '#fbbf24') + ';">' + vendor + '</a>' : vendor;
 
 // 1. Baked-in preset list -> vendor fixtures only
 replaceRegex('BUILTIN_PRESETS array', /let BUILTIN_PRESETS = \[[\s\S]*?\n\];/, () => 'let BUILTIN_PRESETS = ' + JSON.stringify(presets, null, 2) + ';\nconst VENDOR_MATCH = new RegExp(' + JSON.stringify(args.match) + ', "i");');
@@ -52,40 +52,43 @@ if (args.url) {
     '<a class="about-link" href="' + args.url + '" target="_blank" rel="noopener" aria-label="' + vendor + ' website">' + vendor + '</a>');
 }
 
-// 3b. Vendor theme (overrides the base purple look; accent is configurable)
-const accent = args.accent || '#ff7a2f';
-const accentSoft = args.accent2 || '#ffc857';
-const rgb = accent.replace('#', '').match(/../g).map(h => parseInt(h, 16)).join(',');
+// 3b. Vendor theme: purple (primary), blue (secondary), gold (highlight). Override with --purple --blue --gold --scale.
+const purple = args.purple || '#8b5cf6';
+const blue = args.blue || '#3b82f6';
+const gold = args.gold || '#fbbf24';
+const rgbOf = c => c.replace('#', '').match(/../g).map(h => parseInt(h, 16)).join(',');
+const pr = rgbOf(purple), bl = rgbOf(blue), go = rgbOf(gold);
 const theme = `
   /* vendor theme */
-  body { background: #0e0e11; color: #e8e6e3; zoom: ${args.scale || 1.2}; }
-  header { background: linear-gradient(180deg, #1c1410 0%, #0e0e11 100%); border-bottom: 3px solid ${accent}; box-shadow: 0 6px 24px rgba(${rgb},0.15); padding: 38px 28px 30px; }
-  header::before { width: 100%; height: 3px; background: linear-gradient(90deg, transparent, ${accent}, ${accentSoft}, ${accent}, transparent); top: 0; }
-  header::after { width: 90px; height: 2px; background: linear-gradient(90deg, ${accent}, ${accentSoft}); box-shadow: 0 0 12px rgba(${rgb},0.6); }
-  header h1 { font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; background: linear-gradient(180deg, #ffffff 0%, ${accentSoft} 55%, ${accent} 100%); -webkit-background-clip: text; background-clip: text; text-shadow: none; }
-  header p { color: #b9b3ad; }
-  .about-link { color: ${accentSoft}; border-color: rgba(${rgb},0.6); background: rgba(${rgb},0.08); font-weight: 600; }
-  .about-link:hover { color: #0e0e11; background: ${accent}; border-color: ${accent}; }
-  fieldset { background: #17171c; border: 1px solid #2c2c34; border-left: 4px solid ${accent}; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
-  legend { background: ${accent}; color: #0e0e11; border: none; border-radius: 4px; letter-spacing: 0.1em; font-weight: 800; }
-  label, .help, .field-tip, .chlist-header, .rgbw-cell label { color: #b9b3ad; }
-  input[type="text"], input[type="number"], textarea, select { background: #101014; border-color: #34343d; color: #f1efec; }
-  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { border-color: ${accent}; box-shadow: 0 0 0 3px rgba(${rgb},0.25); }
-  button { background: linear-gradient(180deg, ${accent} 0%, #e5601a 100%); color: #130a04; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; box-shadow: 0 3px 10px rgba(${rgb},0.3); }
-  button:hover { filter: brightness(1.12); box-shadow: 0 4px 14px rgba(${rgb},0.45); }
-  button.secondary { background: #24242b; color: #e8e6e3; box-shadow: none; }
-  .preset-select { border-color: rgba(${rgb},0.6); }
-  .head-radio { background: #101014; border-color: #34343d; color: #e8e6e3; border-radius: 4px; }
-  .head-radio:hover { background: #1f1f26; }
-  .head-radio:has(input:checked) { border-color: ${accent}; background: rgba(${rgb},0.14); }
-  input[type="radio"], input[type="checkbox"] { accent-color: ${accent}; }
-  summary, .pane-title, .help-btn { color: ${accentSoft}; }
-  pre.preview { background: #101014; border-color: #2c2c34; }
-  .modal-box { background: #17171c; border: 1px solid #2c2c34; border-top: 4px solid ${accent}; border-radius: 6px; }
-  .modal-box h3 { color: ${accentSoft}; text-transform: uppercase; letter-spacing: 0.04em; }
-  .modal-box p, .info-modal .modal-box .modal-body, .info-modal .modal-box .modal-body p { color: #d4d0cb; }
-  #orientIcon .head-body { fill: ${accent}; }
-  #orientIcon .ring { fill: #24242b; stroke: #34343d; }
+  body { background: #0b0b1a; color: #e6e8f5; zoom: ${args.scale || 1.2}; }
+  header { background: linear-gradient(180deg, #1b1245 0%, #0f1536 55%, #0b0b1a 100%); border-bottom: 3px solid ${gold}; box-shadow: 0 6px 24px rgba(${pr},0.25); padding: 38px 28px 30px; }
+  header::before { width: 100%; height: 4px; background: linear-gradient(90deg, ${purple}, ${blue}, ${gold}); top: 0; }
+  header::after { width: 90px; height: 3px; background: linear-gradient(90deg, ${purple}, ${blue}, ${gold}); box-shadow: 0 0 12px rgba(${go},0.5); }
+  header h1 { font-size: 32px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; background: linear-gradient(180deg, #ffffff 0%, ${gold} 100%); -webkit-background-clip: text; background-clip: text; text-shadow: none; }
+  header p { color: #b4b9dc; }
+  .about-link { color: ${gold}; border-color: rgba(${go},0.6); background: rgba(${go},0.08); font-weight: 600; }
+  .about-link:hover { color: #0b0b1a; background: ${gold}; border-color: ${gold}; }
+  fieldset { background: #14142b; border: 1px solid #2a2d5a; border-left: 4px solid ${blue}; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.45); }
+  legend { background: linear-gradient(90deg, ${purple}, ${blue}); color: #ffffff; border: none; border-radius: 4px; letter-spacing: 0.1em; font-weight: 800; }
+  label, .help, .field-tip, .chlist-header, .rgbw-cell label { color: #b4b9dc; }
+  input[type="text"], input[type="number"], textarea, select { background: #0d0d20; border-color: #33376b; color: #f1f2fb; }
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus { border-color: ${blue}; box-shadow: 0 0 0 3px rgba(${bl},0.3); }
+  button { background: linear-gradient(180deg, ${purple} 0%, #6d3fe0 100%); color: #ffffff; border: 1px solid ${gold}; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 800; box-shadow: 0 3px 10px rgba(${pr},0.4); }
+  button:hover { filter: brightness(1.15); box-shadow: 0 4px 14px rgba(${go},0.35); }
+  button.secondary { background: #20244a; color: #e6e8f5; border: 1px solid #33376b; box-shadow: none; }
+  .preset-select { border-color: rgba(${go},0.65); }
+  .head-radio { background: #0d0d20; border-color: #33376b; color: #e6e8f5; border-radius: 4px; }
+  .head-radio:hover { background: #1b1f45; }
+  .head-radio:has(input:checked) { border-color: ${gold}; background: rgba(${pr},0.25); }
+  input[type="radio"], input[type="checkbox"] { accent-color: ${args.green || '#22c55e'}; }
+  summary, .pane-title, .help-btn { color: ${gold}; }
+  pre.preview { background: #0d0d20; border-color: #2a2d5a; }
+  .modal-box { background: #14142b; border: 1px solid #2a2d5a; border-top: 4px solid ${gold}; border-radius: 6px; }
+  .modal-box h3 { color: ${gold}; text-transform: uppercase; letter-spacing: 0.04em; }
+  .modal-box p, .info-modal .modal-box .modal-body, .info-modal .modal-box .modal-body p { color: #d6d9ef; }
+  #orientIcon .head-body { fill: ${purple}; }
+  #orientIcon .beam { stroke: ${gold}; }
+  #orientIcon .ring { fill: #20244a; stroke: #33376b; }
 `;
 replaceOnce('theme injection point', '</style>', theme + '</style>');
 
